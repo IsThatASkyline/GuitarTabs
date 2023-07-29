@@ -1,0 +1,9 @@
+services:
+  postgres:
+    container_name: postgresFullDevelopment
+    image: postgres:latest
+    restart: on-failure
+    ports:
+      - 5431:5432
+    env_file:
+      - .dev.env

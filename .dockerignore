@@ -1,0 +1,11 @@
+Dockerfile
+
+.pytest_cache
+docker-compose.dev.yaml
+docker-compose.prod.yaml
+docker-compose.test.yaml
+
+
+
+.gitignore
+README.md
