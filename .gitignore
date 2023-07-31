@@ -1,0 +1,8 @@
+.idea
+__pycache__
+.env
+.dev.env
+*.png
+*.jpg
+.pytest_cache
+.test.env
