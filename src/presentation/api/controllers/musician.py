@@ -1,6 +1,5 @@
 from fastapi import APIRouter, Response, status
 from fastapi.params import Depends
-
 from src.domain.guitarapp.dto import CreateMusicianDTO, MusicianDTO, UpdateMusicianDTO, UpdateMusicianBandDTO, FullBandDTO
 from src.domain.guitarapp.exceptions import MusicianNotExists, SmthWithAddingToBand
 from src.domain.guitarapp.services import MusicianServices
@@ -12,6 +11,7 @@ from src.presentation.api.controllers.requests import (
 from src.presentation.api.controllers.responses import MusicianDeleteResponse
 from src.presentation.api.controllers.responses.exceptions import NotFoundMusicianError, MusicianToBandIntegrityError
 from src.presentation.api.di.providers.services import get_musician_services
+
 
 router = APIRouter(prefix="/musician", tags=["musician"])
 

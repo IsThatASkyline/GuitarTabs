@@ -1,7 +1,5 @@
 from sqlalchemy.ext.asyncio import AsyncSession
-
 from src.infrastructure.db.repositories import UserRepository, MusicianRepository, SongRepository, BandRepository
-
 
 class SqlAlchemyUOW:
     def __init__(self, session: AsyncSession):

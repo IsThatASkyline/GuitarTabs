@@ -1,5 +1,4 @@
 from pydantic import Field
-
 from src.presentation.api.controllers.responses.exceptions.base import ApiError
 
 

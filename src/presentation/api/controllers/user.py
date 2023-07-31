@@ -1,6 +1,5 @@
 from fastapi import APIRouter, Response, status
 from fastapi.params import Depends
-
 from src.domain.guitarapp.dto import CreateUserDTO, UpdateUserDTO, UserDTO
 from src.domain.guitarapp.exceptions import UserNotExists
 from src.domain.guitarapp.services import UserServices
@@ -11,6 +10,7 @@ from src.presentation.api.controllers.requests.user import (
 from src.presentation.api.controllers.responses import UserDeleteResponse
 from src.presentation.api.controllers.responses.exceptions import NotFoundUserError
 from src.presentation.api.di.providers.services import get_user_services
+
 
 router = APIRouter(prefix="/user", tags=["user"])
 

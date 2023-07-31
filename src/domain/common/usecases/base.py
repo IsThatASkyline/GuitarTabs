@@ -1,5 +1,4 @@
 from abc import ABC
-
 from src.infrastructure.db.uow import UnitOfWork
 
 

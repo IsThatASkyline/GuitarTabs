@@ -1,5 +1,4 @@
 from sqladmin import ModelView
-
 from src.infrastructure.db.models import Musician
 
 

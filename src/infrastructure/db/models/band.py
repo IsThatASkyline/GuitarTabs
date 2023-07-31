@@ -14,7 +14,6 @@ class Band(BaseAlchemyModels):
         String(125),
         nullable=False,
     )
-
     songs: Mapped["Song"] = relationship(back_populates="band", lazy='joined')
     members: Mapped["Musician"] = relationship(back_populates="bands", secondary='musician_band_table', lazy='selectin')
 

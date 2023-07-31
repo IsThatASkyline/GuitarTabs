@@ -1,6 +1,4 @@
 from sqladmin import Admin
-
-
 from src.infrastructure.admin.models.musician import MusicianAdmin
 from src.infrastructure.admin.models.user import UserAdmin
 
