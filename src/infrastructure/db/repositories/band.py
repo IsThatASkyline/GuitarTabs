@@ -1,6 +1,7 @@
+from sqlalchemy import select, and_
 from sqlalchemy.ext.asyncio import AsyncSession
 from src.domain.guitarapp.dto import CreateBandDTO, UpdateMusicianBandDTO, FullBandDTO
-from src.infrastructure.db.models import Band, MusicianBandTable
+from src.infrastructure.db.models import Band, MusicianBandLink, Musician
 from src.infrastructure.db.repositories.base import BaseRepository
 
 
@@ -18,8 +19,26 @@ class BandRepository(BaseRepository[Band]):
         return band.to_full_dto()
 
     async def get_band_by_id(self, id_: int) -> FullBandDTO:
-        band = await super().get_by_id(id_)
-        return band.to_full_dto() if band else None
+        query = select(Band).where(Band.id==id_)
+        band = (await self._session.execute(query)).scalar_one_or_none()
+
+        query = select(Musician).join(MusicianBandLink).where(MusicianBandLink.band_id==id_)
+        members = (await self._session.execute(query)).scalars().all()
+        return band.to_full_dto(members=members) if band else None
+
+
+    # async def get_band_by_id(self, id_: int) -> FullBandDTO:
+    #     # Govnokod moment
+    #     query = select(Band, Musician).join(MusicianBandLink, Band.id == id_)\
+    #         .join(Musician, MusicianBandLink.musician_id==Musician.id).\
+    #         filter(MusicianBandLink.band_id==Band.id)
+    #     result = (await self._session.execute(query))
+    #     members = []
+    #     for couple in result:
+    #         band = couple[0].to_dto()
+    #         members.append(couple[1].to_dto())
+    #
+    #     return FullBandDTO(members=members, **band.dict(exclude_none=True, exclude=set("members"))) if band else None
 
     async def get_all_bands(self) -> list[FullBandDTO]:
         bands = await super().get_all()
@@ -29,7 +48,7 @@ class BandRepository(BaseRepository[Band]):
         await super().update_obj(id_, **kwargs)
 
     async def add_musician_to_band(self, musician_dto: UpdateMusicianBandDTO) -> None:
-        musician = MusicianBandTable(**musician_dto.dict())
+        musician = MusicianBandLink(**musician_dto.dict())
         self.session.add(musician)
 
     async def delete_band(self, id_: int):

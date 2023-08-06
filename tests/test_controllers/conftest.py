@@ -62,6 +62,15 @@ async def musician_data():
 
 
 @pytest_asyncio.fixture(scope='function')
+async def musician_data2():
+    return {
+        'musician_id': 2,
+        'first_name': '2first_name',
+        'last_name': '2lastname',
+    }
+
+
+@pytest_asyncio.fixture(scope='function')
 async def create_song_in_database(db_session_test: sessionmaker):
     async def create_song_in_database_wrap(
         song_id: int,

@@ -2,14 +2,12 @@ from src.domain.guitarapp.dto import CreateBandDTO, BandDTO, UpdateBandDTO, Full
 from src.domain.guitarapp.exceptions import BandNotExists, SmthWithAddingToBand
 from src.domain.guitarapp.usecases import BandUseCase
 from src.infrastructure.db.uow import UnitOfWork
-from sqlalchemy.exc import IntegrityError
 
 
 class GetBandById(BandUseCase):
     async def __call__(self, id_: int) -> FullBandDTO:
         if band := await self.uow.app_holder.band_repo.get_band_by_id(id_):
-            members = await self.uow.app_holder.musician_repo.get_all_musicians_in_band(id_)
-            return FullBandDTO(members=members, **band.dict(exclude_none=True, exclude=set("members")))
+            return band
         raise BandNotExists
 
 
