@@ -8,15 +8,15 @@ from src.infrastructure.db.uow import UnitOfWork
 
 class GetSongById(SongUseCase):
     async def __call__(self, id_: int) -> FullSongDTO:
-        if song := await self.uow.app_holder.song_repo.get_song_by_id(id_):
+        if song := await self.uow.app_holder.song_repo.get_by_id(id_):
             return song
         raise SongNotExists
 
 
 class CreateSong(SongUseCase):
     async def __call__(self, song_dto: CreateSongDTO) -> SongDTO:
-        if await self.uow.app_holder.band_repo.get_band_by_id(song_dto.band_id):
-            song = await self.uow.app_holder.song_repo.create_song(song_dto)
+        if await self.uow.app_holder.band_repo.get_by_id(song_dto.band_id):
+            song = await self.uow.app_holder.song_repo.create_obj(song_dto)
             await self.uow.commit()
             return song
         raise CreateSongException
@@ -24,13 +24,13 @@ class CreateSong(SongUseCase):
 
 class GetSongs(SongUseCase):
     async def __call__(self) -> list[SongDTO]:
-        songs = await self.uow.app_holder.song_repo.get_all_songs()
+        songs = await self.uow.app_holder.song_repo.get_all()
         return songs
 
 
 class UpdateSong(SongUseCase):
     async def __call__(self, song_update_dto: UpdateSongDTO) -> None:
-        await self.uow.app_holder.song_repo.update_song(
+        await self.uow.app_holder.song_repo.update_obj(
             song_update_dto.id,
             **song_update_dto.dict(exclude_none=True, exclude=set("id")),
         )
@@ -39,8 +39,8 @@ class UpdateSong(SongUseCase):
 
 class DeleteSong(SongUseCase):
     async def __call__(self, id_: int) -> None:
-        if await self.uow.app_holder.song_repo.get_song_by_id(id_):
-            await self.uow.app_holder.song_repo.delete_song(id_)
+        if await self.uow.app_holder.song_repo.get_by_id(id_):
+            await self.uow.app_holder.song_repo.delete_obj(id_)
             await self.uow.commit()
             return
         raise SongNotExists

@@ -6,27 +6,27 @@ from src.infrastructure.db.uow import UnitOfWork
 
 class GetMusicianById(MusicianUseCase):
     async def __call__(self, id_: int) -> MusicianDTO:
-        if musician := await self.uow.app_holder.musician_repo.get_musician_by_id(id_):
+        if musician := await self.uow.app_holder.musician_repo.get_by_id(id_):
             return musician
         raise MusicianNotExists
 
 
 class CreateMusician(MusicianUseCase):
     async def __call__(self, musician_dto: CreateMusicianDTO) -> MusicianDTO:
-        musician = await self.uow.app_holder.musician_repo.create_musician(musician_dto)
+        musician = await self.uow.app_holder.musician_repo.create_obj(musician_dto)
         await self.uow.commit()
         return musician
 
 
 class GetMusicians(MusicianUseCase):
     async def __call__(self) -> list[MusicianDTO]:
-        musicians = await self.uow.app_holder.musician_repo.get_all_musicians()
+        musicians = await self.uow.app_holder.musician_repo.get_all()
         return musicians
 
 
 class UpdateMusician(MusicianUseCase):
     async def __call__(self, musician_update_dto: UpdateMusicianDTO) -> None:
-        await self.uow.app_holder.musician_repo.update_musician(
+        await self.uow.app_holder.musician_repo.update_obj(
             musician_update_dto.id,
             **musician_update_dto.dict(exclude_none=True, exclude=set("id")),
         )
@@ -35,8 +35,8 @@ class UpdateMusician(MusicianUseCase):
 
 class DeleteMusician(MusicianUseCase):
     async def __call__(self, id_: int) -> None:
-        if await self.uow.app_holder.musician_repo.get_musician_by_id(id_):
-            await self.uow.app_holder.musician_repo.delete_musician(id_)
+        if await self.uow.app_holder.musician_repo.get_by_id(id_):
+            await self.uow.app_holder.musician_repo.delete_obj(id_)
             await self.uow.commit()
             return
         raise MusicianNotExists

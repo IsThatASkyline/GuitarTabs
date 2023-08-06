@@ -1,5 +1,5 @@
-from pydantic.main import BaseModel
+from abc import ABC
 
 
-class BaseDTO(BaseModel):
+class AbstractDTO(ABC):
     pass
