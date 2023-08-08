@@ -31,6 +31,7 @@ class SongRepository(BaseRepository[Song]):
 
     async def get_by_id(self, id_: int) -> FullSongDTO:
         song = await super().get_by_id(id_)
+
         query = select(Verse).where(Verse.song_id == song.id)
         verses = (await self._session.execute(query)).scalars().all()
         return song.to_full_dto(verses=verses) if song else None

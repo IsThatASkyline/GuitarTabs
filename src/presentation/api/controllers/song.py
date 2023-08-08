@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Response, status
 from fastapi.params import Depends
 
-from src.domain.guitarapp.dto import CreateSongDTO, SongDTO, UpdateSongDTO, FullSongDTO
+from src.domain.guitarapp.dto import CreateSongDTO, SongDTO, UpdateSongDTO, FullSongDTO, ModulateSongDTO
 from src.domain.guitarapp.exceptions import SongNotExists, CreateSongException
 from src.domain.guitarapp.services import SongServices
 from src.presentation.api.controllers.requests import (
@@ -27,6 +27,7 @@ async def create_song(
         return await song_services.create_song(CreateSongDTO(**song.dict()))
     except CreateSongException:
         return SongIntegrityError()
+
 
 @router.get("/get-all-songs")
 async def get_all_songs(
@@ -69,10 +70,10 @@ async def delete_song(
         return NotFoundSongError()
 
 
-@router.delete("/modulate/{song_id}")
+@router.post("/modulate-song/{song_id}")
 async def modulate_song(
     song_id: int,
-    song: ModulateSongRequest,
+    value: ModulateSongRequest,
     song_services: SongServices = Depends(get_song_services),
 ) -> FullSongDTO:
-    return await song_services.update_song(UpdateSongDTO(id=song_id, **song.dict()))
+    return await song_services.modulate_song(ModulateSongDTO(id=song_id, **value.dict()))

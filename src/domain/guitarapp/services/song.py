@@ -1,6 +1,7 @@
 from sqlalchemy.exc import IntegrityError
 
-from src.domain.guitarapp.dto.song import CreateSongDTO, SongDTO, UpdateSongDTO, FullSongDTO
+from src.application.services.modulation import get_modulate_verses
+from src.domain.guitarapp.dto.song import CreateSongDTO, SongDTO, UpdateSongDTO, FullSongDTO, ModulateSongDTO
 from src.domain.guitarapp.exceptions import SongNotExists, CreateSongException
 from src.domain.guitarapp.usecases import SongUseCase
 from src.infrastructure.db.uow import UnitOfWork
@@ -39,6 +40,22 @@ class UpdateSong(SongUseCase):
         await self.uow.commit()
 
 
+class ModulateSong(SongUseCase):
+    async def __call__(self, song_modulate_dto: ModulateSongDTO) -> FullSongDTO:
+        try:
+            song = await self.uow.app_holder.song_repo.get_by_id(song_modulate_dto.id)
+            modulate_verses = get_modulate_verses(song.verses, song_modulate_dto.value)
+            modulate_song = FullSongDTO(
+                id=song.id,
+                title=song.title,
+                band_id=song.band_id,
+                verses=modulate_verses
+            )
+            return modulate_song
+        except Exception as ex:
+            print(ex)
+
+
 class DeleteSong(SongUseCase):
     async def __call__(self, id_: int) -> None:
         if await self.uow.app_holder.song_repo.get_by_id(id_):
@@ -67,3 +84,6 @@ class SongServices:
 
     async def delete_song(self, id_: int) -> None:
         await DeleteSong(self.uow)(id_)
+
+    async def modulate_song(self, modulate_song_dto: ModulateSongDTO) -> FullSongDTO:
+        return await ModulateSong(self.uow)(modulate_song_dto)

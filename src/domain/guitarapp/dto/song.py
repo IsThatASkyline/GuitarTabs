@@ -15,11 +15,6 @@ class BaseSongDTO(BaseModel):
 class CreateSongDTO(BaseSongDTO):
     verses: List[BaseVerseDTO] | None = None
 
-#
-# class CreateSongDTO(BaseSongDTO):
-#     lyrics: str | None = None
-#
-
 
 class UpdateSongDTO(BaseModel):
     id: int
@@ -33,4 +28,9 @@ class SongDTO(BaseSongDTO):
 
 class FullSongDTO(SongDTO):
     verses: List[BaseVerseDTO]
+
+
+class ModulateSongDTO(BaseModel):
+    id: int
+    value: int
 

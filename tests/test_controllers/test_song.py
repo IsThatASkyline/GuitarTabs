@@ -101,3 +101,33 @@ async def test_delete_song(
     response = await client.delete(f'song/delete-song/{song_data["song_id"]}')
 
     assert response.status_code == status.HTTP_204_NO_CONTENT
+
+
+@pytest.mark.asyncio
+async def test_modulate_song(
+        client: AsyncClient,
+        create_song_in_database,
+        song_data,
+        create_band_in_database,
+        band_data,
+        modulate_song_data1,
+        modulate_song_data2,
+        after_modulate_song_data1,
+        after_modulate_song_data2
+) -> None:
+    await create_band_in_database(**band_data)
+    await create_song_in_database(**song_data)
+
+    data_json1 = {
+        'value': modulate_song_data1['value'],
+    }
+
+    data_json2 = {
+        'value': modulate_song_data2['value'],
+    }
+
+    response = await client.post(f'song/modulate-song/{modulate_song_data1["song_id"]}', json=data_json1)
+    response2 = await client.post(f'song/modulate-song/{modulate_song_data2["song_id"]}', json=data_json2)
+
+    assert response.json() == after_modulate_song_data1
+    assert response2.json() == after_modulate_song_data2

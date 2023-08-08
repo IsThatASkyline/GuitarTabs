@@ -1,13 +1,13 @@
 from typing import List
-from src.application.models.chord import Chord
+from src.domain.guitarapp.dto import BaseVerseDTO
 
 major_chords_base = ('A', 'A#', 'B', 'C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#')
 minor_chords_base = ('Am', 'A#m', 'Bm', 'Cm', 'C#m', 'Dm', 'D#m', 'Em', 'Fm', 'F#m', 'Gm', 'G#m')
 
-song_chords = ['Am', 'C', 'Dm', 'G']
+# song_chords = ['Am', 'C', 'Dm', 'G']
 
 
-def modulation(song_chords: List[Chord], direction: bool):
+def modulate(song_chords: List[str], value: int) -> str:
     new_chord_sequence = []
 
     for i in range(len(song_chords)):
@@ -19,8 +19,19 @@ def modulation(song_chords: List[Chord], direction: bool):
 
         index_chord = base_seq.index(chord)
         new_sequence = base_seq[index_chord:] + base_seq[:index_chord]
-        new_chord_sequence.append(new_sequence[1 if direction else -1])
+        new_chord_sequence.append(new_sequence[value])
 
-    return new_chord_sequence
+    return ' '.join(new_chord_sequence)
 
 
+def get_modulate_verses(verses: List[BaseVerseDTO], value: int) -> List[BaseVerseDTO]:
+    new_verses = []
+
+    for verse in verses:
+        old_chords = verse.chords
+        new_chords = modulate(old_chords.split(), value)
+        new_verses.append(
+            BaseVerseDTO(title=verse.title, lyrics=verse.lyrics, chords=new_chords)
+        )
+
+    return new_verses

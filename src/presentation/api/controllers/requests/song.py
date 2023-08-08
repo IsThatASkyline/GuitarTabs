@@ -12,10 +12,6 @@ class BaseSong(BaseModel):
 class CreateSongRequest(BaseSong):
     verses: List[CreateVerseRequest] | None = None
 
-#
-# class CreateSongRequest(BaseSong):
-#     lyrics: str | None = None
-#
 
 class UpdateSongRequest(BaseModel):
     title: str | None = None
@@ -23,5 +19,5 @@ class UpdateSongRequest(BaseModel):
 
 
 class ModulateSongRequest(BaseModel):
-    direction: bool
+    value: int
 
