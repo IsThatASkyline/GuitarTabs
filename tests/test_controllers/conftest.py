@@ -76,7 +76,6 @@ async def create_song_in_database(db_session_test: sessionmaker):
         song_id: int,
         title: str,
         band_id: int,
-        lyrics: str
     ):
         async with db_session_test() as session:
             await session.execute(
@@ -84,7 +83,6 @@ async def create_song_in_database(db_session_test: sessionmaker):
                     id=song_id,
                     title=title,
                     band_id=band_id,
-                    lyrics=lyrics
                 )
             )
             await session.commit()
@@ -98,5 +96,4 @@ async def song_data():
         'song_id': 1,
         'title': 'string',
         'band_id': 1,
-        'lyrics': 'string'
     }

@@ -9,16 +9,19 @@ from sqlalchemy import text
 from sqlalchemy.orm import sessionmaker, close_all_sessions
 
 from src.config import get_settings
+from src.infrastructure.db.models.base import BaseAlchemyModels
 from src.presentation.admin.main import create_admin_instance
 from src.presentation.api.controllers import setup_controllers
 from src.infrastructure.db.main import build_sessions, create_engine
 from src.presentation.api.di import setup_di
 
+db_engine = create_engine('postgresql+asyncpg://postgres:1234@localhost:5432/testdb')
+
 
 def build_test_app() -> FastAPI:
     app = FastAPI()
-    settings = get_settings()
-    db_engine = create_engine(settings.DB_URL)
+    # settings = get_settings()
+    BaseAlchemyModels.metadata.bind = db_engine
     setup_di(app, build_sessions(db_engine))
 
     create_admin_instance(
@@ -33,7 +36,7 @@ def build_test_app() -> FastAPI:
 
 @pytest_asyncio.fixture(scope='session')
 async def db_session_test() -> sessionmaker:
-    yield build_sessions(create_engine(get_settings().DB_URL))
+    yield build_sessions(create_engine('postgresql+asyncpg://postgres:1234@localhost:5432/testdb'))
     close_all_sessions()
 
 
@@ -53,6 +56,15 @@ async def clean_tables(db_session_test) -> None:
             statement = text(f"""TRUNCATE TABLE {table} CASCADE;""")
             await session.execute(statement)
             await session.commit()
+
+
+@pytest.fixture(autouse=True, scope='session')
+async def prepare_database():
+    async with db_engine.begin() as conn:
+        await conn.run_sync(BaseAlchemyModels.metadata.create_all)
+    yield
+    async with db_engine.begin() as conn:
+        await conn.run_sync(BaseAlchemyModels.metadata.drop_all)
 
 
 @pytest.fixture(scope='session')

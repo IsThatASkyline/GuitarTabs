@@ -39,7 +39,6 @@ async def test_get_song(
     assert response.status_code == status.HTTP_200_OK
     assert response.json()['title'] == song_data['title']
     assert response.json()['band_id'] == song_data['band_id']
-    assert response.json()['lyrics'] == song_data['lyrics']
 
     assert response_404.json()['detail'] == 'Not found song'
     # assert response_404.status_code == status.HTTP_404_NOT_FOUND
@@ -80,14 +79,12 @@ async def test_update_song(
 
     data_json = {
         'title': 'new_title',
-        'lyrics': 'new_lyrics',
     }
     response = await client.patch(f'song/update-song/{song_data["song_id"]}', json=data_json)
     r_data = response.json()
 
     assert response.status_code == status.HTTP_200_OK
     assert r_data['title'] == data_json['title']
-    assert r_data['lyrics'] == data_json['lyrics']
 
 
 @pytest.mark.asyncio

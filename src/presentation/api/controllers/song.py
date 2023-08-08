@@ -7,6 +7,7 @@ from src.domain.guitarapp.services import SongServices
 from src.presentation.api.controllers.requests import (
     CreateSongRequest,
     UpdateSongRequest,
+    ModulateSongRequest
 )
 from src.presentation.api.controllers.responses import SongDeleteResponse
 from src.presentation.api.controllers.responses.exceptions import NotFoundSongError, SongIntegrityError
@@ -66,3 +67,12 @@ async def delete_song(
     except SongNotExists:
         response.status_code = status.HTTP_404_NOT_FOUND
         return NotFoundSongError()
+
+
+@router.delete("/modulate/{song_id}")
+async def modulate_song(
+    song_id: int,
+    song: ModulateSongRequest,
+    song_services: SongServices = Depends(get_song_services),
+) -> FullSongDTO:
+    return await song_services.update_song(UpdateSongDTO(id=song_id, **song.dict()))

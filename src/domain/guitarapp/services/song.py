@@ -8,9 +8,11 @@ from src.infrastructure.db.uow import UnitOfWork
 
 class GetSongById(SongUseCase):
     async def __call__(self, id_: int) -> FullSongDTO:
-        if song := await self.uow.app_holder.song_repo.get_by_id(id_):
+        try:
+            song = await self.uow.app_holder.song_repo.get_by_id(id_)
             return song
-        raise SongNotExists
+        except Exception:
+            raise SongNotExists
 
 
 class CreateSong(SongUseCase):
