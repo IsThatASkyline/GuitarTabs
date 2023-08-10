@@ -20,7 +20,6 @@ class CreateSong(SongUseCase):
     async def __call__(self, song_dto: CreateSongDTO) -> SongDTO:
         if await self.uow.app_holder.band_repo.get_by_id(song_dto.band_id):
             song = await self.uow.app_holder.song_repo.create_obj(song_dto)
-            await self.uow.commit()
             return song
         raise CreateSongException
 
@@ -37,10 +36,9 @@ class UpdateSong(SongUseCase):
             song_update_dto.id,
             **song_update_dto.dict(exclude_none=True, exclude=set("id")),
         )
-        await self.uow.commit()
 
 
-class ModulateSong(SongUseCase):
+class GetModulatedSong(SongUseCase):
     async def __call__(self, song_modulate_dto: ModulateSongDTO) -> FullSongDTO:
         try:
             song = await self.uow.app_holder.song_repo.get_by_id(song_modulate_dto.id)
@@ -70,7 +68,10 @@ class SongServices:
         self.uow = uow
 
     async def create_song(self, user_dto: CreateSongDTO) -> SongDTO:
-        return await CreateSong(self.uow)(user_dto)
+        async with self.uow:
+            song = await CreateSong(self.uow)(user_dto)
+            await self.uow.commit()
+            return song
 
     async def get_all_songs(self) -> list[SongDTO]:
         return await GetSongs(self.uow)()
@@ -79,11 +80,15 @@ class SongServices:
         return await GetSongById(self.uow)(id_)
 
     async def update_song(self, update_song_dto: UpdateSongDTO) -> FullSongDTO:
-        await UpdateSong(self.uow)(update_song_dto)
-        return await GetSongById(self.uow)(update_song_dto.id)
+        async with self.uow:
+            await UpdateSong(self.uow)(update_song_dto)
+            await self.uow.commit()
+            return await GetSongById(self.uow)(update_song_dto.id)
 
     async def delete_song(self, id_: int) -> None:
-        await DeleteSong(self.uow)(id_)
+        async with self.uow:
+            await DeleteSong(self.uow)(id_)
+            await self.uow.commit()
 
     async def modulate_song(self, modulate_song_dto: ModulateSongDTO) -> FullSongDTO:
-        return await ModulateSong(self.uow)(modulate_song_dto)
+        return await GetModulatedSong(self.uow)(modulate_song_dto)

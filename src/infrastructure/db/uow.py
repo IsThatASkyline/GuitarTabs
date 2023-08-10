@@ -1,9 +1,17 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 from src.infrastructure.db.repositories import UserRepository, MusicianRepository, SongRepository, BandRepository
 
+
 class SqlAlchemyUOW:
     def __init__(self, session: AsyncSession):
         self.session = session
+
+    async def __aenter__(self):
+        pass
+
+    async def __aexit__(self, *args):
+        await self.session.rollback()
+        await self.session.close()
 
     async def commit(self):
         await self.session.commit()

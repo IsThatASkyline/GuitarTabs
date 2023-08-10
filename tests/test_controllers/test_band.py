@@ -40,15 +40,19 @@ async def test_get_band(
 @pytest.mark.asyncio
 async def test_create_band(
         client: AsyncClient,
-        create_band_in_database
+        create_band_in_database,
+        band_data
 ) -> None:
     data_json = {
-        'title': 'string'
+        'id': band_data['band_id'],
+        'title': band_data['title'],
     }
-    response = await client.post('band/create-band', json=data_json)
-    r_data = response.json()
+    response_create = await client.post('band/create-band', json=data_json)
+    response_get = await client.get(f'band/get-band/{band_data["band_id"]}')
 
-    assert response.status_code == status.HTTP_201_CREATED
+    r_data = response_get.json()
+
+    assert response_create.status_code == status.HTTP_201_CREATED
     assert r_data['title'] == data_json['title']
 
 
@@ -64,10 +68,12 @@ async def test_update_band(
         'title': 'new_string'
     }
 
-    response = await client.patch(f'band/update-band/{band_data["band_id"]}', json=data_json)
-    r_data = response.json()
+    response_update = await client.patch(f'band/update-band/{band_data["band_id"]}', json=data_json)
+    response_get = await client.get(f'band/get-band/{band_data["band_id"]}')
 
-    assert response.status_code == status.HTTP_200_OK
+    r_data = response_get.json()
+
+    assert response_update.status_code == status.HTTP_200_OK
     assert r_data['title'] == data_json['title']
 
 
@@ -80,8 +86,11 @@ async def test_delete_band(
     await create_band_in_database(**band_data)
 
     response = await client.delete(f'band/delete-band/{band_data["band_id"]}')
-
     assert response.status_code == status.HTTP_204_NO_CONTENT
+
+    response = await client.get(f'band/get-band/{band_data["band_id"]}')
+    # assert response.text == 'Not found band'
+    # assert response.status_code == status.HTTP_404_NOT_FOUND
 
 
 @pytest.mark.asyncio

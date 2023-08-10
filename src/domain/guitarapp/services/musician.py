@@ -14,7 +14,6 @@ class GetMusicianById(MusicianUseCase):
 class CreateMusician(MusicianUseCase):
     async def __call__(self, musician_dto: CreateMusicianDTO) -> MusicianDTO:
         musician = await self.uow.app_holder.musician_repo.create_obj(musician_dto)
-        await self.uow.commit()
         return musician
 
 
@@ -30,14 +29,12 @@ class UpdateMusician(MusicianUseCase):
             musician_update_dto.id,
             **musician_update_dto.dict(exclude_none=True, exclude=set("id")),
         )
-        await self.uow.commit()
 
 
 class DeleteMusician(MusicianUseCase):
     async def __call__(self, id_: int) -> None:
         if await self.uow.app_holder.musician_repo.get_by_id(id_):
             await self.uow.app_holder.musician_repo.delete_obj(id_)
-            await self.uow.commit()
             return
         raise MusicianNotExists
 
@@ -47,7 +44,10 @@ class MusicianServices:
         self.uow = uow
 
     async def create_musician(self, musician_dto: CreateMusicianDTO) -> MusicianDTO:
-        return await CreateMusician(self.uow)(musician_dto)
+        async with self.uow:
+            musician = await CreateMusician(self.uow)(musician_dto)
+            await self.uow.commit()
+            return musician
 
     async def get_all_musicians(self) -> list[MusicianDTO]:
         return await GetMusicians(self.uow)()
@@ -56,8 +56,12 @@ class MusicianServices:
         return await GetMusicianById(self.uow)(id_)
 
     async def update_musician(self, update_musician_dto: UpdateMusicianDTO) -> MusicianDTO:
-        await UpdateMusician(self.uow)(update_musician_dto)
-        return await GetMusicianById(self.uow)(update_musician_dto.id)
+        async with self.uow:
+            await UpdateMusician(self.uow)(update_musician_dto)
+            await self.uow.commit()
+            return await GetMusicianById(self.uow)(update_musician_dto.id)
 
     async def delete_musician(self, id_: int) -> None:
-        await DeleteMusician(self.uow)(id_)
+        async with self.uow:
+            await DeleteMusician(self.uow)(id_)
+            await self.uow.commit()

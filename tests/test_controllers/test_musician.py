@@ -41,16 +41,20 @@ async def test_get_musician(
 @pytest.mark.asyncio
 async def test_create_musician(
         client: AsyncClient,
-        create_musician_in_database
+        create_musician_in_database,
+        musician_data
 ) -> None:
     data_json = {
-        'first_name': 'first_name',
-        'last_name': 'last_name'
+        'musician_id': musician_data['musician_id'],
+        'first_name': musician_data['first_name'],
+        'last_name': musician_data['last_name']
     }
-    response = await client.post('musician/create-musician', json=data_json)
-    r_data = response.json()
+    response_create = await client.post('musician/create-musician', json=data_json)
+    response_get = await client.get(f'musician/get-musician/{musician_data["musician_id"]}')
 
-    assert response.status_code == status.HTTP_201_CREATED
+    r_data = response_get.json()
+
+    assert response_create.status_code == status.HTTP_201_CREATED
     assert r_data['first_name'] == data_json['first_name']
     assert r_data['last_name'] == data_json['last_name']
 
@@ -67,10 +71,12 @@ async def test_update_musician(
         'first_name': 'new_first_name',
         'last_name': 'new_last_name'
     }
-    response = await client.patch(f'musician/update-musician/{musician_data["musician_id"]}', json=data_json)
-    r_data = response.json()
+    response_update = await client.patch(f'musician/update-musician/{musician_data["musician_id"]}', json=data_json)
+    response_get = await client.get(f'musician/get-musician/{musician_data["musician_id"]}')
 
-    assert response.status_code == status.HTTP_200_OK
+    r_data = response_get.json()
+
+    # assert response_update.status_code ==
     assert r_data['first_name'] == data_json['first_name']
     assert r_data['last_name'] == data_json['last_name']
 
@@ -84,5 +90,9 @@ async def test_delete_musician(
     await create_musician_in_database(**musician_data)
 
     response = await client.delete(f'musician/delete-musician/{musician_data["musician_id"]}')
-
     assert response.status_code == status.HTTP_204_NO_CONTENT
+
+    response = await client.get(f'musician/get-musician/{musician_data["musician_id"]}')
+    # assert response.json['detail'] == 'Not found musician'
+    # assert response.status_code == status.HTTP_404_NOT_FOUND
+

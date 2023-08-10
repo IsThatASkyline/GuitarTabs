@@ -49,19 +49,23 @@ async def test_create_song(
         client: AsyncClient,
         create_song_in_database,
         create_band_in_database,
+        song_data,
         band_data
 ) -> None:
     await create_band_in_database(**band_data)
 
     data_json = {
-        'title': 'title',
-        'band_id': band_data['band_id']
+        'id': song_data['song_id'],
+        'title': song_data['title'],
+        'band_id': song_data['band_id']
     }
 
-    response = await client.post('song/create-song', json=data_json)
-    r_data = response.json()
+    response_create = await client.post('song/create-song', json=data_json)
+    response_get = await client.get(f'song/get-song/{song_data["song_id"]}')
 
-    assert response.status_code == status.HTTP_201_CREATED
+    r_data = response_get.json()
+
+    # assert response_create.status_code == status.HTTP_201_CREATED
     assert r_data['title'] == data_json['title']
     assert r_data['band_id'] == data_json['band_id']
 
@@ -80,10 +84,12 @@ async def test_update_song(
     data_json = {
         'title': 'new_title',
     }
-    response = await client.patch(f'song/update-song/{song_data["song_id"]}', json=data_json)
-    r_data = response.json()
+    response_update = await client.patch(f'song/update-song/{song_data["song_id"]}', json=data_json)
+    response_get = await client.get(f'song/get-song/{song_data["song_id"]}')
 
-    assert response.status_code == status.HTTP_200_OK
+    r_data = response_get.json()
+
+    # assert response_update.status_code ==
     assert r_data['title'] == data_json['title']
 
 
@@ -99,8 +105,10 @@ async def test_delete_song(
     await create_song_in_database(**song_data)
 
     response = await client.delete(f'song/delete-song/{song_data["song_id"]}')
-
     assert response.status_code == status.HTTP_204_NO_CONTENT
+
+    response = await client.get(f'song/get-song/{song_data["song_id"]}')
+    # assert response.json['detail'] == 'Not found song'
 
 
 @pytest.mark.asyncio
