@@ -41,7 +41,7 @@ async def test_get_song(
     assert response.json()['band_id'] == song_data['band_id']
 
     assert response_404.json()['detail'] == 'Not found song'
-    # assert response_404.status_code == status.HTTP_404_NOT_FOUND
+    assert response_404.status_code == status.HTTP_404_NOT_FOUND
 
 
 @pytest.mark.asyncio
@@ -65,7 +65,7 @@ async def test_create_song(
 
     r_data = response_get.json()
 
-    # assert response_create.status_code == status.HTTP_201_CREATED
+    assert response_create.status_code == status.HTTP_201_CREATED
     assert r_data['title'] == data_json['title']
     assert r_data['band_id'] == data_json['band_id']
 
@@ -86,11 +86,13 @@ async def test_update_song(
     }
     response_update = await client.patch(f'song/update-song/{song_data["song_id"]}', json=data_json)
     response_get = await client.get(f'song/get-song/{song_data["song_id"]}')
+    response_404 = await client.patch(f'song/update-song/123123123', json=data_json)
 
     r_data = response_get.json()
 
-    # assert response_update.status_code ==
+    assert response_update.status_code == status.HTTP_200_OK
     assert r_data['title'] == data_json['title']
+    assert response_404.status_code == status.HTTP_404_NOT_FOUND
 
 
 @pytest.mark.asyncio
@@ -108,7 +110,8 @@ async def test_delete_song(
     assert response.status_code == status.HTTP_204_NO_CONTENT
 
     response = await client.get(f'song/get-song/{song_data["song_id"]}')
-    # assert response.json['detail'] == 'Not found song'
+    assert response.status_code == status.HTTP_404_NOT_FOUND
+    assert response.json()['detail'] == 'Not found song'
 
 
 @pytest.mark.asyncio
@@ -136,6 +139,8 @@ async def test_modulate_song(
 
     response = await client.post(f'song/modulate-song/{modulate_song_data1["song_id"]}', json=data_json1)
     response2 = await client.post(f'song/modulate-song/{modulate_song_data2["song_id"]}', json=data_json2)
+    response_404 = await client.post(f'song/modulate-song/123213', json=data_json2)
 
     assert response.json() == after_modulate_song_data1
     assert response2.json() == after_modulate_song_data2
+    assert response_404.status_code == status.HTTP_404_NOT_FOUND

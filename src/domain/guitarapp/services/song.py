@@ -9,56 +9,51 @@ from src.infrastructure.db.uow import UnitOfWork
 
 class GetSongById(SongUseCase):
     async def __call__(self, id_: int) -> FullSongDTO:
-        try:
-            song = await self.uow.app_holder.song_repo.get_by_id(id_)
+        if song := await self.uow.app_holder.song_repo.get_by_id(id_):
             return song
-        except Exception:
-            raise SongNotExists
+        raise SongNotExists
 
 
 class CreateSong(SongUseCase):
     async def __call__(self, song_dto: CreateSongDTO) -> SongDTO:
         if await self.uow.app_holder.band_repo.get_by_id(song_dto.band_id):
-            song = await self.uow.app_holder.song_repo.create_obj(song_dto)
-            return song
+            return await self.uow.app_holder.song_repo.create_obj(song_dto)
         raise CreateSongException
 
 
 class GetSongs(SongUseCase):
     async def __call__(self) -> list[SongDTO]:
-        songs = await self.uow.app_holder.song_repo.get_all()
-        return songs
+        return await self.uow.app_holder.song_repo.get_all()
 
 
 class UpdateSong(SongUseCase):
     async def __call__(self, song_update_dto: UpdateSongDTO) -> None:
-        await self.uow.app_holder.song_repo.update_obj(
-            song_update_dto.id,
-            **song_update_dto.dict(exclude_none=True, exclude=set("id")),
-        )
+        if await self.uow.app_holder.song_repo.get_by_id(song_update_dto.id):
+            await self.uow.app_holder.song_repo.update_obj(
+                song_update_dto.id,
+                **song_update_dto.dict(exclude_none=True, exclude=set("id")),
+            )
+            return
+        raise SongNotExists
 
 
 class GetModulatedSong(SongUseCase):
     async def __call__(self, song_modulate_dto: ModulateSongDTO) -> FullSongDTO:
-        try:
-            song = await self.uow.app_holder.song_repo.get_by_id(song_modulate_dto.id)
+        if song := await self.uow.app_holder.song_repo.get_by_id(song_modulate_dto.id):
             modulate_verses = get_modulate_verses(song.verses, song_modulate_dto.value)
-            modulate_song = FullSongDTO(
+            return FullSongDTO(
                 id=song.id,
                 title=song.title,
                 band_id=song.band_id,
                 verses=modulate_verses
             )
-            return modulate_song
-        except Exception as ex:
-            print(ex)
+        raise SongNotExists
 
 
 class DeleteSong(SongUseCase):
     async def __call__(self, id_: int) -> None:
         if await self.uow.app_holder.song_repo.get_by_id(id_):
             await self.uow.app_holder.song_repo.delete_obj(id_)
-            await self.uow.commit()
             return
         raise SongNotExists
 

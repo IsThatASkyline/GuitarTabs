@@ -34,11 +34,14 @@ async def get_all_musicians(
 
 @router.get("/get-musician/{musician_id}")
 async def get_musician_by_id(
-    musician_id: int, musician_services: MusicianServices = Depends(get_musician_services)
+    musician_id: int,
+    response: Response,
+    musician_services: MusicianServices = Depends(get_musician_services)
 ) -> MusicianDTO | NotFoundMusicianError:
     try:
         return await musician_services.get_musician_by_id(musician_id)
     except MusicianNotExists:
+        response.status_code = status.HTTP_404_NOT_FOUND
         return NotFoundMusicianError()
 
 
@@ -46,9 +49,14 @@ async def get_musician_by_id(
 async def update_musician(
     musician_id: int,
     musician: UpdateMusicianRequest,
+    response: Response,
     musician_services: MusicianServices = Depends(get_musician_services),
-) -> MusicianDTO:
-    return await musician_services.update_musician(UpdateMusicianDTO(id=musician_id, **musician.dict()))
+) -> MusicianDTO | NotFoundMusicianError:
+    try:
+        return await musician_services.update_musician(UpdateMusicianDTO(id=musician_id, **musician.dict()))
+    except MusicianNotExists:
+        response.status_code = status.HTTP_404_NOT_FOUND
+        return NotFoundMusicianError()
 
 
 @router.delete("/delete-musician/{musician_id}")

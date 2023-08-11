@@ -1,5 +1,3 @@
-from typing import List
-
 from pydantic.main import BaseModel
 from .verse import BaseVerseDTO
 
@@ -13,13 +11,13 @@ class BaseSongDTO(BaseModel):
 
 
 class CreateSongDTO(BaseSongDTO):
-    verses: List[BaseVerseDTO] | None = None
+    verses: list[BaseVerseDTO] | None = None
 
 
 class UpdateSongDTO(BaseModel):
     id: int
     title: str | None = None
-    verses: List[BaseVerseDTO] | None = None
+    verses: list[BaseVerseDTO] | None = None
 
 
 class SongDTO(BaseSongDTO):
@@ -27,7 +25,7 @@ class SongDTO(BaseSongDTO):
 
 
 class FullSongDTO(SongDTO):
-    verses: List[BaseVerseDTO]
+    verses: list[BaseVerseDTO] | None
 
 
 class ModulateSongDTO(BaseModel):

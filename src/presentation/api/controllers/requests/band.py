@@ -14,4 +14,4 @@ class UpdateBandRequest(BaseBand):
 
 
 class UpdateMusicianBandRequest(BaseModel):
-    musician_id: int | None = None
+    musician_id: int

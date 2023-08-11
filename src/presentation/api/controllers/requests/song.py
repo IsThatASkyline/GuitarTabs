@@ -1,5 +1,3 @@
-from typing import List
-
 from pydantic import BaseModel
 from .verse import CreateVerseRequest
 
@@ -10,7 +8,7 @@ class BaseSong(BaseModel):
 
 
 class CreateSongRequest(BaseSong):
-    verses: List[CreateVerseRequest] | None = None
+    verses: list[CreateVerseRequest] | None = None
 
 
 class UpdateSongRequest(BaseModel):

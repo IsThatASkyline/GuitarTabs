@@ -1,4 +1,3 @@
-from typing import List
 from pydantic.main import BaseModel
 from .musician import MusicianDTO
 from .song import SongDTO
@@ -26,8 +25,8 @@ class BandDTO(BaseBandDTO):
 
 class FullBandDTO(BaseBandDTO):
     id: int
-    members: List[MusicianDTO] | None
-    songs: List[SongDTO] | None
+    members: list[MusicianDTO] | None
+    songs: list[SongDTO] | None
 
 
 class UpdateMusicianBandDTO(BaseModel):

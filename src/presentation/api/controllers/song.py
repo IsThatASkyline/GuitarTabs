@@ -38,11 +38,14 @@ async def get_all_songs(
 
 @router.get("/get-song/{song_id}")
 async def get_song_by_id(
-    song_id: int, song_services: SongServices = Depends(get_song_services)
+    song_id: int,
+    response: Response,
+    song_services: SongServices = Depends(get_song_services)
 ) -> FullSongDTO | NotFoundSongError:
     try:
         return await song_services.get_song_by_id(song_id)
     except SongNotExists:
+        response.status_code = status.HTTP_404_NOT_FOUND
         return NotFoundSongError()
 
 
@@ -50,9 +53,14 @@ async def get_song_by_id(
 async def update_song(
     song_id: int,
     song: UpdateSongRequest,
+    response: Response,
     song_services: SongServices = Depends(get_song_services),
-) -> FullSongDTO:
-    return await song_services.update_song(UpdateSongDTO(id=song_id, **song.dict()))
+) -> FullSongDTO | NotFoundSongError:
+    try:
+        return await song_services.update_song(UpdateSongDTO(id=song_id, **song.dict()))
+    except SongNotExists:
+        response.status_code = status.HTTP_404_NOT_FOUND
+        return NotFoundSongError()
 
 
 @router.delete("/delete-song/{song_id}")
@@ -73,7 +81,12 @@ async def delete_song(
 @router.post("/modulate-song/{song_id}")
 async def modulate_song(
     song_id: int,
+    response: Response,
     value: ModulateSongRequest,
     song_services: SongServices = Depends(get_song_services),
-) -> FullSongDTO:
-    return await song_services.modulate_song(ModulateSongDTO(id=song_id, **value.dict()))
+) -> FullSongDTO | NotFoundSongError:
+    try:
+        return await song_services.modulate_song(ModulateSongDTO(id=song_id, **value.dict()))
+    except SongNotExists:
+        response.status_code = status.HTTP_404_NOT_FOUND
+        return NotFoundSongError()

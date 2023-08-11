@@ -1,5 +1,5 @@
 from src.domain.guitarapp.dto import CreateBandDTO, BandDTO, UpdateBandDTO, FullBandDTO, UpdateMusicianBandDTO
-from src.domain.guitarapp.exceptions import BandNotExists, SmthWithAddingToBand
+from src.domain.guitarapp.exceptions import BandNotExists, SmthWithAddingToBand, MusicianNotExists
 from src.domain.guitarapp.usecases import BandUseCase
 from src.infrastructure.db.uow import UnitOfWork
 
@@ -13,31 +13,32 @@ class GetBandById(BandUseCase):
 
 class CreateBand(BandUseCase):
     async def __call__(self, band_dto: CreateBandDTO) -> FullBandDTO:
-        band = await self.uow.app_holder.band_repo.create_obj(band_dto)
-        return band
+        return await self.uow.app_holder.band_repo.create_obj(band_dto)
 
 
 class GetBands(BandUseCase):
     async def __call__(self) -> list[BandDTO]:
-        bands = await self.uow.app_holder.band_repo.get_all()
-        return bands
+        return await self.uow.app_holder.band_repo.get_all()
 
 
 class UpdateBand(BandUseCase):
     async def __call__(self, band_update_dto: UpdateBandDTO) -> None:
-        await self.uow.app_holder.band_repo.update_obj(
-            band_update_dto.id,
-            **band_update_dto.dict(exclude_none=True, exclude=set("id")),
-        )
+        if await self.uow.app_holder.band_repo.get_by_id(band_update_dto.id):
+            await self.uow.app_holder.band_repo.update_obj(
+                band_update_dto.id,
+                **band_update_dto.dict(exclude_none=True, exclude=set("id")),
+            )
+            return
+        raise BandNotExists
 
 
 class UpdateMusicianBand(BandUseCase):
     async def __call__(self, musician_band_update_dto: UpdateMusicianBandDTO) -> None:
-        if await self.uow.app_holder.band_repo.get_by_id(musician_band_update_dto.band_id) and \
-                await self.uow.app_holder.musician_repo.get_by_id(musician_band_update_dto.musician_id):
-            await self.uow.app_holder.band_repo.add_musician_to_band(musician_band_update_dto)
-            return
-        raise SmthWithAddingToBand
+        if await self.uow.app_holder.band_repo.get_by_id(musician_band_update_dto.band_id):
+            if await self.uow.app_holder.musician_repo.get_by_id(musician_band_update_dto.musician_id):
+                return await self.uow.app_holder.band_repo.add_musician_to_band(musician_band_update_dto)
+            raise MusicianNotExists
+        raise BandNotExists
 
 
 class DeleteBand(BandUseCase):

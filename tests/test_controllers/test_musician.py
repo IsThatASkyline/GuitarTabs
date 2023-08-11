@@ -35,7 +35,7 @@ async def test_get_musician(
     assert response.json()['last_name'] == musician_data['last_name']
 
     assert response_404.json()['detail'] == 'Not found musician'
-    # assert response_404.status_code == status.HTTP_404_NOT_FOUND
+    assert response_404.status_code == status.HTTP_404_NOT_FOUND
 
 
 @pytest.mark.asyncio
@@ -73,12 +73,14 @@ async def test_update_musician(
     }
     response_update = await client.patch(f'musician/update-musician/{musician_data["musician_id"]}', json=data_json)
     response_get = await client.get(f'musician/get-musician/{musician_data["musician_id"]}')
+    response_404 = await client.patch(f'musician/update-musician/123123123', json=data_json)
 
     r_data = response_get.json()
 
-    # assert response_update.status_code ==
+    assert response_update.status_code == status.HTTP_200_OK
     assert r_data['first_name'] == data_json['first_name']
     assert r_data['last_name'] == data_json['last_name']
+    assert response_404.status_code == status.HTTP_404_NOT_FOUND
 
 
 @pytest.mark.asyncio
@@ -93,6 +95,6 @@ async def test_delete_musician(
     assert response.status_code == status.HTTP_204_NO_CONTENT
 
     response = await client.get(f'musician/get-musician/{musician_data["musician_id"]}')
-    # assert response.json['detail'] == 'Not found musician'
-    # assert response.status_code == status.HTTP_404_NOT_FOUND
+    assert response.json()['detail'] == 'Not found musician'
+    assert response.status_code == status.HTTP_404_NOT_FOUND
 

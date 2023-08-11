@@ -9,5 +9,3 @@ class BandException(AppException):
 
 class BandNotExists(BandException):
     """Band not exists error"""
-
-    pass
