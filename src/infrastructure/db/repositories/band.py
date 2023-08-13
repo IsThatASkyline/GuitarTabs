@@ -1,7 +1,7 @@
 from sqlalchemy import select, and_
 from sqlalchemy.ext.asyncio import AsyncSession
 from src.domain.guitarapp.dto import CreateBandDTO, UpdateMusicianBandDTO, FullBandDTO, BandDTO
-from src.infrastructure.db.models import Band, MusicianBandLink, Musician, Song
+from src.infrastructure.db.models import Band, BandMembers, Musician, Song
 from src.infrastructure.db.repositories.base import BaseRepository
 
 
@@ -24,7 +24,7 @@ class BandRepository(BaseRepository[Band]):
         query = select(Band).where(Band.id == id_)
         band = (await self._session.execute(query)).scalar_one_or_none()
 
-        query = select(Musician).join(MusicianBandLink).where(MusicianBandLink.band_id == id_)
+        query = select(Musician).join(BandMembers).where(BandMembers.band_id == id_)
         members = (await self._session.execute(query)).scalars().all()
 
         query = select(Song).where(Song.band_id == id_)
@@ -40,7 +40,7 @@ class BandRepository(BaseRepository[Band]):
         await super().update_obj(id_, **kwargs)
 
     async def add_musician_to_band(self, musician_dto: UpdateMusicianBandDTO) -> None:
-        musician = MusicianBandLink(**musician_dto.dict())
+        musician = BandMembers(**musician_dto.dict())
         self.session.add(musician)
 
     async def delete_obj(self, id_: int):

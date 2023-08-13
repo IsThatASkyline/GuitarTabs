@@ -2,7 +2,7 @@ from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from src.domain.guitarapp.dto import CreateMusicianDTO, MusicianDTO
-from src.infrastructure.db.models import Musician, MusicianBandLink
+from src.infrastructure.db.models import Musician, BandMembers
 from src.infrastructure.db.repositories.base import BaseRepository
 
 
@@ -29,7 +29,7 @@ class MusicianRepository(BaseRepository[Musician]):
         return [musician.to_dto() for musician in musicians] if musicians else None
 
     async def get_all_musicians_in_band(self, id_: int) -> list[MusicianDTO]:
-        query = select(Musician).join(MusicianBandLink).where(MusicianBandLink.band_id == id_)
+        query = select(Musician).join(BandMembers).where(BandMembers.band_id == id_)
         musicians = (await self.session.execute(query)).scalars().all()
         return [musician.to_dto() for musician in musicians] if musicians else None
 

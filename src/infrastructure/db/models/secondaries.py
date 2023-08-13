@@ -4,7 +4,7 @@ from sqlalchemy.orm import Mapped, mapped_column, relationship
 from src.infrastructure.db.models.base import BaseAlchemyModels
 
 
-class MusicianBandLink(BaseAlchemyModels):
+class BandMembers(BaseAlchemyModels):
     __tablename__ = "musician_band_table"
     __table_args__ = (UniqueConstraint('band_id', 'musician_id', name='musician_band_ff'),)
 

@@ -40,13 +40,13 @@ class UpdateSong(SongUseCase):
 
 class SongToFavorite(SongUseCase):
     async def __call__(self, song_dto: FavoriteSongDTO) -> bool:
-        if song := await self.uow.app_holder.song_repo.get_by_id(song_dto.id):
+        if song := await self.uow.app_holder.song_repo.get_by_id(song_dto.song_id):
             song = SongDTO(**song.dict())
             if song in await self.uow.app_holder.song_repo.get_favorite_songs_by_user(song_dto.user_id):
-                await self.uow.app_holder.song_repo.remove_song_from_favorite(song_dto)
+                await self.uow.app_holder.favorites_repo.delete_obj(song_dto)
                 return False
             else:
-                await self.uow.app_holder.song_repo.add_song_to_favorite(song_dto)
+                await self.uow.app_holder.favorites_repo.create_obj(song_dto)
                 return True
         raise SongNotExists
 
