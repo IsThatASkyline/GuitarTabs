@@ -30,6 +30,7 @@ class BandRepository(BaseRepository[Band]):
         query = select(Song).where(Song.band_id == id_)
         songs = (await self._session.execute(query)).scalars().all()
 
+        print(band)
         return band.to_full_dto(members=members, songs=songs) if band else None
 
     async def get_all(self) -> list[BandDTO]:
@@ -38,7 +39,6 @@ class BandRepository(BaseRepository[Band]):
 
     async def update_obj(self, id_: int, **kwargs) -> None:
         await super().update_obj(id_, **kwargs)
-
 
     async def delete_obj(self, id_: int):
         await super().delete_obj(id_)

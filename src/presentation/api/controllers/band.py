@@ -61,7 +61,7 @@ async def update_band(
         return NotFoundBandError()
 
 
-@router.patch("/add-musician-to-band/{band_id}")
+@router.post("/add-musician-to-band/{band_id}")
 async def add_musician_to_band(
     band_id: int,
     response: Response,

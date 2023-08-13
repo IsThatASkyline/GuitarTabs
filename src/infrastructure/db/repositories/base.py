@@ -47,7 +47,7 @@ class BaseRepository(Generic[Model], AbstractRepository):
         query = select(self._model).where(self._model.id == id_)
         return (await self._session.execute(query)).scalar_one_or_none()
 
-    async def get_all(self) -> list[Model]:
+    async def get_all(self, **kwargs) -> list[Model]:
         result = await self._session.execute(select(self._model))
         return result.scalars().all()
 

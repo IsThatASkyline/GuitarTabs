@@ -116,14 +116,13 @@ async def test_add_musician_to_band(
         'musician_id': musician_data2['musician_id']
     }
 
-    await client.patch(f'band/add-musician-to-band/{band_data["band_id"]}', json=data_json)
-    await client.patch(f'band/add-musician-to-band/{band_data["band_id"]}', json=data_json2)
+    await client.post(f'band/add-musician-to-band/{band_data["band_id"]}', json=data_json)
+    await client.post(f'band/add-musician-to-band/{band_data["band_id"]}', json=data_json2)
     response = await client.get(f'band/get-band/{band_data["band_id"]}')
 
     # response_404_1 = await client.patch(f'band/add-musician-to-band/12312312312', json=data_json2)
     # response_404_2 = await client.patch(f'band/add-musician-to-band/{band_data["band_id"]}', json={'musician_id': 11223123})
     r_data = response.json()
-
     assert response.status_code == status.HTTP_200_OK
     assert r_data['title'] == band_data['title']
     assert r_data['id'] == band_data['band_id']
