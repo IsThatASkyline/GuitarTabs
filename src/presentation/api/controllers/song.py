@@ -1,13 +1,14 @@
 from fastapi import APIRouter, Response, status
 from fastapi.params import Depends
 
-from src.domain.guitarapp.dto import CreateSongDTO, SongDTO, UpdateSongDTO, FullSongDTO, ModulateSongDTO
+from src.domain.guitarapp.dto import CreateSongDTO, SongDTO, UpdateSongDTO, FullSongDTO, ModulateSongDTO, \
+    FavoriteSongDTO
 from src.domain.guitarapp.exceptions import SongNotExists, CreateSongException
 from src.domain.guitarapp.services import SongServices
 from src.presentation.api.controllers.requests import (
     CreateSongRequest,
     UpdateSongRequest,
-    ModulateSongRequest
+    ModulateSongRequest, AddFavoriteSongRequest
 )
 from src.presentation.api.controllers.responses import SongDeleteResponse
 from src.presentation.api.controllers.responses.exceptions import NotFoundSongError, SongIntegrityError
@@ -87,6 +88,23 @@ async def modulate_song(
 ) -> FullSongDTO | NotFoundSongError:
     try:
         return await song_services.modulate_song(ModulateSongDTO(id=song_id, **value.dict()))
+    except SongNotExists:
+        response.status_code = status.HTTP_404_NOT_FOUND
+        return NotFoundSongError()
+
+
+@router.post("/song-to-favorite/{song_id}")
+async def song_to_favorite(
+    song_id: int,
+    response: Response,
+    user_id: AddFavoriteSongRequest,
+    song_services: SongServices = Depends(get_song_services),
+):
+    try:
+        if await song_services.song_to_favorite(FavoriteSongDTO(id=song_id, **user_id.dict())) is True:
+            return {'detail': 'Песня добавлена в избранное'}
+        else:
+            return {'detail': 'Песня убрана из избранного'}
     except SongNotExists:
         response.status_code = status.HTTP_404_NOT_FOUND
         return NotFoundSongError()

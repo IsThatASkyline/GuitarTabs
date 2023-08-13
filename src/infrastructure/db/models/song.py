@@ -14,6 +14,7 @@ class Song(BaseAlchemyModels):
 
     verses: Mapped["Verse"] = relationship()
     band: Mapped["Band"] = relationship(back_populates="songs")
+    in_favorites: Mapped["User"] = relationship(secondary='user_favorite_table', back_populates="favorites")
 
     # V C V C B C V C
     #        Song
@@ -28,7 +29,7 @@ class Song(BaseAlchemyModels):
             band_id=self.band_id,
         )
 
-    def to_full_dto(self, verses: BaseVerseDTO) -> FullSongDTO:
+    def to_full_dto(self, verses: BaseVerseDTO | None = None) -> FullSongDTO:
         return FullSongDTO(
             id=self.id,
             title=self.title,

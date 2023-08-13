@@ -1,7 +1,8 @@
 from sqlalchemy.exc import IntegrityError
 
 from src.application.services.modulation import get_modulate_verses
-from src.domain.guitarapp.dto.song import CreateSongDTO, SongDTO, UpdateSongDTO, FullSongDTO, ModulateSongDTO
+from src.domain.guitarapp.dto.song import CreateSongDTO, SongDTO, UpdateSongDTO, FullSongDTO, ModulateSongDTO, \
+    FavoriteSongDTO
 from src.domain.guitarapp.exceptions import SongNotExists, CreateSongException
 from src.domain.guitarapp.usecases import SongUseCase
 from src.infrastructure.db.uow import UnitOfWork
@@ -34,6 +35,19 @@ class UpdateSong(SongUseCase):
                 **song_update_dto.dict(exclude_none=True, exclude=set("id")),
             )
             return
+        raise SongNotExists
+
+
+class SongToFavorite(SongUseCase):
+    async def __call__(self, song_dto: FavoriteSongDTO) -> bool:
+        if song := await self.uow.app_holder.song_repo.get_by_id(song_dto.id):
+            song = SongDTO(**song.dict())
+            if song in await self.uow.app_holder.song_repo.get_favorite_songs_by_user(song_dto.user_id):
+                await self.uow.app_holder.song_repo.remove_song_from_favorite(song_dto)
+                return False
+            else:
+                await self.uow.app_holder.song_repo.add_song_to_favorite(song_dto)
+                return True
         raise SongNotExists
 
 
@@ -87,3 +101,9 @@ class SongServices:
 
     async def modulate_song(self, modulate_song_dto: ModulateSongDTO) -> FullSongDTO:
         return await GetModulatedSong(self.uow)(modulate_song_dto)
+
+    async def song_to_favorite(self,  song_dto: FavoriteSongDTO) -> bool:
+        async with self.uow:
+            is_added = await SongToFavorite(self.uow)(song_dto)
+            await self.uow.commit()
+            return is_added

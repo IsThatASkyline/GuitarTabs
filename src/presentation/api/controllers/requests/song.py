@@ -19,3 +19,7 @@ class UpdateSongRequest(BaseModel):
 class ModulateSongRequest(BaseModel):
     value: int
 
+
+class AddFavoriteSongRequest(BaseModel):
+    user_id: int
+

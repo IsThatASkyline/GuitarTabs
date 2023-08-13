@@ -32,3 +32,7 @@ class ModulateSongDTO(BaseModel):
     id: int
     value: int
 
+
+class FavoriteSongDTO(BaseModel):
+    id: int
+    user_id: int

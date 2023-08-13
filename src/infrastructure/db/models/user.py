@@ -1,5 +1,6 @@
 from sqlalchemy import String
-from sqlalchemy.orm import Mapped, mapped_column
+from sqlalchemy.orm import Mapped, mapped_column, relationship
+
 from src.infrastructure.db.models.base import BaseAlchemyModels
 
 
@@ -14,3 +15,5 @@ class User(BaseAlchemyModels):
         String(128),
         nullable=False,
     )
+
+    favorites: Mapped["Song"] = relationship(secondary='user_favorite_table', back_populates='in_favorites')

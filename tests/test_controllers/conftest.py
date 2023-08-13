@@ -3,7 +3,7 @@ import pytest_asyncio
 from sqlalchemy import insert
 from sqlalchemy.orm import sessionmaker
 
-from src.infrastructure.db.models import Band, Musician, Song, Verse
+from src.infrastructure.db.models import Band, Musician, Song, Verse, User, UserFavorite
 
 
 @pytest_asyncio.fixture(scope='function')
@@ -179,3 +179,60 @@ async def after_modulate_song_data2():
             ],
     }
 
+
+@pytest_asyncio.fixture(scope='function')
+async def create_user_in_database(db_session_test: sessionmaker):
+    async def create_user_in_database_wrap(
+        user_id: int,
+        username: str,
+        email: str,
+        password: str,
+    ):
+        async with db_session_test() as session:
+            await session.execute(
+                insert(User).values(
+                    id=user_id,
+                    username=username,
+                    email=email,
+                    password=password,
+                )
+            )
+            await session.commit()
+
+    return create_user_in_database_wrap
+
+
+@pytest_asyncio.fixture(scope='function')
+async def user_data():
+    return {
+        'user_id': 1,
+        'username': 'username',
+        'email': 'email',
+        'password': 'password'
+    }
+
+
+@pytest_asyncio.fixture(scope='function')
+async def add_song_to_favorites_in_database(db_session_test: sessionmaker):
+    async def add_song_to_favorites_in_database_wrap(
+        song_id: int,
+        user_id: int,
+    ):
+        async with db_session_test() as session:
+            await session.execute(
+                insert(UserFavorite).values(
+                    song_id=song_id,
+                    user_id=user_id,
+                )
+            )
+            await session.commit()
+
+    return add_song_to_favorites_in_database_wrap
+
+
+@pytest_asyncio.fixture(scope='function')
+async def add_song_to_favorites_data():
+    return {
+        'user_id': 1,
+        'song_id': 1,
+    }

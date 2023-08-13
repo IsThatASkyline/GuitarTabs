@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Response, status
 from fastapi.params import Depends
-from src.domain.guitarapp.dto import CreateUserDTO, UpdateUserDTO, UserDTO
+from src.domain.guitarapp.dto import CreateUserDTO, UpdateUserDTO, UserDTO, SongDTO
 from src.domain.guitarapp.exceptions import UserNotExists
 from src.domain.guitarapp.services import UserServices
 from src.presentation.api.controllers.requests.user import (
@@ -20,6 +20,14 @@ async def get_user_by_id(
     user_id: int, user_services: UserServices = Depends(get_user_services)
 ) -> UserDTO:
     return await user_services.get_user_by_id(user_id)
+
+
+@router.get("/get-user-favorite-songs/{user_id}")
+async def get_favorite_songs(
+    user_id: int,
+    user_services: UserServices = Depends(get_user_services)
+) -> list[SongDTO]:
+    return await user_services.get_favorite_songs_by_user(user_id)
 
 
 @router.get("/get-all-users")

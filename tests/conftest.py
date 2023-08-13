@@ -50,7 +50,7 @@ def event_loop(request):
 
 @pytest.fixture(scope='function', autouse=True)
 async def clean_tables(db_session_test) -> None:
-    tables = ('musician_table', 'song_table', 'musician_band_table', 'band_table')
+    tables = ('musician_table', 'song_table', 'musician_band_table', 'band_table', 'user_table', 'user_favorite_table')
     async with db_session_test() as session:
         for table in tables:
             statement = text(f"""TRUNCATE TABLE {table} CASCADE;""")

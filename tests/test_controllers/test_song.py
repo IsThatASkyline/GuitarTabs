@@ -144,3 +144,53 @@ async def test_modulate_song(
     assert response.json() == after_modulate_song_data1
     assert response2.json() == after_modulate_song_data2
     assert response_404.status_code == status.HTTP_404_NOT_FOUND
+
+
+@pytest.mark.asyncio
+async def test_add_song_to_favorite(
+        client: AsyncClient,
+        create_song_in_database,
+        song_data,
+        band_data,
+        user_data,
+        create_band_in_database,
+        create_user_in_database,
+) -> None:
+    await create_band_in_database(**band_data)
+    await create_song_in_database(**song_data)
+    await create_user_in_database(**user_data)
+
+    data_json = {
+        'user_id': user_data['user_id'],
+    }
+
+    response = await client.post(f'song/song-to-favorite/{song_data["song_id"]}', json=data_json)
+    assert response.json()['detail'] == 'Песня добавлена в избранное'
+    assert response.status_code == 200
+
+
+@pytest.mark.asyncio
+async def test_remove_song_from_favorite(
+        client: AsyncClient,
+        create_song_in_database,
+        song_data,
+        band_data,
+        user_data,
+        create_band_in_database,
+        create_user_in_database,
+        add_song_to_favorites_data,
+        add_song_to_favorites_in_database
+) -> None:
+    await create_band_in_database(**band_data)
+    await create_song_in_database(**song_data)
+    await create_user_in_database(**user_data)
+    await add_song_to_favorites_in_database(**add_song_to_favorites_data)
+
+    data_json = {
+        'user_id': user_data['user_id'],
+    }
+
+    response = await client.post(f'song/song-to-favorite/{song_data["song_id"]}', json=data_json)
+
+    assert response.json()['detail'] == 'Песня убрана из избранного'
+    assert response.status_code == 200

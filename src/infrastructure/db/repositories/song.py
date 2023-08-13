@@ -1,8 +1,9 @@
-from sqlalchemy import select
+from sqlalchemy import select, delete
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from src.domain.guitarapp.dto import CreateSongDTO, SongDTO, FullSongDTO
+from src.domain.guitarapp.dto import CreateSongDTO, SongDTO, FullSongDTO, FavoriteSongDTO
 from src.infrastructure.db.models import Song, Verse
+from src.infrastructure.db.models.secondaries import UserFavorite
 from src.infrastructure.db.repositories.base import BaseRepository
 
 
@@ -42,6 +43,23 @@ class SongRepository(BaseRepository[Song]):
 
     async def update_obj(self, id_: int, **kwargs) -> None:
         await super().update_obj(id_, **kwargs)
+
+    async def add_song_to_favorite(self, song_dto: FavoriteSongDTO) -> None:
+        fav = UserFavorite(
+            song_id=song_dto.id,
+            user_id=song_dto.user_id,
+        )
+        self.session.add(fav)
+        await self.session.flush()
+
+    async def remove_song_from_favorite(self, song_dto: FavoriteSongDTO) -> None:
+        query = delete(UserFavorite).where(UserFavorite.song_id == song_dto.id)
+        await self.session.execute(query)
+
+    async def get_favorite_songs_by_user(self, id_: int) -> list[SongDTO]:
+        query = select(Song).join(UserFavorite).where(UserFavorite.user_id == id_)
+        songs = (await self._session.execute(query)).scalars().all()
+        return [song.to_dto() for song in songs]
 
     async def delete_obj(self, id_: int):
         await super().delete_obj(id_)
