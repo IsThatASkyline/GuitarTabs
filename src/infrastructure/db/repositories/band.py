@@ -39,9 +39,6 @@ class BandRepository(BaseRepository[Band]):
     async def update_obj(self, id_: int, **kwargs) -> None:
         await super().update_obj(id_, **kwargs)
 
-    async def add_musician_to_band(self, musician_dto: UpdateMusicianBandDTO) -> None:
-        musician = BandMembers(**musician_dto.dict())
-        self.session.add(musician)
 
     async def delete_obj(self, id_: int):
         await super().delete_obj(id_)

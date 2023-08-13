@@ -1,6 +1,6 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 from src.infrastructure.db.repositories import (UserRepository, MusicianRepository, SongRepository,
-                                                BandRepository, FavoriteRepository)
+                                                BandRepository, FavoriteRepository, BandMembersRepository)
 
 
 class SqlAlchemyUOW:
@@ -28,6 +28,7 @@ class AppHolder:
         self.band_repo = BandRepository(session)
         self.song_repo = SongRepository(session)
         self.favorites_repo = FavoriteRepository(session)
+        self.band_members_repo = BandMembersRepository(session)
 
 
 class UnitOfWork(SqlAlchemyUOW):

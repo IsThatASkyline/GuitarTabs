@@ -36,7 +36,7 @@ class UpdateMusicianBand(BandUseCase):
     async def __call__(self, musician_band_update_dto: UpdateMusicianBandDTO) -> None:
         if await self.uow.app_holder.band_repo.get_by_id(musician_band_update_dto.band_id):
             if await self.uow.app_holder.musician_repo.get_by_id(musician_band_update_dto.musician_id):
-                return await self.uow.app_holder.band_repo.add_musician_to_band(musician_band_update_dto)
+                return await self.uow.app_holder.band_members_repo.create_obj(musician_band_update_dto)
             raise MusicianNotExists
         raise BandNotExists
 
