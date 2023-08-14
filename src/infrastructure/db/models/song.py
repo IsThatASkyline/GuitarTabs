@@ -12,7 +12,7 @@ class Song(BaseAlchemyModels):
     title: Mapped[str] = mapped_column(String(125), nullable=False)
     band_id: Mapped[int] = mapped_column(ForeignKey("band_table.id", ondelete="CASCADE"), nullable=False)
 
-    verses: Mapped["Verse"] = relationship()
+    verses: Mapped[list["Verse"]] = relationship()
     band: Mapped["Band"] = relationship(back_populates="songs")
     in_favorites: Mapped["User"] = relationship(secondary='user_favorite_table', back_populates="favorites")
 
@@ -29,10 +29,10 @@ class Song(BaseAlchemyModels):
             band_id=self.band_id,
         )
 
-    def to_full_dto(self, verses: BaseVerseDTO | None = None) -> FullSongDTO:
+    def to_full_dto(self) -> FullSongDTO:
         return FullSongDTO(
             id=self.id,
             title=self.title,
             band_id=self.band_id,
-            verses=verses
+            verses=self.verses
         )

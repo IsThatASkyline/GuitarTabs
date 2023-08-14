@@ -17,7 +17,7 @@ class Musician(BaseAlchemyModels):
         String(125),
         nullable=False,
     )
-    bands: Mapped["Band"] = relationship(back_populates="members", secondary='musician_band_table')
+    bands: Mapped[list["Band"]] = relationship(back_populates="members", secondary='musician_band_table')
 
     def to_dto(self) -> MusicianDTO:
         return MusicianDTO(

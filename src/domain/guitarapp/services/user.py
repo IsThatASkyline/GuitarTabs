@@ -20,7 +20,7 @@ class GetUserById(UserUseCase):
 
 class GetFavoriteSongsByUser(UserUseCase):
     async def __call__(self, id_: int) -> list[SongDTO]:
-        return await self.uow.app_holder.song_repo.get_favorite_songs_by_user(id_)
+        return await self.uow.app_holder.favorites_repo.get_all(id_)
 
 
 class GetUsers(UserUseCase):

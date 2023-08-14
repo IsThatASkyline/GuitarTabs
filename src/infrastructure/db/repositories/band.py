@@ -1,9 +1,9 @@
-from sqlalchemy import select, and_
+from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy.orm import joinedload,selectinload
+from sqlalchemy.orm import joinedload
 
-from src.domain.guitarapp.dto import CreateBandDTO, UpdateMusicianBandDTO, FullBandDTO, BandDTO
-from src.infrastructure.db.models import Band, BandMembers, Musician, Song
+from src.domain.guitarapp.dto import CreateBandDTO, FullBandDTO, BandDTO
+from src.infrastructure.db.models import Band
 from src.infrastructure.db.repositories.base import BaseRepository
 
 
@@ -18,7 +18,7 @@ class BandRepository(BaseRepository[Band]):
         )
         self.session.add(band)
         await self.session.flush()
-        return band
+        return band.to_dto()
 
     async def get_by_id(self, id_: int) -> FullBandDTO:
         query = select(Band).options(joinedload(Band.songs), joinedload(Band.members)).where(Band.id == id_)

@@ -28,11 +28,6 @@ class MusicianRepository(BaseRepository[Musician]):
         musicians = await super().get_all()
         return [musician.to_dto() for musician in musicians] if musicians else None
 
-    async def get_all_musicians_in_band(self, id_: int) -> list[MusicianDTO]:
-        query = select(Musician).join(BandMembers).where(BandMembers.band_id == id_)
-        musicians = (await self.session.execute(query)).scalars().all()
-        return [musician.to_dto() for musician in musicians] if musicians else None
-
     async def update_obj(self, id_: int, **kwargs) -> None:
         await super().update_obj(id_, **kwargs)
 
