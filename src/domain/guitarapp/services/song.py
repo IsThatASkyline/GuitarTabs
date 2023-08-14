@@ -18,7 +18,10 @@ class GetSongById(SongUseCase):
 class CreateSong(SongUseCase):
     async def __call__(self, song_dto: CreateSongDTO) -> SongDTO:
         if await self.uow.app_holder.band_repo.get_by_id(song_dto.band_id):
-            return await self.uow.app_holder.song_repo.create_obj(song_dto)
+            try:
+                return await self.uow.app_holder.song_repo.create_obj(song_dto)
+            except Exception as ex:
+                print(ex)
         raise CreateSongException
 
 

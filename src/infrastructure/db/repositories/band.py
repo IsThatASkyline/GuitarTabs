@@ -1,5 +1,7 @@
 from sqlalchemy import select, and_
 from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy.orm import joinedload,selectinload
+
 from src.domain.guitarapp.dto import CreateBandDTO, UpdateMusicianBandDTO, FullBandDTO, BandDTO
 from src.infrastructure.db.models import Band, BandMembers, Musician, Song
 from src.infrastructure.db.repositories.base import BaseRepository
@@ -10,28 +12,19 @@ class BandRepository(BaseRepository[Band]):
         self.session = session
         super().__init__(Band, session)
 
-    async def create_obj(self, band_dto: CreateBandDTO) -> FullBandDTO:
+    async def create_obj(self, band_dto: CreateBandDTO) -> BandDTO:
         band = Band(
             title=band_dto.title,
         )
         self.session.add(band)
         await self.session.flush()
-        return band.to_full_dto()
+        return band
 
     async def get_by_id(self, id_: int) -> FullBandDTO:
-        # refactor into one query
+        query = select(Band).options(joinedload(Band.songs), joinedload(Band.members)).where(Band.id == id_)
+        band = (await self._session.execute(query)).unique().scalar_one_or_none()
 
-        query = select(Band).where(Band.id == id_)
-        band = (await self._session.execute(query)).scalar_one_or_none()
-
-        query = select(Musician).join(BandMembers).where(BandMembers.band_id == id_)
-        members = (await self._session.execute(query)).scalars().all()
-
-        query = select(Song).where(Song.band_id == id_)
-        songs = (await self._session.execute(query)).scalars().all()
-
-        print(band)
-        return band.to_full_dto(members=members, songs=songs) if band else None
+        return band.to_full_dto() if band else None
 
     async def get_all(self) -> list[BandDTO]:
         bands = await super().get_all()
