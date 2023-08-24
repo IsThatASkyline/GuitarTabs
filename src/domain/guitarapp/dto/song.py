@@ -1,5 +1,6 @@
 from pydantic.main import BaseModel
 from .verse import BaseVerseDTO
+from .band import BandDTO
 
 
 class BaseSongDTO(BaseModel):
@@ -20,8 +21,13 @@ class UpdateSongDTO(BaseModel):
     verses: list[BaseVerseDTO] | None = None
 
 
-class SongDTO(BaseSongDTO):
+class SongDTO(BaseModel):
     id: int
+    title: str
+    band: BandDTO
+
+    class Config:
+        orm_mode = True
 
 
 class FullSongDTO(SongDTO):
@@ -36,3 +42,7 @@ class ModulateSongDTO(BaseModel):
 class FavoriteSongDTO(BaseModel):
     song_id: int
     user_id: int
+
+
+class FindSongDTO(BaseModel):
+    value: str

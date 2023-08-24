@@ -143,7 +143,10 @@ async def after_modulate_song_data1():
     return {
         'id': 1,
         'title': 'string',
-        'band_id': 1,
+        'band': {
+                'id': 1,
+                'title': 'test_band',
+            },
         'verses': [
                 {
                     'title': 'verse1',
@@ -164,7 +167,10 @@ async def after_modulate_song_data2():
     return {
         'id': 1,
         'title': 'string',
-        'band_id': 1,
+        'band': {
+                'id': 1,
+                'title': 'test_band',
+            },
         'verses': [
                 {
                     'title': 'verse1',

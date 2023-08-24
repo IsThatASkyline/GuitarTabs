@@ -13,13 +13,12 @@ class SongRepository(BaseRepository[Song]):
         self.session = session
         super().__init__(Song, session)
 
-    async def create_obj(self, song_dto: CreateSongDTO) -> SongDTO:
+    async def create_obj(self, song_dto: CreateSongDTO) -> None:
         song = Song(
             title=song_dto.title,
             band_id=song_dto.band_id,
         )
         self.session.add(song)
-        await self.session.flush()
 
         if song_dto.verses:
             [self.session.add(Verse(
@@ -29,15 +28,16 @@ class SongRepository(BaseRepository[Song]):
                 song_id=song.id,
             )) for v in song_dto.verses]
 
-        return song.to_dto()
+        return
 
     async def get_by_id(self, id_: int) -> FullSongDTO:
-        query = select(Song).options(joinedload(Song.verses)).where(Song.id == id_)
+        query = select(Song).options(joinedload(Song.verses), joinedload(Song.band)).where(Song.id == id_)
         song = (await self.session.execute(query)).unique().scalar_one_or_none()
         return song.to_full_dto() if song else None
 
     async def get_all(self) -> list[SongDTO]:
-        songs = await super().get_all()
+        query = select(Song).options(joinedload(Song.band))
+        songs = (await self.session.execute(query)).scalars().all()
         return [song.to_dto() for song in songs] if songs else None
 
     async def update_obj(self, id_: int, **kwargs) -> None:

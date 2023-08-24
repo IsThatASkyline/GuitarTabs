@@ -1,5 +1,6 @@
 from sqlalchemy import select, delete
 from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy.orm import joinedload
 
 from src.domain.guitarapp.dto import CreateSongDTO, SongDTO, FullSongDTO, FavoriteSongDTO
 from src.infrastructure.db.models import Song
@@ -18,10 +19,9 @@ class FavoriteRepository(BaseRepository[UserFavorite]):
             user_id=fav_dto.user_id,
         )
         self.session.add(fav)
-        await self.session.flush()
 
     async def get_all(self, id_: int) -> list[SongDTO]:
-        query = select(Song).join(UserFavorite).where(UserFavorite.user_id == id_)
+        query = select(Song).join(UserFavorite).where(UserFavorite.user_id == id_).options(joinedload(Song.band))
         songs = (await self._session.execute(query)).scalars().all()
         return [song.to_dto() for song in songs]
 

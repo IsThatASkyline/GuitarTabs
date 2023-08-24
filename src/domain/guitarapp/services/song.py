@@ -1,6 +1,6 @@
 from src.domain.guitarapp.utils.modulation import get_modulate_verses
 from src.domain.guitarapp.dto.song import CreateSongDTO, SongDTO, UpdateSongDTO, FullSongDTO, ModulateSongDTO, \
-    FavoriteSongDTO
+    FavoriteSongDTO, FindSongDTO
 from src.domain.guitarapp.exceptions import SongNotExists, CreateSongException
 from src.domain.guitarapp.usecases import SongUseCase
 from src.infrastructure.db.uow import UnitOfWork
@@ -54,6 +54,13 @@ class SongToFavorite(SongUseCase):
         raise SongNotExists
 
 
+class FindSong(SongUseCase):
+    async def __call__(self, song_dto: FindSongDTO) -> list[SongDTO] | None:
+        if songs := await self.uow.app_holder.find_song_repo.get_all(song_dto):
+            return songs
+        return None
+
+
 class GetModulatedSong(SongUseCase):
     async def __call__(self, song_modulate_dto: ModulateSongDTO) -> FullSongDTO:
         if song := await self.uow.app_holder.song_repo.get_by_id(song_modulate_dto.id):
@@ -61,7 +68,7 @@ class GetModulatedSong(SongUseCase):
             return FullSongDTO(
                 id=song.id,
                 title=song.title,
-                band_id=song.band_id,
+                band=song.band,
                 verses=modulate_verses
             )
         raise SongNotExists
@@ -79,11 +86,10 @@ class SongServices:
     def __init__(self, uow: UnitOfWork) -> None:
         self.uow = uow
 
-    async def create_song(self, user_dto: CreateSongDTO) -> SongDTO:
+    async def create_song(self, user_dto: CreateSongDTO) -> None:
         async with self.uow:
-            song = await CreateSong(self.uow)(user_dto)
+            await CreateSong(self.uow)(user_dto)
             await self.uow.commit()
-            return song
 
     async def get_all_songs(self) -> list[SongDTO]:
         return await GetSongs(self.uow)()
@@ -110,3 +116,6 @@ class SongServices:
             is_added = await SongToFavorite(self.uow)(song_dto)
             await self.uow.commit()
             return is_added
+
+    async def find_song(self, song_dto: FindSongDTO) -> list[SongDTO]:
+        return await FindSong(self.uow)(song_dto)

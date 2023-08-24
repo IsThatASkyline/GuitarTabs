@@ -2,15 +2,15 @@ from fastapi import APIRouter, Response, status
 from fastapi.params import Depends
 
 from src.domain.guitarapp.dto import CreateSongDTO, SongDTO, UpdateSongDTO, FullSongDTO, ModulateSongDTO, \
-    FavoriteSongDTO
+    FavoriteSongDTO, FindSongDTO
 from src.domain.guitarapp.exceptions import SongNotExists, CreateSongException
 from src.domain.guitarapp.services import SongServices
 from src.presentation.api.controllers.requests import (
     CreateSongRequest,
     UpdateSongRequest,
-    ModulateSongRequest, AddFavoriteSongRequest
+    ModulateSongRequest, AddFavoriteSongRequest, FindSongRequest
 )
-from src.presentation.api.controllers.responses import SongDeleteResponse
+from src.presentation.api.controllers.responses import SongDeleteResponse, SongCreateResponse
 from src.presentation.api.controllers.responses.exceptions import NotFoundSongError, SongIntegrityError
 from src.presentation.api.di.providers.services import get_song_services
 
@@ -22,10 +22,11 @@ async def create_song(
     song: CreateSongRequest,
     response: Response,
     song_services: SongServices = Depends(get_song_services),
-) -> SongDTO | SongIntegrityError:
+) -> SongCreateResponse | SongIntegrityError:
     try:
         response.status_code = status.HTTP_201_CREATED
-        return await song_services.create_song(CreateSongDTO(**song.dict()))
+        await song_services.create_song(CreateSongDTO(**song.dict()))
+        return SongCreateResponse()
     except CreateSongException:
         return SongIntegrityError()
 
@@ -108,3 +109,12 @@ async def song_to_favorite(
     except SongNotExists:
         response.status_code = status.HTTP_404_NOT_FOUND
         return NotFoundSongError()
+
+
+@router.get("/find-song")
+async def find_song(
+    song: FindSongRequest,
+    song_services: SongServices = Depends(get_song_services),
+) -> list[SongDTO] | None:
+    return await song_services.find_song(FindSongDTO(**song.dict()))
+

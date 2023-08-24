@@ -20,7 +20,7 @@ async def test_get_all_songs(
     assert len(response.json()) == 1
     assert response.json()[0]['id'] == 1
     assert response.json()[0]['title'] == song_data['title']
-    assert response.json()[0]['band_id'] == song_data['band_id']
+    assert response.json()[0]['band']['id'] == song_data['band_id']
 
 
 @pytest.mark.asyncio
@@ -38,7 +38,7 @@ async def test_get_song(
     response_404 = await client.get('song/get-song/123')
     assert response.status_code == status.HTTP_200_OK
     assert response.json()['title'] == song_data['title']
-    assert response.json()['band_id'] == song_data['band_id']
+    assert response.json()['band']['id'] == song_data['band_id']
 
     assert response_404.json()['detail'] == 'Not found song'
     assert response_404.status_code == status.HTTP_404_NOT_FOUND
@@ -67,7 +67,7 @@ async def test_create_song(
 
     assert response_create.status_code == status.HTTP_201_CREATED
     assert r_data['title'] == data_json['title']
-    assert r_data['band_id'] == data_json['band_id']
+    assert r_data['id'] == data_json['band_id']
 
 
 @pytest.mark.asyncio

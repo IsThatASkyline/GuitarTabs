@@ -48,7 +48,7 @@ class BaseRepository(Generic[Model], AbstractRepository):
         return (await self._session.execute(query)).scalar_one_or_none()
 
     async def get_all(self, **kwargs) -> list[Model]:
-        result = await self._session.execute(select(self._model))
+        result = await self._session.execute(select(self._model).filter_by(**kwargs))
         return result.scalars().all()
 
     async def update_obj(self, id_: int, **kwargs) -> None:

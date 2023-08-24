@@ -18,8 +18,6 @@ class Band(BaseAlchemyModels):
     members: Mapped[list["Musician"]] = relationship(back_populates="bands", secondary='musician_band_table')
 
     # Альбомы
-    # Дата основания
-    # Дата распада
 
     def to_dto(self) -> BandDTO:
         return BandDTO(
