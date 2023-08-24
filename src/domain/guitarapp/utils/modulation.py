@@ -1,10 +1,6 @@
 from typing import List
 from src.domain.guitarapp.dto import BaseVerseDTO
-
-major_chords_base = ('A', 'A#', 'B', 'C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#')
-minor_chords_base = ('Am', 'A#m', 'Bm', 'Cm', 'C#m', 'Dm', 'D#m', 'Em', 'Fm', 'F#m', 'Gm', 'G#m')
-
-# song_chords = ['Am', 'C', 'Dm', 'G']
+from .chords import MAJOR_CHORDS_SEQUENCE, MINOR_CHORDS_SEQUENCE
 
 
 def modulate(song_chords: List[str], value: int) -> str:
@@ -13,12 +9,12 @@ def modulate(song_chords: List[str], value: int) -> str:
     for i in range(len(song_chords)):
         chord = song_chords[i]
         if 'm' in chord:
-            base_seq = minor_chords_base
+            base_seq = MINOR_CHORDS_SEQUENCE
         else:
-            base_seq = major_chords_base
+            base_seq = MAJOR_CHORDS_SEQUENCE
 
-        index_chord = base_seq.index(chord)
-        new_sequence = base_seq[index_chord:] + base_seq[:index_chord]
+        chord_index = base_seq.index(chord)
+        new_sequence = base_seq[chord_index:] + base_seq[:chord_index]
         new_chord_sequence.append(new_sequence[value])
 
     return ' '.join(new_chord_sequence)

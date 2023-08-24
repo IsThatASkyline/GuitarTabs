@@ -1,6 +1,4 @@
-from sqlalchemy.exc import IntegrityError
-
-from src.application.services.modulation import get_modulate_verses
+from src.domain.guitarapp.utils.modulation import get_modulate_verses
 from src.domain.guitarapp.dto.song import CreateSongDTO, SongDTO, UpdateSongDTO, FullSongDTO, ModulateSongDTO, \
     FavoriteSongDTO
 from src.domain.guitarapp.exceptions import SongNotExists, CreateSongException
@@ -43,6 +41,8 @@ class UpdateSong(SongUseCase):
 
 class SongToFavorite(SongUseCase):
     async def __call__(self, song_dto: FavoriteSongDTO) -> bool:
+        # if song already in favorites, delete song from favorites and return False
+        # else add song to favorites and return True
         if song := await self.uow.app_holder.song_repo.get_by_id(song_dto.song_id):
             song = SongDTO(**song.dict())
             if song in await self.uow.app_holder.favorites_repo.get_all(song_dto.user_id):
