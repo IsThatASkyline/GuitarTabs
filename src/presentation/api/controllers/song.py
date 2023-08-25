@@ -111,7 +111,7 @@ async def song_to_favorite(
         return NotFoundSongError()
 
 
-@router.get("/find-song")
+@router.post("/find-song")
 async def find_song(
     song: FindSongRequest,
     song_services: SongServices = Depends(get_song_services),

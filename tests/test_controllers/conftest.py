@@ -123,6 +123,27 @@ async def song_data():
 
 
 @pytest_asyncio.fixture(scope='function')
+async def song_data2():
+    return {
+        'song_id': 2,
+        'title': 'somestring',
+        'band_id': 1,
+        'verses': [
+                {
+                    'title': 'verse1',
+                    'lyrics': 'lyrics',
+                    'chords': 'Am C Dm G'
+                },
+                {
+                    'title': 'verse2',
+                    'lyrics': 'lyrics',
+                    'chords': 'A Cm D Gm'
+                },
+            ],
+    }
+
+
+@pytest_asyncio.fixture(scope='function')
 async def modulate_song_data1():
     return {
         'song_id': 1,

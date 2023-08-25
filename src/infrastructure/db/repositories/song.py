@@ -2,7 +2,7 @@ from sqlalchemy import select, delete
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import joinedload
 
-from src.domain.guitarapp.dto import CreateSongDTO, SongDTO, FullSongDTO, FavoriteSongDTO
+from src.domain.guitarapp.dto import CreateSongDTO, SongDTO, FullSongDTO, FavoriteSongDTO, FindSongDTO
 from src.infrastructure.db.models import Song, Verse
 from src.infrastructure.db.models.secondaries import UserFavorite
 from src.infrastructure.db.repositories.base import BaseRepository
@@ -38,6 +38,11 @@ class SongRepository(BaseRepository[Song]):
     async def get_all(self) -> list[SongDTO]:
         query = select(Song).options(joinedload(Song.band))
         songs = (await self.session.execute(query)).scalars().all()
+        return [song.to_dto() for song in songs] if songs else None
+
+    async def find_song(self, criteria: FindSongDTO) -> list[SongDTO]:
+        query = select(Song).options(joinedload(Song.band)).where(Song.title.ilike('%' + criteria.value + '%'))
+        songs = (await self.session.execute(query, params=criteria.dict())).scalars().all()
         return [song.to_dto() for song in songs] if songs else None
 
     async def update_obj(self, id_: int, **kwargs) -> None:

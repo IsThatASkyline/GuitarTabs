@@ -194,3 +194,43 @@ async def test_remove_song_from_favorite(
 
     assert response.json()['detail'] == 'Песня убрана из избранного'
     assert response.status_code == 200
+
+
+@pytest.mark.asyncio
+async def test_find_song(
+        client: AsyncClient,
+        create_song_in_database,
+        song_data,
+        song_data2,
+        band_data,
+        create_band_in_database,
+) -> None:
+    await create_band_in_database(**band_data)
+    await create_song_in_database(**song_data)
+    await create_song_in_database(**song_data2)
+
+    title_part1 = song_data['title'][0:2]
+    data_json1 = {
+        'value': title_part1,
+    }
+
+    title_part2 = song_data2['title'][0:2]
+    data_json2 = {
+        'value': title_part2,
+    }
+
+    response1 = await client.post(f'song/find-song', json=data_json1)
+    r_data1 = response1.json()
+
+    response2 = await client.post(f'song/find-song', json=data_json2)
+    r_data2 = response2.json()
+
+    assert len(r_data1) == 2
+    assert title_part1 in r_data1[0]['title']
+    assert title_part1 in r_data1[1]['title']
+    assert r_data1[0]['band']['id'] == song_data['band_id']
+    assert r_data1[0]['band']['id'] == song_data2['band_id']
+
+    assert len(r_data2) == 1
+    assert title_part2 in r_data2[0]['title']
+    assert r_data2[0]['band']['id'] == song_data['band_id']

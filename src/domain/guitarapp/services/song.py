@@ -56,7 +56,7 @@ class SongToFavorite(SongUseCase):
 
 class FindSong(SongUseCase):
     async def __call__(self, song_dto: FindSongDTO) -> list[SongDTO] | None:
-        if songs := await self.uow.app_holder.find_song_repo.get_all(song_dto):
+        if songs := await self.uow.app_holder.song_repo.find_song(song_dto):
             return songs
         return None
 
