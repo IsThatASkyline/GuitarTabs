@@ -2,7 +2,7 @@ from sqlalchemy import select, delete
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import joinedload
 
-from src.domain.guitarapp.dto import CreateSongDTO, SongDTO, FullSongDTO, FavoriteSongDTO
+from src.application.guitarapp.dto import CreateSongDTO, SongDTO, FullSongDTO, FavoriteSongDTO
 from src.infrastructure.db.models import Song
 from src.infrastructure.db.models.secondaries import UserFavorite
 from src.infrastructure.db.repositories.base import BaseRepository

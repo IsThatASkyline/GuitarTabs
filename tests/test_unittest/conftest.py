@@ -1,6 +1,6 @@
 import pytest_asyncio
 
-from src.domain.guitarapp.dto import BaseVerseDTO
+from src.application.guitarapp.dto import BaseVerseDTO
 
 
 @pytest_asyncio.fixture(scope='function')

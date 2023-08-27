@@ -2,7 +2,7 @@ from sqlalchemy import select, delete
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import joinedload
 
-from src.domain.guitarapp.dto import CreateSongDTO, SongDTO, FullSongDTO, FavoriteSongDTO, FindSongDTO
+from src.application.guitarapp.dto import CreateSongDTO, SongDTO, FullSongDTO, FavoriteSongDTO, FindSongDTO
 from src.infrastructure.db.models import Song, Verse
 from src.infrastructure.db.models.secondaries import UserFavorite
 from src.infrastructure.db.repositories.base import BaseRepository
@@ -13,7 +13,7 @@ class SongRepository(BaseRepository[Song]):
         self.session = session
         super().__init__(Song, session)
 
-    async def create_obj(self, song_dto: CreateSongDTO) -> None:
+    async def create_obj(self, song_dto: CreateSongDTO) -> int:
         song = Song(
             title=song_dto.title,
             band_id=song_dto.band_id,
@@ -27,8 +27,9 @@ class SongRepository(BaseRepository[Song]):
                 chords=v.chords,
                 song_id=song.id,
             )) for v in song_dto.verses]
+        await self.session.flush()
 
-        return
+        return song.id
 
     async def get_by_id(self, id_: int) -> FullSongDTO:
         query = select(Song).options(joinedload(Song.verses), joinedload(Song.band)).where(Song.id == id_)

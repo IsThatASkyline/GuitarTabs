@@ -1,8 +1,8 @@
 from fastapi import APIRouter, Response, status
 from fastapi.params import Depends
-from src.domain.guitarapp.dto import CreateUserDTO, UpdateUserDTO, UserDTO, SongDTO
-from src.domain.guitarapp.exceptions import UserNotExists
-from src.domain.guitarapp.services import UserServices
+from src.application.guitarapp.dto import CreateUserDTO, UpdateUserDTO, UserDTO, SongDTO
+from src.application.guitarapp.exceptions import UserNotExists
+from src.application.guitarapp.services import UserServices
 from src.presentation.api.controllers.requests.user import (
     CreateUserRequest,
     UpdateUserRequest,

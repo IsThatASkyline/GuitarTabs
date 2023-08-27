@@ -1,7 +1,7 @@
 from sqlalchemy import select, delete
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from src.domain.guitarapp.dto import CreateSongDTO, SongDTO, FullSongDTO, FavoriteSongDTO, UpdateMusicianBandDTO
+from src.application.guitarapp.dto import CreateSongDTO, SongDTO, FullSongDTO, FavoriteSongDTO, UpdateMusicianBandDTO
 from src.infrastructure.db.models.secondaries import BandMembers
 from src.infrastructure.db.repositories.base import BaseRepository
 

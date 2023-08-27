@@ -1,5 +1,5 @@
-from src.domain.guitarapp.dto import CreateMusicianDTO, MusicianDTO, UpdateMusicianDTO
-from src.domain.guitarapp.usecases import CreateMusician, GetMusicians, GetMusicianById, UpdateMusician, DeleteMusician
+from src.application.guitarapp.dto import CreateMusicianDTO, MusicianDTO, UpdateMusicianDTO
+from src.application.guitarapp.usecases import CreateMusician, GetMusicians, GetMusicianById, UpdateMusician, DeleteMusician
 from src.infrastructure.db.uow import UnitOfWork
 
 

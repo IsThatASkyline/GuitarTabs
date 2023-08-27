@@ -1,7 +1,7 @@
-from src.domain.common.usecases.base import BaseUseCase
-from src.domain.guitarapp.dto import FullBandDTO, CreateBandDTO, BandDTO, UpdateBandDTO, UpdateMusicianBandDTO
+from src.application.common.usecases.base import BaseUseCase
+from src.application.guitarapp.dto import FullBandDTO, CreateBandDTO, BandDTO, UpdateBandDTO, UpdateMusicianBandDTO
 from src.infrastructure.db.uow import UnitOfWork
-from src.domain.guitarapp.exceptions import BandNotExists, MusicianNotExists
+from src.application.guitarapp.exceptions import BandNotExists, MusicianNotExists
 
 
 class BandUseCase(BaseUseCase):

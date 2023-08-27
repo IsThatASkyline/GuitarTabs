@@ -60,12 +60,11 @@ async def test_create_song(
         'band_id': song_data['band_id']
     }
 
-    response_create = await client.post('song/create-song', json=data_json)
-    response_get = await client.get(f'song/get-song/{song_data["song_id"]}')
+    response = await client.post('song/create-song', json=data_json)
 
-    r_data = response_get.json()
+    r_data = response.json()
 
-    assert response_create.status_code == status.HTTP_201_CREATED
+    assert response.status_code == status.HTTP_201_CREATED
     assert r_data['title'] == data_json['title']
     assert r_data['id'] == data_json['band_id']
 
@@ -84,13 +83,12 @@ async def test_update_song(
     data_json = {
         'title': 'new_title',
     }
-    response_update = await client.patch(f'song/update-song/{song_data["song_id"]}', json=data_json)
-    response_get = await client.get(f'song/get-song/{song_data["song_id"]}')
+    response = await client.patch(f'song/update-song/{song_data["song_id"]}', json=data_json)
     response_404 = await client.patch(f'song/update-song/123123123', json=data_json)
 
-    r_data = response_get.json()
+    r_data = response.json()
 
-    assert response_update.status_code == status.HTTP_200_OK
+    assert response.status_code == status.HTTP_200_OK
     assert r_data['title'] == data_json['title']
     assert response_404.status_code == status.HTTP_404_NOT_FOUND
 

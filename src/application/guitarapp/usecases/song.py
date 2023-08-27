@@ -1,9 +1,9 @@
-from src.domain.common.usecases.base import BaseUseCase
-from src.domain.guitarapp.dto import FullSongDTO, CreateSongDTO, SongDTO, UpdateSongDTO, FavoriteSongDTO, FindSongDTO, \
+from src.application.common.usecases.base import BaseUseCase
+from src.application.guitarapp.dto import FullSongDTO, CreateSongDTO, SongDTO, UpdateSongDTO, FavoriteSongDTO, FindSongDTO, \
     ModulateSongDTO
 from src.infrastructure.db.uow import UnitOfWork
-from src.domain.guitarapp.exceptions import SongNotExists, CreateSongException
-from src.domain.guitarapp.utils.modulation import get_modulate_verses
+from src.application.guitarapp.exceptions import SongNotExists, CreateSongException
+from src.application.guitarapp.utils.modulation import get_modulate_verses
 
 
 class SongUseCase(BaseUseCase):
@@ -19,7 +19,7 @@ class GetSongById(SongUseCase):
 
 
 class CreateSong(SongUseCase):
-    async def __call__(self, song_dto: CreateSongDTO) -> SongDTO:
+    async def __call__(self, song_dto: CreateSongDTO) -> int:
         if await self.uow.app_holder.band_repo.get_by_id(song_dto.band_id):
             try:
                 return await self.uow.app_holder.song_repo.create_obj(song_dto)

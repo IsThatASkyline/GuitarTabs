@@ -47,12 +47,11 @@ async def test_create_band(
         'id': band_data['band_id'],
         'title': band_data['title'],
     }
-    response_create = await client.post('band/create-band', json=data_json)
-    response_get = await client.get(f'band/get-band/{band_data["band_id"]}')
+    response = await client.post('band/create-band', json=data_json)
 
-    r_data = response_get.json()
+    r_data = response.json()
 
-    assert response_create.status_code == status.HTTP_201_CREATED
+    assert response.status_code == status.HTTP_201_CREATED
     assert r_data['title'] == data_json['title']
 
 
@@ -68,13 +67,12 @@ async def test_update_band(
         'title': 'new_string'
     }
 
-    response_update = await client.patch(f'band/update-band/{band_data["band_id"]}', json=data_json)
+    response = await client.patch(f'band/update-band/{band_data["band_id"]}', json=data_json)
     response_404 = await client.patch(f'band/update-band/123123123', json=data_json)
-    response_get = await client.get(f'band/get-band/{band_data["band_id"]}')
 
-    r_data = response_get.json()
+    r_data = response.json()
 
-    assert response_update.status_code == status.HTTP_200_OK
+    assert response.status_code == status.HTTP_200_OK
     assert r_data['title'] == data_json['title']
     assert response_404.status_code == status.HTTP_404_NOT_FOUND
 
@@ -119,10 +117,8 @@ async def test_add_musician_to_band(
     await client.post(f'band/add-musician-to-band/{band_data["band_id"]}', json=data_json)
     await client.post(f'band/add-musician-to-band/{band_data["band_id"]}', json=data_json2)
     response = await client.get(f'band/get-band/{band_data["band_id"]}')
-
-    # response_404_1 = await client.patch(f'band/add-musician-to-band/12312312312', json=data_json2)
-    # response_404_2 = await client.patch(f'band/add-musician-to-band/{band_data["band_id"]}', json={'musician_id': 11223123})
     r_data = response.json()
+
     assert response.status_code == status.HTTP_200_OK
     assert r_data['title'] == band_data['title']
     assert r_data['id'] == band_data['band_id']
@@ -131,7 +127,3 @@ async def test_add_musician_to_band(
     assert r_data['members'][0]['last_name'] == musician_data['last_name']
     assert r_data['members'][1]['first_name'] == musician_data2['first_name']
     assert r_data['members'][1]['last_name'] == musician_data2['last_name']
-    # assert response_404_1.status_code == status.HTTP_404_NOT_FOUND
-    # assert response_404_2.status_code == status.HTTP_404_NOT_FOUND
-    # assert response_404_1.json()['detail'] == 'Not found band'
-    # assert response_404_2.json()['detail'] == 'Not found musician'

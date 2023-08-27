@@ -2,7 +2,7 @@ from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import joinedload
 
-from src.domain.guitarapp.dto import CreateBandDTO, FullBandDTO, BandDTO
+from src.application.guitarapp.dto import CreateBandDTO, FullBandDTO, BandDTO
 from src.infrastructure.db.models import Band
 from src.infrastructure.db.repositories.base import BaseRepository
 

@@ -1,10 +1,10 @@
 from fastapi import APIRouter, Response, status
 from fastapi.params import Depends
 
-from src.domain.guitarapp.dto import CreateSongDTO, SongDTO, UpdateSongDTO, FullSongDTO, ModulateSongDTO, \
+from src.application.guitarapp.dto import CreateSongDTO, SongDTO, UpdateSongDTO, FullSongDTO, ModulateSongDTO, \
     FavoriteSongDTO, FindSongDTO
-from src.domain.guitarapp.exceptions import SongNotExists, CreateSongException
-from src.domain.guitarapp.services import SongServices
+from src.application.guitarapp.exceptions import SongNotExists, CreateSongException
+from src.application.guitarapp.services import SongServices
 from src.presentation.api.controllers.requests import (
     CreateSongRequest,
     UpdateSongRequest,
@@ -22,11 +22,10 @@ async def create_song(
     song: CreateSongRequest,
     response: Response,
     song_services: SongServices = Depends(get_song_services),
-) -> SongCreateResponse | SongIntegrityError:
+) -> SongDTO | SongIntegrityError:
     try:
         response.status_code = status.HTTP_201_CREATED
-        await song_services.create_song(CreateSongDTO(**song.dict()))
-        return SongCreateResponse()
+        return await song_services.create_song(CreateSongDTO(**song.dict()))
     except CreateSongException:
         return SongIntegrityError()
 

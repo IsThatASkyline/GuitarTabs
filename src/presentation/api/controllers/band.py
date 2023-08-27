@@ -1,9 +1,9 @@
 from fastapi import APIRouter, Response, status
 from fastapi.params import Depends
 
-from src.domain.guitarapp.dto import CreateBandDTO, BandDTO, UpdateBandDTO, FullBandDTO, UpdateMusicianBandDTO
-from src.domain.guitarapp.exceptions import BandNotExists, SmthWithAddingToBand, MusicianNotExists
-from src.domain.guitarapp.services import BandServices
+from src.application.guitarapp.dto import CreateBandDTO, BandDTO, UpdateBandDTO, FullBandDTO, UpdateMusicianBandDTO
+from src.application.guitarapp.exceptions import BandNotExists, SmthWithAddingToBand, MusicianNotExists
+from src.application.guitarapp.services import BandServices
 from src.presentation.api.controllers.requests import (
     CreateBandRequest,
     UpdateBandRequest,

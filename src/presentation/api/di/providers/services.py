@@ -1,5 +1,5 @@
 from fastapi import Depends
-from src.domain.guitarapp.services import MusicianServices, UserServices, BandServices, SongServices
+from src.application.guitarapp.services import MusicianServices, UserServices, BandServices, SongServices
 from src.infrastructure.db.uow import UnitOfWork
 from src.presentation.api.di.providers.db import uow_provider
 

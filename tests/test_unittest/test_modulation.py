@@ -1,5 +1,5 @@
 import pytest
-from src.domain.guitarapp.utils.modulation import get_modulate_verses
+from src.application.guitarapp.utils.modulation import get_modulate_verses
 
 
 @pytest.mark.asyncio

@@ -1,7 +1,7 @@
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from src.domain.guitarapp.dto import CreateMusicianDTO, MusicianDTO
+from src.application.guitarapp.dto import CreateMusicianDTO, MusicianDTO
 from src.infrastructure.db.models import Musician, BandMembers
 from src.infrastructure.db.repositories.base import BaseRepository
 

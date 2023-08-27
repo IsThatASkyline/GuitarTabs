@@ -3,7 +3,7 @@ from abc import ABC, abstractmethod
 from sqlalchemy import delete, select, update
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from src.domain.guitarapp.dto.base import AbstractDTO
+from src.application.guitarapp.dto.base import AbstractDTO
 from src.infrastructure.db.models.base import BaseAlchemyModels
 
 Model = TypeVar("Model", bound=BaseAlchemyModels)

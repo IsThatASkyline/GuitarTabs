@@ -1,6 +1,6 @@
-from src.domain.guitarapp.dto.song import CreateSongDTO, SongDTO, UpdateSongDTO, FullSongDTO, ModulateSongDTO, \
+from src.application.guitarapp.dto.song import CreateSongDTO, SongDTO, UpdateSongDTO, FullSongDTO, ModulateSongDTO, \
     FavoriteSongDTO, FindSongDTO
-from src.domain.guitarapp.usecases import CreateSong, GetSongs, GetSongById, UpdateSong, DeleteSong, GetModulatedSong, \
+from src.application.guitarapp.usecases import CreateSong, GetSongs, GetSongById, UpdateSong, DeleteSong, GetModulatedSong, \
     SongToFavorite, FindSong
 from src.infrastructure.db.uow import UnitOfWork
 
@@ -9,10 +9,11 @@ class SongServices:
     def __init__(self, uow: UnitOfWork) -> None:
         self.uow = uow
 
-    async def create_song(self, user_dto: CreateSongDTO) -> None:
+    async def create_song(self, song_dto: CreateSongDTO) -> SongDTO:
         async with self.uow:
-            await CreateSong(self.uow)(user_dto)
+            song_id = await CreateSong(self.uow)(song_dto)
             await self.uow.commit()
+            return await GetSongById(self.uow)(song_id)
 
     async def get_all_songs(self) -> list[SongDTO]:
         return await GetSongs(self.uow)()

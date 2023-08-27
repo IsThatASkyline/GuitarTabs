@@ -1,5 +1,5 @@
 from typing import List
-from src.domain.guitarapp.dto import BaseVerseDTO
+from src.application.guitarapp.dto import BaseVerseDTO
 from .chords import MAJOR_CHORDS_SEQUENCE, MINOR_CHORDS_SEQUENCE
 
 

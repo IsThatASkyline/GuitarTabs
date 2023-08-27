@@ -49,12 +49,11 @@ async def test_create_musician(
         'first_name': musician_data['first_name'],
         'last_name': musician_data['last_name']
     }
-    response_create = await client.post('musician/create-musician', json=data_json)
-    response_get = await client.get(f'musician/get-musician/{musician_data["musician_id"]}')
+    response = await client.post('musician/create-musician', json=data_json)
 
-    r_data = response_get.json()
+    r_data = response.json()
 
-    assert response_create.status_code == status.HTTP_201_CREATED
+    assert response.status_code == status.HTTP_201_CREATED
     assert r_data['first_name'] == data_json['first_name']
     assert r_data['last_name'] == data_json['last_name']
 
@@ -71,13 +70,12 @@ async def test_update_musician(
         'first_name': 'new_first_name',
         'last_name': 'new_last_name'
     }
-    response_update = await client.patch(f'musician/update-musician/{musician_data["musician_id"]}', json=data_json)
-    response_get = await client.get(f'musician/get-musician/{musician_data["musician_id"]}')
+    response = await client.patch(f'musician/update-musician/{musician_data["musician_id"]}', json=data_json)
     response_404 = await client.patch(f'musician/update-musician/123123123', json=data_json)
 
-    r_data = response_get.json()
+    r_data = response.json()
 
-    assert response_update.status_code == status.HTTP_200_OK
+    assert response.status_code == status.HTTP_200_OK
     assert r_data['first_name'] == data_json['first_name']
     assert r_data['last_name'] == data_json['last_name']
     assert response_404.status_code == status.HTTP_404_NOT_FOUND

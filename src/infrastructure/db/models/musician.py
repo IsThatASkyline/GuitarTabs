@@ -1,7 +1,7 @@
 from sqlalchemy import String
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
-from src.domain.guitarapp.dto import MusicianDTO
+from src.application.guitarapp.dto import MusicianDTO
 from src.infrastructure.db.models.base import BaseAlchemyModels
 
 

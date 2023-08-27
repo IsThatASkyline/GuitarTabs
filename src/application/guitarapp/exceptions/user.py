@@ -1,4 +1,4 @@
-from src.domain.common.exceptions import AppException
+from src.application.common.exceptions import AppException
 
 
 class UserException(AppException):
