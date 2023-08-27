@@ -1,6 +1,6 @@
 from typing import List
 from src.application.guitarapp.dto import BaseVerseDTO
-from .chords import MAJOR_CHORDS_SEQUENCE, MINOR_CHORDS_SEQUENCE
+from src.application.guitarapp.domain.utils.default_constants import MAJOR_CHORDS_SEQUENCE, MINOR_CHORDS_SEQUENCE
 
 
 def modulate(song_chords: List[str], value: int) -> str:

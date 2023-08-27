@@ -3,7 +3,7 @@ from src.application.guitarapp.dto import FullSongDTO, CreateSongDTO, SongDTO, U
     ModulateSongDTO
 from src.infrastructure.db.uow import UnitOfWork
 from src.application.guitarapp.exceptions import SongNotExists, CreateSongException
-from src.application.guitarapp.utils.modulation import get_modulate_verses
+from src.application.guitarapp.domain.services.modulation import get_modulate_verses
 
 
 class SongUseCase(BaseUseCase):

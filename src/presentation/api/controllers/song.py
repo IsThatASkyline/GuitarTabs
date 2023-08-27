@@ -1,6 +1,5 @@
 from fastapi import APIRouter, Response, status
 from fastapi.params import Depends
-
 from src.application.guitarapp.dto import CreateSongDTO, SongDTO, UpdateSongDTO, FullSongDTO, ModulateSongDTO, \
     FavoriteSongDTO, FindSongDTO
 from src.application.guitarapp.exceptions import SongNotExists, CreateSongException
@@ -10,7 +9,7 @@ from src.presentation.api.controllers.requests import (
     UpdateSongRequest,
     ModulateSongRequest, AddFavoriteSongRequest, FindSongRequest
 )
-from src.presentation.api.controllers.responses import SongDeleteResponse, SongCreateResponse
+from src.presentation.api.controllers.responses import SongDeleteResponse
 from src.presentation.api.controllers.responses.exceptions import NotFoundSongError, SongIntegrityError
 from src.presentation.api.di.providers.services import get_song_services
 
