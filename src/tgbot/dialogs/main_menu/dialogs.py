@@ -12,6 +12,11 @@ main_menu = Dialog(
             "Ты находишься в главном меню.\n"
         ),
         Start(
+            Const("[Emodji]Избранные песни"),
+            id="favorite_songs",
+            state=states.FavoriteSongsPanelSG.choose_song,
+        ),
+        Start(
             Const("[Emodji]Все песни"),
             id="all_songs",
             state=states.AllSongsPanelSG.choose_song,

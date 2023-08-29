@@ -21,8 +21,8 @@ class SearchHistoryPanelSG(StatesGroup):
 class FavoriteSongsPanelSG(StatesGroup):
     choose_song = State()
     song = State()
-    list = State()
-    menu = State()
+    song_menu = State()
+    song_chords = State()
 
 
 class AllSongsPanelSG(StatesGroup):

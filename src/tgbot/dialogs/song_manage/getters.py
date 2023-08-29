@@ -45,6 +45,21 @@ async def get_songs_by_band(**_):
     }
 
 
+async def get_favorite_songs(**_):
+    return {
+        "songs": [
+            {
+                "id": 1,
+                "title": "favsong1",
+            },
+            {
+                "id": 2,
+                "title": "favsong2",
+            },
+        ],
+    }
+
+
 async def get_chords(**_):
     return {
         "title": "Звезда по имени Солнце",

@@ -6,12 +6,14 @@ from aiogram_dialog.widgets.text import Jinja, Const, Format
 from .getters import (
     get_song,
     get_all_songs,
-    get_chords, get_songs_by_band,
+    get_chords,
+    get_songs_by_band,
+    get_favorite_songs,
 )
 from .handlers import (
     select_song,
     select_song_by_band,
-    show_chords,
+    select_favorite_song,
 )
 from src.tgbot import states
 from ..preview_data import PREVIEW_SONG
@@ -76,7 +78,7 @@ all_songs = Dialog(
 )
 
 
-all_songs_by_group = Dialog(
+songs_by_group = Dialog(
     Window(
         Const("Все песни определенной группы"),
         ScrollingGroup(
@@ -129,6 +131,65 @@ all_songs_by_group = Dialog(
             state=states.BandSongsPanelSG.song_menu,
         ),
         state=states.BandSongsPanelSG.song_chords,
+        preview_data={"song": PREVIEW_SONG},
+        getter=get_chords,
+    ),
+)
+
+
+favorite_songs = Dialog(
+    Window(
+        Const("Избранные песни"),
+        ScrollingGroup(
+            Select(
+                Format("{item[title]}"),
+                id="favorite_songs",
+                item_id_getter=lambda x: x['id'],
+                items="songs",
+                on_click=select_favorite_song,
+            ),
+            id="favorite_songs_sg",
+            width=1,
+            height=10,
+        ),
+        Cancel(Const("[Emodji]Назад")),
+        state=states.FavoriteSongsPanelSG.choose_song,
+        preview_data={"songs": [PREVIEW_SONG]},
+        getter=get_favorite_songs,
+    ),
+    Window(
+        Jinja(
+            "Выбрана песня {{ title }} группы {{ band }}"
+        ),
+        SwitchTo(
+            Const("[Emodji]Аккорды"),
+            id="to_chords",
+            state=states.FavoriteSongsPanelSG.song_chords,
+        ),
+        SwitchTo(
+            Const("[Emodji]Назад к избраным песням"),
+            id="to_band",
+            state=states.FavoriteSongsPanelSG.choose_song,
+        ),
+        state=states.FavoriteSongsPanelSG.song_menu,
+        preview_data={"song": PREVIEW_SONG},
+        getter=get_song,
+    ),
+    Window(
+        Jinja(
+            "Аккорды для песни {{title}}\n"
+            "{{chords}}\n"
+            "{{chords}}\n"
+            "{{chords}}\n"
+            "{{chords}}\n"
+            "{{chords}}\n"
+        ),
+        SwitchTo(
+            Const("[Emodji]Назад к меню песни"),
+            id="to_song",
+            state=states.FavoriteSongsPanelSG.song_menu,
+        ),
+        state=states.FavoriteSongsPanelSG.song_chords,
         preview_data={"song": PREVIEW_SONG},
         getter=get_chords,
     ),
