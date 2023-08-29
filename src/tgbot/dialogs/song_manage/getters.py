@@ -1,4 +1,5 @@
-
+from src.infrastructure.db.uow import UnitOfWork
+from src.application.guitarapp import services
 
 async def get_song(**_):
     return {
@@ -7,22 +8,9 @@ async def get_song(**_):
     }
 
 
-async def get_all_songs(**_):
+async def get_all_songs(uow: UnitOfWork, **_):
     return {
-        "songs": [
-            {
-                "id": 1,
-                "title": "song1",
-            },
-            {
-                "id": 2,
-                "title": "song2",
-            },
-            {
-                "id": 3,
-                "title": "song3",
-            },
-        ],
+        "songs": await services.SongServices(uow).get_all_songs()
     }
 
 

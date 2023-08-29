@@ -24,9 +24,9 @@ all_songs = Dialog(
         Const("Все песни"),
         ScrollingGroup(
             Select(
-                Format("{item[title]}"),
+                Format("{item.title}"),
                 id="all_songs",
-                item_id_getter=lambda x: x['id'],
+                item_id_getter=lambda x: x.id,
                 items="songs",
                 on_click=select_song,
             ),
