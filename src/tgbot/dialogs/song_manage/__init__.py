@@ -1,10 +1,8 @@
 from aiogram import Router
 
-# from .dialogs import songs, favorite_songs
-from .dialogs import favorite_songs, all_songs
+from .dialogs import all_songs, all_songs_by_group
 
 
 def setup(router: Router):
-    # router.include_router(songs)
-    router.include_router(favorite_songs)
     router.include_router(all_songs)
+    router.include_router(all_songs_by_group)

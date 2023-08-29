@@ -28,8 +28,13 @@ class FavoriteSongsPanelSG(StatesGroup):
 class AllSongsPanelSG(StatesGroup):
     choose_song = State()
     song = State()
-    list = State()
-    menu = State()
+    song_menu = State()
+    song_chords = State()
+
+
+class BandSongsPanelSG(StatesGroup):
+    choose_song = State()
+    song = State()
     song_menu = State()
     song_chords = State()
 
@@ -37,6 +42,6 @@ class AllSongsPanelSG(StatesGroup):
 class AllBandsPanelSG(StatesGroup):
     choose_band = State()
     menu = State()
-    band_songs = State()
+    band_menu = State()
     band_song = State()
     band_song_chords = State()

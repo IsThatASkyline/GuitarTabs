@@ -11,25 +11,6 @@ async def get_band(**_):
     }
 
 
-async def get_songs_by_band(**_):
-    return {
-        "songs": [
-            {
-                "id": 1,
-                "title": "song1",
-            },
-            {
-                "id": 2,
-                "title": "song2",
-            },
-            {
-                "id": 3,
-                "title": "song3",
-            },
-        ],
-    }
-
-
 async def get_all_bands(**_):
     return {
         "bands": [

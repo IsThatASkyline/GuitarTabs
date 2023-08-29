@@ -15,7 +15,7 @@ async def select_band(c: CallbackQuery, widget: Any, manager: DialogManager, ite
     if not isinstance(data, dict):
         data = {}
     data["song_id"] = int(item_id)
-    await manager.switch_to(states.AllBandsPanelSG.band_songs)
+    await manager.start(states.BandSongsPanelSG.choose_song)
 
 
 async def select_song(c: CallbackQuery, widget: Any, manager: DialogManager, item_id: str):
@@ -24,4 +24,4 @@ async def select_song(c: CallbackQuery, widget: Any, manager: DialogManager, ite
     if not isinstance(data, dict):
         data = {}
     data["song_id"] = int(item_id)
-    await manager.switch_to(states.AllBandsPanelSG.band_song)
+    await manager.start(states.AllSongsPanelSG.song_menu)

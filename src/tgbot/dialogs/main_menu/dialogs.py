@@ -11,11 +11,6 @@ main_menu = Dialog(
             "Привет, {{ username }}!\n"
             "Ты находишься в главном меню.\n"
         ),
-        # Start(
-        #     Const("[Emodji]История поиска"),
-        #     id="search_history",
-        #     state=states.SearchHistoryPanelSG.list,
-        # ),
         Start(
             Const("[Emodji]Все песни"),
             id="all_songs",
@@ -26,12 +21,6 @@ main_menu = Dialog(
             id="all_bands",
             state=states.AllBandsPanelSG.choose_band,
         ),
-        Start(
-            Const("[Emodji]Избранные песни"),
-            id="favorite_songs",
-            state=states.FavoriteSongsPanelSG.list,
-        ),
-        # Надо еще добавить поиск песен
         Cancel(Const("[Emodji]Закрыть")),
         state=states.MainMenuSG.main,
         getter=get_main,

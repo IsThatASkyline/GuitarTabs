@@ -1,30 +1,9 @@
-from src.application.guitarapp import dto
-from src.application.guitarapp import services
-
-# async def get_search_history_songs(uow: UnitOfWork, **_) -> dict[str, list[dto.SongDTO]]:
-    # return {"songs": await SongServices.get_all_songs}
-    # Сделать историю поиска юзера в бд
 
 
 async def get_song(**_):
     return {
         "title": "song_name",
         "band": "band_name"
-    }
-
-
-async def get_favorite_songs(**_):
-    return {
-        "songs": [
-            {
-                "id": 1,
-                "title": "favsong1",
-            },
-            {
-                "id": 2,
-                "title": "favsong2",
-            },
-        ],
     }
 
 
@@ -42,6 +21,25 @@ async def get_all_songs(**_):
             {
                 "id": 3,
                 "title": "song3",
+            },
+        ],
+    }
+
+
+async def get_songs_by_band(**_):
+    return {
+        "songs": [
+            {
+                "id": 1,
+                "title": "bandsong1",
+            },
+            {
+                "id": 2,
+                "title": "bandsong2",
+            },
+            {
+                "id": 3,
+                "title": "bandsong3",
             },
         ],
     }
