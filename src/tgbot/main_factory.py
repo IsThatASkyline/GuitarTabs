@@ -4,6 +4,7 @@ from aiogram_dialog.manager.message_manager import MessageManager
 from sqlalchemy.ext.asyncio import async_sessionmaker, AsyncSession
 
 from src.tgbot.handlers import setup_handlers
+from src.tgbot.middlewares import setup_middlewares
 
 
 def create_bot(token) -> Bot:
@@ -13,9 +14,14 @@ def create_bot(token) -> Bot:
 
 
 def create_dispatcher(
+    pool: async_sessionmaker[AsyncSession],
     message_manager: MessageManager,
 ) -> Dispatcher:
     dp = create_only_dispatcher()
+    setup_middlewares(
+        dp=dp,
+        pool=pool,
+    )
     setup_handlers(dp, message_manager)
     return dp
 
