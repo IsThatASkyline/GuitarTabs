@@ -44,7 +44,7 @@ class UpdateSong(SongUseCase):
         raise SongNotExists
 
 
-class SongToFavorite(SongUseCase):
+class EditFavoriteStatus(SongUseCase):
     async def __call__(self, song_dto: FavoriteSongDTO) -> bool:
         # if song already in favorites, delete song from favorites and return False
         # else add song to favorites and return True

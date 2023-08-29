@@ -100,7 +100,7 @@ async def song_to_favorite(
     song_services: SongServices = Depends(get_song_services),
 ):
     try:
-        if await song_services.song_to_favorite(FavoriteSongDTO(song_id=song_id, **user_id.dict())):
+        if await song_services.edit_song_favorite_status_by_user(FavoriteSongDTO(song_id=song_id, **user_id.dict())):
             return {'detail': 'Песня добавлена в избранное'}
         else:
             return {'detail': 'Песня убрана из избранного'}

@@ -8,6 +8,8 @@ readme = "README.md"
 [tool.poetry.dependencies]
 python = "^3.10"
 fastapi = "^0.92.0"
+aiogram = "3.0.0b7"
+aiogram_dialog = "2.0.0b20"
 sqlalchemy = "^2.0.4"
 alembic = "^1.9.4"
 uvicorn = "^0.20.0"

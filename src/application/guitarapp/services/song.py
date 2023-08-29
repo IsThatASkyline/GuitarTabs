@@ -1,7 +1,7 @@
 from src.application.guitarapp.dto.song import CreateSongDTO, SongDTO, UpdateSongDTO, FullSongDTO, ModulateSongDTO, \
     FavoriteSongDTO, FindSongDTO
 from src.application.guitarapp.usecases import CreateSong, GetSongs, GetSongById, UpdateSong, DeleteSong, GetModulatedSong, \
-    SongToFavorite, FindSong
+    EditFavoriteStatus, FindSong
 from src.infrastructure.db.uow import UnitOfWork
 
 
@@ -35,9 +35,9 @@ class SongServices:
     async def modulate_song(self, modulate_song_dto: ModulateSongDTO) -> FullSongDTO:
         return await GetModulatedSong(self.uow)(modulate_song_dto)
 
-    async def song_to_favorite(self,  song_dto: FavoriteSongDTO) -> bool:
+    async def edit_song_favorite_status_by_user(self,  song_dto: FavoriteSongDTO) -> bool:
         async with self.uow:
-            is_added = await SongToFavorite(self.uow)(song_dto)
+            is_added = await EditFavoriteStatus(self.uow)(song_dto)
             await self.uow.commit()
             return is_added
 
