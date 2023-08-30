@@ -41,7 +41,7 @@ all_songs = Dialog(
     ),
     Window(
         Jinja(
-            "Выбрана песня {{ title }} группы {{ band }}"
+            "Выбрана песня {{ song.title }} группы {{ song.band.title }}"
         ),
         SwitchTo(
             Const("[Emodji]Аккорды"),
@@ -58,13 +58,23 @@ all_songs = Dialog(
         getter=get_song,
     ),
     Window(
+        # Hardcode jinja but whatever
         Jinja(
-            "Аккорды для песни {{title}}\n"
-            "{{chords}}\n"
-            "{{chords}}\n"
-            "{{chords}}\n"
-            "{{chords}}\n"
-            "{{chords}}\n"
+            "Аккорды для песни \n"
+            "{% for verse_string in verses_strings %}"
+            "{% for chord in verse_string.chords %}"
+            "{% if verse_string.chords_count == 1 %}"
+            "{{ chord.title }}"
+            "{% elif verse_string.chords_count == 2 %}"
+            "{{ '%-40s'|format(chord.title) }}"
+            "{% elif verse_string.chords_count == 3 %}"
+            "{{ '%-26s'|format(chord.title) }}"
+            "{% elif verse_string.chords_count == 4 %}"
+            "{{ '%-17s'|format(chord.title) }}"
+            "{% endif %}"
+            "{% endfor %}"
+            "\n\n{{ verse_string.lyrics }}\n"
+            "{% endfor %}"
         ),
         SwitchTo(
             Const("[Emodji]Назад к меню песни"),

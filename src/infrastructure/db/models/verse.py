@@ -14,5 +14,5 @@ class Verse(BaseAlchemyModels):
 
     song: Mapped["Song"] = relationship(back_populates="verses")
 
-    lyrics: Mapped[str] = mapped_column(String(255), nullable=True)
-    chords: Mapped[str] = mapped_column(String(150), nullable=True)
+    lyrics: Mapped[str] = mapped_column(String(500), nullable=True)
+    chords: Mapped[str] = mapped_column(String(250), nullable=True)

@@ -17,6 +17,7 @@ class SongRepository(BaseRepository[Song]):
             band_id=song_dto.band_id,
         )
         self.session.add(song)
+        await self.session.flush()
 
         if song_dto.verses:
             [self.session.add(Verse(
@@ -25,7 +26,6 @@ class SongRepository(BaseRepository[Song]):
                 chords=v.chords,
                 song_id=song.id,
             )) for v in song_dto.verses]
-        await self.session.flush()
 
         return song.id
 
@@ -49,3 +49,26 @@ class SongRepository(BaseRepository[Song]):
 
     async def delete_obj(self, id_: int):
         await super().delete_obj(id_)
+
+"""{
+  "title": "Звезда по имени Солнце",
+  "band_id": 91,
+  "verses": [
+    {
+      "title": "verse_1",
+      "lyrics": "Белый снег, серый лёд \\ На растрескавшейся земле \\ Одеялом лоскутным на ней \\ Город в дорожной петле. \\ А над городом плывут облака, \\ Закрывая небесный свет. \\ А над городом жёлтый дым, \\ Городу две тысячи лет, \\ Прожитых под светом Звезды \\ По имени Солнце.",
+      "chords": "Am \\ C \\ Dm \\ G \\ Am \\ C \\ Dm \\ G \\ Dm \\ Am"
+    }
+  ]
+}"""
+"""{
+  "title": "Звезда по имни Большая",
+  "band_id": 91,
+  "verses": [
+    {
+      "title": "verse_1",
+      "lyrics": "Белый снег, серый лёд на растрескавшейся земле \\ Одеялом лоскутным на ней город в дорожной петле. \\ А над городом плывут облака, закрывая небесный свет. \\ А над городом жёлтый дым, городу две тысячи лет, \\ Прожитых под светом Звезды по имени Солнце.",
+      "chords": "Am C \\ Dm G \\ Am C \\ Dm G \\ Dm Am"
+    }
+  ]
+}"""
