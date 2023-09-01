@@ -4,16 +4,12 @@ from aiogram_dialog.widgets.kbd import Start, Cancel, Select, SwitchTo, Button, 
 from aiogram_dialog.widgets.text import Jinja, Const, Format
 
 from .getters import (
-    get_song,
-    get_band,
     get_all_bands,
 )
 from .handlers import (
     select_band,
-    select_song,
 )
 from src.tgbot import states
-from ..preview_data import PREVIEW_SONG
 
 
 all_bands = Dialog(
@@ -21,15 +17,15 @@ all_bands = Dialog(
         Const("Все группы"),
         ScrollingGroup(
             Select(
-                Format("{item[title]}"),
+                Format("{item.title}"),
                 id="bands",
-                item_id_getter=lambda x: x['id'],
+                item_id_getter=lambda x: x.id,
                 items="bands",
                 on_click=select_band,
             ),
             id="bands_sg",
-            width=1,
-            height=10,
+            width=2,
+            height=7,
         ),
         Cancel(Const("[Emodji]Назад")),
         state=states.AllBandsPanelSG.choose_band,

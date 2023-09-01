@@ -2,7 +2,6 @@ import uvicorn
 from fastapi import FastAPI
 from src.config import get_settings
 from src.infrastructure.db.main import build_sessions, create_engine
-from src.presentation.admin.main import create_admin_instance
 
 from .controllers import setup_controllers
 from .di import setup_di
@@ -14,12 +13,6 @@ def build_app() -> FastAPI:
     db_engine = create_engine(settings.DB_URL)
 
     setup_di(app, build_sessions(db_engine))
-
-    create_admin_instance(
-        app,
-        db_engine,
-    )
-
     setup_controllers(app.router)
 
     return app

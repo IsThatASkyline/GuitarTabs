@@ -1,7 +1,7 @@
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from src.application.guitarapp.dto import CreateUserDTO, SongDTO
+from src.application.guitarapp.dto import CreateUserDTO, SongDTO, UserDTO
 from src.infrastructure.db.models import User, Song, UserFavorite
 from src.infrastructure.db.repositories.base import BaseRepository
 
@@ -11,20 +11,22 @@ class UserRepository(BaseRepository[User]):
         self.session = session
         super().__init__(User, session)
 
-    async def create_user(self, user_dto: CreateUserDTO) -> User:
+    async def create_user(self, user_dto: CreateUserDTO) -> UserDTO:
         user = User(
-            username=user_dto.username,
-            email=user_dto.email,
-            password=user_dto.password,
+            telegram_id=user_dto.telegram_id,
         )
         self.session.add(user)
-        return user
+        return user.to_dto()
 
-    async def get_user_by_id(self, id_: int) -> User:
-        return await super().get_by_id(id_)
+    async def get_user_by_id(self, id_: int) -> UserDTO:
+        query = select(User).where(User.telegram_id == id_)
+        user = (await self._session.execute(query)).scalar_one_or_none()
+        return user.to_dto()
 
-    async def get_all_users(self) -> list[User]:
-        return await super().get_all()
+    async def get_all_users(self) -> list[UserDTO]:
+        query = select(User)
+        users = (await self._session.execute(query)).scalars()
+        return [user.to_dto() for user in users]
 
     async def update_user(self, id_: int, **kwargs) -> None:
         await super().update_obj(id_, **kwargs)

@@ -39,6 +39,11 @@ class SongRepository(BaseRepository[Song]):
         songs = (await self.session.execute(query)).scalars().all()
         return [song.to_dto() for song in songs] if songs else None
 
+    async def get_songs_by_band(self, band_id) -> list[SongDTO]:
+        query = select(Song).options(joinedload(Song.band)).where(Song.band_id == band_id)
+        songs = (await self.session.execute(query)).scalars().all()
+        return [song.to_dto() for song in songs] if songs else None
+
     async def find_song(self, criteria: FindSongDTO) -> list[SongDTO]:
         query = select(Song).options(joinedload(Song.band)).where(Song.title.ilike('%' + criteria.value + '%'))
         songs = (await self.session.execute(query, params=criteria.dict())).scalars().all()

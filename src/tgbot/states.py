@@ -32,6 +32,14 @@ class AllSongsPanelSG(StatesGroup):
     song_chords = State()
 
 
+class FoundedSongsPanelSG(StatesGroup):
+    input_song_title = State()
+    choose_song = State()
+    song = State()
+    song_menu = State()
+    song_chords = State()
+
+
 class BandSongsPanelSG(StatesGroup):
     choose_song = State()
     song = State()

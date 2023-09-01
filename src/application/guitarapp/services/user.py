@@ -10,13 +10,13 @@ class UserServices:
         self.uow = uow
 
     async def create_user(self, user_dto: CreateUserDTO) -> UserDTO:
-        return await CreateUser(self.uow)(user_dto)
+        async with self.uow:
+            user = await CreateUser(self.uow)(user_dto)
+            await self.uow.commit()
+            return user
 
     async def get_user_by_id(self, id_: int) -> UserDTO:
         return await GetUserById(self.uow)(id_)
-
-    async def get_favorite_songs_by_user(self, id_: int) -> list[SongDTO]:
-        return await GetFavoriteSongsByUser(self.uow)(id_)
 
     async def get_all_users(self) -> list[UserDTO]:
         return await GetUsers(self.uow)()

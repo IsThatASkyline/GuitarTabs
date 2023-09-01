@@ -26,6 +26,11 @@ main_menu = Dialog(
             id="all_bands",
             state=states.AllBandsPanelSG.choose_band,
         ),
+        Start(
+            Const("[Emodji]Найти песню по названию"),
+            id="find_songs",
+            state=states.FoundedSongsPanelSG.input_song_title,
+        ),
         Cancel(Const("[Emodji]Закрыть")),
         state=states.MainMenuSG.main,
         getter=get_main,

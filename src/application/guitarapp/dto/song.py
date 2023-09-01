@@ -33,6 +33,13 @@ class SongDTO(BaseModel):
 class FullSongDTO(SongDTO):
     verses: list[BaseVerseDTO] | None
 
+    def compress(self):
+        return SongDTO(
+            id=self.id,
+            title=self.title,
+            band=self.band
+        )
+
 
 class ModulateSongDTO(BaseModel):
     id: int

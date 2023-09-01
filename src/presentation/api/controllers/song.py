@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Response, status
 from fastapi.params import Depends
 from src.application.guitarapp.dto import CreateSongDTO, SongDTO, UpdateSongDTO, FullSongDTO, ModulateSongDTO, \
-    FavoriteSongDTO, FindSongDTO
+    FavoriteSongDTO, FindSongDTO, UserDTO
 from src.application.guitarapp.exceptions import SongNotExists, CreateSongException
 from src.application.guitarapp.services import SongServices
 from src.presentation.api.controllers.requests import (
@@ -49,6 +49,14 @@ async def get_song_by_id(
         return NotFoundSongError()
 
 
+@router.get("/get-user-favorite-songs/{user_id}")
+async def get_favorite_songs(
+    user_id: int,
+    song_services: SongServices = Depends(get_song_services)
+) -> list[SongDTO]:
+    return await song_services.get_favorite_songs_by_user(UserDTO(telegram_id=user_id))
+
+
 @router.patch("/update-song/{song_id}")
 async def update_song(
     song_id: int,
@@ -92,18 +100,29 @@ async def modulate_song(
         return NotFoundSongError()
 
 
-@router.post("/song-to-favorite/{song_id}")
-async def song_to_favorite(
+@router.post("/add-song-to-favorite/{song_id}")
+async def add_song_to_favorite(
     song_id: int,
     response: Response,
     user_id: AddFavoriteSongRequest,
     song_services: SongServices = Depends(get_song_services),
 ):
     try:
-        if await song_services.edit_song_favorite_status_by_user(FavoriteSongDTO(song_id=song_id, **user_id.dict())):
-            return {'detail': 'Песня добавлена в избранное'}
-        else:
-            return {'detail': 'Песня убрана из избранного'}
+        return await song_services.add_song_to_favorite(FavoriteSongDTO(song_id=song_id, **user_id.dict()))
+    except SongNotExists:
+        response.status_code = status.HTTP_404_NOT_FOUND
+        return NotFoundSongError()
+
+
+@router.post("/remove-song-from-favorite/{song_id}")
+async def remove_song_from_favorite(
+    song_id: int,
+    response: Response,
+    user_id: AddFavoriteSongRequest,
+    song_services: SongServices = Depends(get_song_services),
+):
+    try:
+        return await song_services.remove_song_from_favorite(FavoriteSongDTO(song_id=song_id, **user_id.dict()))
     except SongNotExists:
         response.status_code = status.HTTP_404_NOT_FOUND
         return NotFoundSongError()

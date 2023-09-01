@@ -22,14 +22,6 @@ async def get_user_by_id(
     return await user_services.get_user_by_id(user_id)
 
 
-@router.get("/get-user-favorite-songs/{user_id}")
-async def get_favorite_songs(
-    user_id: int,
-    user_services: UserServices = Depends(get_user_services)
-) -> list[SongDTO]:
-    return await user_services.get_favorite_songs_by_user(user_id)
-
-
 @router.get("/get-all-users")
 async def get_all_users(
     user_services: UserServices = Depends(get_user_services),

@@ -1,7 +1,9 @@
+from src.application.guitarapp.dto import UserDTO
 from src.application.guitarapp.dto.song import CreateSongDTO, SongDTO, UpdateSongDTO, FullSongDTO, ModulateSongDTO, \
     FavoriteSongDTO, FindSongDTO
-from src.application.guitarapp.usecases import CreateSong, GetSongs, GetSongById, UpdateSong, DeleteSong, GetModulatedSong, \
-    EditFavoriteStatus, FindSong
+from src.application.guitarapp.usecases import CreateSong, GetSongs, GetSongById, UpdateSong, DeleteSong, \
+    GetModulatedSong, FindSong, GetFavoriteSongsByUser, AddSongToFavorite, RemoveSongFromFavorite, \
+    GetSongsByGroup
 from src.infrastructure.db.uow import UnitOfWork
 
 
@@ -21,6 +23,12 @@ class SongServices:
     async def get_song_by_id(self, id_: int) -> FullSongDTO:
         return await GetSongById(self.uow)(id_)
 
+    async def get_favorite_songs_by_user(self, user_dto: UserDTO) -> list[SongDTO]:
+        return await GetFavoriteSongsByUser(self.uow)(user_dto.telegram_id)
+
+    async def get_songs_by_band(self, band_id: int) -> list[SongDTO]:
+        return await GetSongsByGroup(self.uow)(band_id)
+
     async def update_song(self, update_song_dto: UpdateSongDTO) -> FullSongDTO:
         async with self.uow:
             await UpdateSong(self.uow)(update_song_dto)
@@ -35,11 +43,15 @@ class SongServices:
     async def modulate_song(self, modulate_song_dto: ModulateSongDTO) -> FullSongDTO:
         return await GetModulatedSong(self.uow)(modulate_song_dto)
 
-    async def edit_song_favorite_status_by_user(self,  song_dto: FavoriteSongDTO) -> bool:
+    async def add_song_to_favorite(self,  song_dto: FavoriteSongDTO):
         async with self.uow:
-            is_added = await EditFavoriteStatus(self.uow)(song_dto)
+            await AddSongToFavorite(self.uow)(song_dto)
             await self.uow.commit()
-            return is_added
+
+    async def remove_song_from_favorite(self,  song_dto: FavoriteSongDTO):
+        async with self.uow:
+            await RemoveSongFromFavorite(self.uow)(song_dto)
+            await self.uow.commit()
 
     async def find_song(self, song_dto: FindSongDTO) -> list[SongDTO]:
         return await FindSong(self.uow)(song_dto)

@@ -1,5 +1,5 @@
 from src.application.common.usecases.base import BaseUseCase
-from src.application.guitarapp.dto import CreateUserDTO, UserDTO, SongDTO, UpdateUserDTO
+from src.application.guitarapp.dto import CreateUserDTO, UserDTO, UpdateUserDTO
 from src.infrastructure.db.uow import UnitOfWork
 from src.application.guitarapp.exceptions import UserNotExists
 
@@ -20,11 +20,6 @@ class GetUserById(UserUseCase):
     async def __call__(self, id_: int) -> UserDTO:
         user = await self.uow.app_holder.user_repo.get_user_by_id(id_)
         return user
-
-
-class GetFavoriteSongsByUser(UserUseCase):
-    async def __call__(self, id_: int) -> list[SongDTO]:
-        return await self.uow.app_holder.favorites_repo.get_all(id_)
 
 
 class GetUsers(UserUseCase):

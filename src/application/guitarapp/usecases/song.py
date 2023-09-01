@@ -1,6 +1,7 @@
 from src.application.common.usecases.base import BaseUseCase
-from src.application.guitarapp.dto import FullSongDTO, CreateSongDTO, SongDTO, UpdateSongDTO, FavoriteSongDTO, FindSongDTO, \
-    ModulateSongDTO
+from src.application.guitarapp.dto import FullSongDTO, CreateSongDTO, SongDTO, UpdateSongDTO, FavoriteSongDTO, \
+    FindSongDTO, \
+    ModulateSongDTO, UserDTO
 from src.infrastructure.db.uow import UnitOfWork
 from src.application.guitarapp.exceptions import SongNotExists, CreateSongException
 from src.application.guitarapp.domain.services.modulation import get_modulate_verses
@@ -33,6 +34,16 @@ class GetSongs(SongUseCase):
         return await self.uow.app_holder.song_repo.get_all()
 
 
+class GetFavoriteSongsByUser(SongUseCase):
+    async def __call__(self, user_id: int) -> list[SongDTO]:
+        return await self.uow.app_holder.favorites_repo.get_all(user_id)
+
+
+class GetSongsByGroup(SongUseCase):
+    async def __call__(self, band_id: int) -> list[SongDTO]:
+        return await self.uow.app_holder.song_repo.get_songs_by_band(band_id)
+
+
 class UpdateSong(SongUseCase):
     async def __call__(self, song_update_dto: UpdateSongDTO) -> None:
         if await self.uow.app_holder.song_repo.get_by_id(song_update_dto.id):
@@ -44,18 +55,22 @@ class UpdateSong(SongUseCase):
         raise SongNotExists
 
 
-class EditFavoriteStatus(SongUseCase):
+class AddSongToFavorite(SongUseCase):
     async def __call__(self, song_dto: FavoriteSongDTO) -> bool:
-        # if song already in favorites, delete song from favorites and return False
         # else add song to favorites and return True
         if song := await self.uow.app_holder.song_repo.get_by_id(song_dto.song_id):
             song = SongDTO(**song.dict())
+            if song not in await self.uow.app_holder.favorites_repo.get_all(song_dto.user_id):
+                return await self.uow.app_holder.favorites_repo.create_obj(song_dto)
+        raise SongNotExists
+
+
+class RemoveSongFromFavorite(SongUseCase):
+    async def __call__(self, song_dto: FavoriteSongDTO) -> bool:
+        if song := await self.uow.app_holder.song_repo.get_by_id(song_dto.song_id):
+            song = SongDTO(**song.dict())
             if song in await self.uow.app_holder.favorites_repo.get_all(song_dto.user_id):
-                await self.uow.app_holder.favorites_repo.delete_obj(song_dto)
-                return False
-            else:
-                await self.uow.app_holder.favorites_repo.create_obj(song_dto)
-                return True
+                return await self.uow.app_holder.favorites_repo.delete_obj(song_dto)
         raise SongNotExists
 
 
