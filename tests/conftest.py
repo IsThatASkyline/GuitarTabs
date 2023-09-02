@@ -10,7 +10,6 @@ from sqlalchemy.orm import sessionmaker, close_all_sessions
 
 from src.config import get_settings
 from src.infrastructure.db.models.base import BaseAlchemyModels
-from src.presentation.admin.main import create_admin_instance
 from src.presentation.api.controllers import setup_controllers
 from src.infrastructure.db.main import build_sessions, create_engine
 from src.presentation.api.di import setup_di
@@ -23,11 +22,6 @@ def build_test_app() -> FastAPI:
     # settings = get_settings()
     BaseAlchemyModels.metadata.bind = db_engine
     setup_di(app, build_sessions(db_engine))
-
-    create_admin_instance(
-        app,
-        db_engine,
-    )
 
     setup_controllers(app.router)
 

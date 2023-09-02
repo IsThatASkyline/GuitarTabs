@@ -108,7 +108,8 @@ async def add_song_to_favorite(
     song_services: SongServices = Depends(get_song_services),
 ):
     try:
-        return await song_services.add_song_to_favorite(FavoriteSongDTO(song_id=song_id, **user_id.dict()))
+        await song_services.add_song_to_favorite(FavoriteSongDTO(song_id=song_id, **user_id.dict()))
+        return {'detail': 'Песня добавлена в избранное'}
     except SongNotExists:
         response.status_code = status.HTTP_404_NOT_FOUND
         return NotFoundSongError()
@@ -122,7 +123,8 @@ async def remove_song_from_favorite(
     song_services: SongServices = Depends(get_song_services),
 ):
     try:
-        return await song_services.remove_song_from_favorite(FavoriteSongDTO(song_id=song_id, **user_id.dict()))
+        await song_services.remove_song_from_favorite(FavoriteSongDTO(song_id=song_id, **user_id.dict()))
+        return {'detail': 'Песня убрана из избранного'}
     except SongNotExists:
         response.status_code = status.HTTP_404_NOT_FOUND
         return NotFoundSongError()

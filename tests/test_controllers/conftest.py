@@ -211,17 +211,13 @@ async def after_modulate_song_data2():
 async def create_user_in_database(db_session_test: sessionmaker):
     async def create_user_in_database_wrap(
         user_id: int,
-        username: str,
-        email: str,
-        password: str,
+        telegram_id: str,
     ):
         async with db_session_test() as session:
             await session.execute(
                 insert(User).values(
                     id=user_id,
-                    username=username,
-                    email=email,
-                    password=password,
+                    telegram_id=telegram_id,
                 )
             )
             await session.commit()
@@ -233,9 +229,7 @@ async def create_user_in_database(db_session_test: sessionmaker):
 async def user_data():
     return {
         'user_id': 1,
-        'username': 'username',
-        'email': 'email',
-        'password': 'password'
+        'telegram_id': 121212,
     }
 
 

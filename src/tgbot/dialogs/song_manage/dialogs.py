@@ -21,6 +21,13 @@ from .handlers import (
 from src.tgbot import states
 from ..preview_data import PREVIEW_SONG
 
+am = """
+        E | A | D | G | H | e
+       --＋--＋--＋--＋--＋--
+        – | – | – | – | O | – 1
+        – | – | O | O | – | – 2
+        – | – | – | – | – | – 3
+     """
 
 all_songs = Dialog(
     Window(
@@ -44,7 +51,9 @@ all_songs = Dialog(
     ),
     Window(
         Jinja(
-            "Выбрана песня {{ song.title }} группы {{ song.band.title }}"
+            "Выбрана песня {{ song.title }} группы {{ song.band.title }}\n"
+            "Аккорды в песне:\n"
+            f"Am: {am}"
         ),
         Button(
             Const("[Emodji]Добавить в избранное"),
