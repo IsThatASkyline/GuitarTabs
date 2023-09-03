@@ -13,7 +13,7 @@ class CreateBandDTO(BaseBandDTO):
     pass
 
 
-class UpdateBandDTO(BaseBandDTO):
+class UpdateBandDTO(BaseModel):
     id: int
     title: str | None
 

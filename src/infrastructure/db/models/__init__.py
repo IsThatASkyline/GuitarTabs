@@ -1,3 +1,4 @@
+from .base import BaseAlchemyModels
 from .user import User
 from .band import Band
 from .song import Song

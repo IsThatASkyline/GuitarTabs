@@ -1,3 +1,4 @@
+
 [tool.poetry]
 name = "guitar-app"
 version = "0.1.0"

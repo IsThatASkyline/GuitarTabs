@@ -13,7 +13,7 @@ class CreateMusicianDTO(BaseMusicianDTO):
     pass
 
 
-class UpdateMusicianDTO(BaseMusicianDTO):
+class UpdateMusicianDTO(BaseModel):
     id: int
     first_name: str | None = None
     last_name: str | None = None

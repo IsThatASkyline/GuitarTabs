@@ -2,7 +2,7 @@ from sqlalchemy import String
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from src.application.guitarapp.dto import MusicianDTO
-from src.infrastructure.db.models.base import BaseAlchemyModels
+from src.infrastructure.db.models import BaseAlchemyModels, Band
 
 
 class Musician(BaseAlchemyModels):

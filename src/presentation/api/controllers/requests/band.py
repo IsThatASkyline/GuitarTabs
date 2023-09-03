@@ -10,7 +10,7 @@ class CreateBandRequest(BaseBand):
 
 
 class UpdateBandRequest(BaseBand):
-    title: str | None
+    pass
 
 
 class UpdateMusicianBandRequest(BaseModel):

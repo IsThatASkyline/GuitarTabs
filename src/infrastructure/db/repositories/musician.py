@@ -19,7 +19,7 @@ class MusicianRepository(BaseRepository[Musician]):
         return musician.to_dto()
 
     async def get_by_id(self, id_: int) -> MusicianDTO:
-        musician = await super().get_by_id(id_)
+        musician: Musician = await super().get_by_id(id_)
         return musician.to_dto() if musician else None
 
     async def get_all(self) -> list[MusicianDTO]:

@@ -1,6 +1,7 @@
 from sqlalchemy import ForeignKey, String
 from sqlalchemy.orm import Mapped, mapped_column, relationship
-from src.infrastructure.db.models.base import BaseAlchemyModels
+
+from src.infrastructure.db.models import BaseAlchemyModels, Song
 
 
 class Verse(BaseAlchemyModels):

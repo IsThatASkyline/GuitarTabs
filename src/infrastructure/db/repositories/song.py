@@ -20,12 +20,15 @@ class SongRepository(BaseRepository[Song]):
         await self.session.flush()
 
         if song_dto.verses:
-            [self.session.add(Verse(
-                title=v.title,
-                lyrics=v.lyrics,
-                chords=v.chords,
-                song_id=song.id,
-            )) for v in song_dto.verses]
+            for v in song_dto.verses:
+                self.session.add(
+                    Verse(
+                        title=v.title,
+                        lyrics=v.lyrics,
+                        chords=v.chords,
+                        song_id=song.id,
+                    )
+                )
 
         return song.id
 

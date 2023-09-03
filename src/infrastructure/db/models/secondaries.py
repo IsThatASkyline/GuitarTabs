@@ -1,6 +1,6 @@
 from sqlalchemy import ForeignKey, UniqueConstraint
 from sqlalchemy.orm import Mapped, mapped_column
-from src.infrastructure.db.models.base import BaseAlchemyModels
+from src.infrastructure.db.models import BaseAlchemyModels
 
 
 class BandMembers(BaseAlchemyModels):
