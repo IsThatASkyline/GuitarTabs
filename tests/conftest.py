@@ -7,10 +7,10 @@ from fastapi import FastAPI
 from httpx import AsyncClient
 from sqlalchemy import text
 from sqlalchemy.orm import sessionmaker, close_all_sessions
-from src.infrastructure.db.models.base import BaseAlchemyModels
-from src.presentation.api.controllers import setup_controllers
-from src.infrastructure.db.main import build_sessions, create_engine
-from src.presentation.api.di import setup_di
+from guitar_app.infrastructure.db.models.base import BaseAlchemyModels
+from guitar_app.presentation.api.controllers import setup_controllers
+from guitar_app.infrastructure.db.main import build_sessions, create_engine
+from guitar_app.presentation.api.di import setup_di
 
 db_engine = create_engine('postgresql+asyncpg://postgres:1234@localhost:5432/testdb')
 

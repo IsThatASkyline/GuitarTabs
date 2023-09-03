@@ -2,7 +2,7 @@ import pytest_asyncio
 from sqlalchemy import insert
 from sqlalchemy.orm import sessionmaker
 
-from src.infrastructure.db.models import Musician
+from guitar_app.infrastructure.db.models import Musician
 
 
 @pytest_asyncio.fixture(scope='function')
