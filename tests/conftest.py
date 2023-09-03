@@ -7,8 +7,6 @@ from fastapi import FastAPI
 from httpx import AsyncClient
 from sqlalchemy import text
 from sqlalchemy.orm import sessionmaker, close_all_sessions
-
-from src.config import get_settings
 from src.infrastructure.db.models.base import BaseAlchemyModels
 from src.presentation.api.controllers import setup_controllers
 from src.infrastructure.db.main import build_sessions, create_engine

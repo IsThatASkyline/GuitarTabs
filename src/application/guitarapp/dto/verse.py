@@ -12,4 +12,3 @@ class BaseVerseDTO(BaseModel):
 
 class CreateVerseDTO(BaseVerseDTO):
     song_id: int
-

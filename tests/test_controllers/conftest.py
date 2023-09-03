@@ -1,4 +1,3 @@
-import pytest
 import pytest_asyncio
 from sqlalchemy import insert
 from sqlalchemy.orm import sessionmaker

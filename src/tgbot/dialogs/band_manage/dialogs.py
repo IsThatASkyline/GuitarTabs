@@ -1,7 +1,6 @@
-from aiogram import F
 from aiogram_dialog import Dialog, Window
-from aiogram_dialog.widgets.kbd import Start, Cancel, Select, SwitchTo, Button, ScrollingGroup
-from aiogram_dialog.widgets.text import Jinja, Const, Format
+from aiogram_dialog.widgets.kbd import Cancel, Select, ScrollingGroup
+from aiogram_dialog.widgets.text import Const, Format
 
 from .getters import (
     get_all_bands,

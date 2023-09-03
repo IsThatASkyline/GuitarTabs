@@ -21,4 +21,3 @@ def register_start_handler(
         start_dialog,
         *filters,
     )
-

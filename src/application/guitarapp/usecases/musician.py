@@ -44,4 +44,3 @@ class DeleteMusician(MusicianUseCase):
             await self.uow.app_holder.musician_repo.delete_obj(id_)
             return
         raise MusicianNotExists
-

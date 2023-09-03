@@ -2,7 +2,7 @@ from fastapi import APIRouter, Response, status
 from fastapi.params import Depends
 
 from src.application.guitarapp.dto import CreateBandDTO, BandDTO, UpdateBandDTO, FullBandDTO, UpdateMusicianBandDTO
-from src.application.guitarapp.exceptions import BandNotExists, SmthWithAddingToBand, MusicianNotExists
+from src.application.guitarapp.exceptions import BandNotExists, MusicianNotExists
 from src.application.guitarapp.services import BandServices
 from src.presentation.api.controllers.requests import (
     CreateBandRequest,
@@ -10,8 +10,7 @@ from src.presentation.api.controllers.requests import (
     UpdateMusicianBandRequest,
 )
 from src.presentation.api.controllers.responses import BandDeleteResponse
-from src.presentation.api.controllers.responses.exceptions import NotFoundBandError, MusicianToBandIntegrityError, \
-    NotFoundMusicianError
+from src.presentation.api.controllers.responses.exceptions import NotFoundBandError, NotFoundMusicianError
 from src.presentation.api.di.providers.services import get_band_services
 
 router = APIRouter(prefix="/band", tags=["band"])

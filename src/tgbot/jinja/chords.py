@@ -36,4 +36,3 @@ CHORDS_TABULATURE['G'] = """
         O    |     |     |     |   O         3
          |    |     |     |     |    |          4
 """
-

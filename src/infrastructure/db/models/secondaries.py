@@ -27,4 +27,3 @@ class UserFavorite(BaseAlchemyModels):
     song_id: Mapped[int] = mapped_column(
         ForeignKey("song_table.id", ondelete="CASCADE"), nullable=False
     )
-

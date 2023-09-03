@@ -84,7 +84,7 @@ async def test_update_song(
         'title': 'new_title',
     }
     response = await client.patch(f'song/update-song/{song_data["song_id"]}', json=data_json)
-    response_404 = await client.patch(f'song/update-song/123123123', json=data_json)
+    response_404 = await client.patch('song/update-song/123123123', json=data_json)
 
     r_data = response.json()
 
@@ -137,7 +137,7 @@ async def test_modulate_song(
 
     response = await client.post(f'song/modulate-song/{modulate_song_data1["song_id"]}', json=data_json1)
     response2 = await client.post(f'song/modulate-song/{modulate_song_data2["song_id"]}', json=data_json2)
-    response_404 = await client.post(f'song/modulate-song/123213', json=data_json2)
+    response_404 = await client.post('song/modulate-song/123213', json=data_json2)
 
     assert response.json() == after_modulate_song_data1
     assert response2.json() == after_modulate_song_data2
@@ -217,10 +217,10 @@ async def test_find_song(
         'value': title_part2,
     }
 
-    response1 = await client.post(f'song/find-song', json=data_json1)
+    response1 = await client.post('song/find-song', json=data_json1)
     r_data1 = response1.json()
 
-    response2 = await client.post(f'song/find-song', json=data_json2)
+    response2 = await client.post('song/find-song', json=data_json2)
     r_data2 = response2.json()
 
     assert len(r_data1) == 2
@@ -256,4 +256,3 @@ async def test_get_user_favorite_songs(
     r_data = response.json()
     assert len(r_data) == 1
     assert r_data[0]['title'] == song_data['title']
-

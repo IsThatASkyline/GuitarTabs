@@ -68,7 +68,7 @@ async def test_update_band(
     }
 
     response = await client.patch(f'band/update-band/{band_data["band_id"]}', json=data_json)
-    response_404 = await client.patch(f'band/update-band/123123123', json=data_json)
+    response_404 = await client.patch('band/update-band/123123123', json=data_json)
 
     r_data = response.json()
 

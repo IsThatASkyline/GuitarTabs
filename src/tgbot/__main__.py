@@ -2,7 +2,6 @@ import asyncio
 
 from aiogram_dialog.manager.message_manager import MessageManager
 
-from src import config
 from src.config import get_settings
 from src.infrastructure.db.main import create_engine, build_sessions
 from src.tgbot.main_factory import create_bot, create_dispatcher

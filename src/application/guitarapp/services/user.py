@@ -1,7 +1,5 @@
-from src.application.guitarapp.dto import SongDTO
 from src.application.guitarapp.dto.user import CreateUserDTO, UpdateUserDTO, UserDTO
-from src.application.guitarapp.usecases import CreateUser, GetUserById, GetFavoriteSongsByUser, GetUsers, UpdateUser, \
-    DeleteUser
+from src.application.guitarapp.usecases import CreateUser, GetUserById, GetUsers, UpdateUser, DeleteUser
 from src.infrastructure.db.uow import UnitOfWork
 
 

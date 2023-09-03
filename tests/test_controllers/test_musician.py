@@ -71,7 +71,7 @@ async def test_update_musician(
         'last_name': 'new_last_name'
     }
     response = await client.patch(f'musician/update-musician/{musician_data["musician_id"]}', json=data_json)
-    response_404 = await client.patch(f'musician/update-musician/123123123', json=data_json)
+    response_404 = await client.patch('musician/update-musician/123123123', json=data_json)
 
     r_data = response.json()
 
@@ -95,4 +95,3 @@ async def test_delete_musician(
     response = await client.get(f'musician/get-musician/{musician_data["musician_id"]}')
     assert response.json()['detail'] == 'Not found musician'
     assert response.status_code == status.HTTP_404_NOT_FOUND
-

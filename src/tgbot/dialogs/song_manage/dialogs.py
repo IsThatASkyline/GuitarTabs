@@ -19,7 +19,6 @@ from .handlers import (
     remove_song_from_favorite, find_song_by_title, select_song_founded_by_title,
 )
 from src.tgbot import states
-from src.tgbot.jinja import chords
 from src.tgbot.jinja.templates import song
 from ..preview_data import PREVIEW_SONG
 

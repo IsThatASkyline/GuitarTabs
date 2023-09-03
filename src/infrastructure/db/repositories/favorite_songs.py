@@ -2,7 +2,7 @@ from sqlalchemy import select, delete
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import joinedload
 
-from src.application.guitarapp.dto import SongDTO,  FavoriteSongDTO
+from src.application.guitarapp.dto import SongDTO, FavoriteSongDTO
 from src.infrastructure.db.models import Song, User
 from src.infrastructure.db.models.secondaries import UserFavorite
 from src.infrastructure.db.repositories.base import BaseRepository
@@ -34,4 +34,3 @@ class FavoriteRepository(BaseRepository[UserFavorite]):
         query = delete(UserFavorite).where(UserFavorite.user_id == subquery,
                                            UserFavorite.song_id == fav_dto.song_id)
         await self.session.execute(query)
-

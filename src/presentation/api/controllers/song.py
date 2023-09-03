@@ -136,4 +136,3 @@ async def find_song(
     song_services: SongServices = Depends(get_song_services),
 ) -> list[SongDTO] | None:
     return await song_services.find_song(FindSongDTO(**song.dict()))
-

@@ -43,4 +43,3 @@ class DeleteUser(UserUseCase):
             await self.uow.commit()
             return
         raise UserNotExists
-

@@ -1,7 +1,7 @@
 from src.application.common.usecases.base import BaseUseCase
 from src.application.guitarapp.dto import FullSongDTO, CreateSongDTO, SongDTO, UpdateSongDTO, FavoriteSongDTO, \
     FindSongDTO, \
-    ModulateSongDTO, UserDTO
+    ModulateSongDTO
 from src.infrastructure.db.uow import UnitOfWork
 from src.application.guitarapp.exceptions import SongNotExists, CreateSongException
 from src.application.guitarapp.domain.services.modulation import get_modulate_verses
@@ -100,4 +100,3 @@ class DeleteSong(SongUseCase):
             await self.uow.app_holder.song_repo.delete_obj(id_)
             return
         raise SongNotExists
-

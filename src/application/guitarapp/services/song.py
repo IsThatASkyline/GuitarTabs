@@ -43,12 +43,12 @@ class SongServices:
     async def modulate_song(self, modulate_song_dto: ModulateSongDTO) -> FullSongDTO:
         return await GetModulatedSong(self.uow)(modulate_song_dto)
 
-    async def add_song_to_favorite(self,  song_dto: FavoriteSongDTO):
+    async def add_song_to_favorite(self, song_dto: FavoriteSongDTO):
         async with self.uow:
             await AddSongToFavorite(self.uow)(song_dto)
             await self.uow.commit()
 
-    async def remove_song_from_favorite(self,  song_dto: FavoriteSongDTO):
+    async def remove_song_from_favorite(self, song_dto: FavoriteSongDTO):
         async with self.uow:
             await RemoveSongFromFavorite(self.uow)(song_dto)
             await self.uow.commit()

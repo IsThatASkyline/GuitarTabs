@@ -20,7 +20,7 @@ SONG_CHORDS_WITHOUT_TABS_TEMPLATE = Jinja(
             "\n\n{{ verse_string.lyrics }}\n"
             "{% endfor %}"
             "{% endfor %}"
-        )
+)
 
 SONG_CHORDS_WITH_TABS_TEMPLATE = Jinja(
             "Аккорды для песни \n\n"
@@ -45,4 +45,4 @@ SONG_CHORDS_WITH_TABS_TEMPLATE = Jinja(
             "\n\n{{ verse_string.lyrics }}\n"
             "{% endfor %}"
             "{% endfor %}"
-        )
+)
