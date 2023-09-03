@@ -4,6 +4,7 @@ from dataclasses import dataclass
 @dataclass
 class Chord:
     title: str
+    tab: str | None = None
 
 
 @dataclass

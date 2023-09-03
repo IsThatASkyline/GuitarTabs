@@ -3,6 +3,7 @@ from aiogram_dialog import DialogManager
 from src.infrastructure.db.uow import UnitOfWork
 from src.application.guitarapp import services, dto
 from src.tgbot.models.verse import Chord, VerseString, Verse
+from src.tgbot.jinja.chords import CHORDS_TABULATURE
 
 
 async def get_song(uow: UnitOfWork, user: dto.UserDTO, dialog_manager: DialogManager, **_):
@@ -37,6 +38,37 @@ async def get_chords(uow: UnitOfWork, dialog_manager: DialogManager, **_):
         result.append(Verse(title=verse.title, strings=verse_strings))
     return {
         "verses": result,
+    }
+
+
+async def get_chords_with_tabs(uow: UnitOfWork, dialog_manager: DialogManager, **_):
+    song_id = (
+        dialog_manager.dialog_data.get("song_id", None) or dialog_manager.start_data["song_id"]
+    )
+    song = await services.SongServices(uow).get_song_by_id(id_=song_id)
+    verses = song.verses
+    result = []
+    # O(n2), thinking of more optimized solution
+    unique_chords = set()
+    for verse in verses:
+        chords_list = verse.chords.split('\\')
+        lyrics_list = verse.lyrics.split('\\')
+        verse_strings = []
+        for chords, lyrics in zip(*(chords_list, lyrics_list)):
+            all_chords_in_verse_string = chords.split()
+            unique_chords.update(all_chords_in_verse_string)
+            verse_string_chords = [Chord(title=chord) for chord in all_chords_in_verse_string]
+            pair = VerseString(lyrics=lyrics.strip(), chords=verse_string_chords, chords_count=len(verse_string_chords))
+            verse_strings.append(pair)
+        result.append(Verse(title=verse.title, strings=verse_strings))
+    return {
+        "verses": result,
+        'chords_tabs': [
+            Chord(
+                title=chord,
+                tab=CHORDS_TABULATURE[f'{chord}']
+            ) for chord in unique_chords
+        ],
     }
 
 

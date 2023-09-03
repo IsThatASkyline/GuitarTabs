@@ -7,7 +7,7 @@ from src.config import get_settings
 from src.infrastructure.db.main import create_engine, build_sessions
 from src.tgbot.main_factory import create_bot, create_dispatcher
 
-TOKEN = "6241238975:AAHPYeeZxYlR0DcT8rR9uGPAGyoekrQiG7c"
+TOKEN = "6241238975:AAGwfeWFEqiAqZxQVPneTElpH8RkuLXL8Ac"
 
 
 async def main():

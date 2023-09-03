@@ -9,7 +9,7 @@ from .getters import (
     get_all_songs,
     get_chords,
     get_songs_by_band,
-    get_favorite_songs, get_songs_founded_by_title,
+    get_favorite_songs, get_songs_founded_by_title, get_chords_with_tabs,
 )
 from .handlers import (
     select_song,
@@ -19,15 +19,10 @@ from .handlers import (
     remove_song_from_favorite, find_song_by_title, select_song_founded_by_title,
 )
 from src.tgbot import states
+from src.tgbot.jinja import chords
+from src.tgbot.jinja.templates import song
 from ..preview_data import PREVIEW_SONG
 
-am = """
-        E | A | D | G | H | e
-       --＋--＋--＋--＋--＋--
-        – | – | – | – | O | – 1
-        – | – | O | O | – | – 2
-        – | – | – | – | – | – 3
-     """
 
 all_songs = Dialog(
     Window(
@@ -51,9 +46,7 @@ all_songs = Dialog(
     ),
     Window(
         Jinja(
-            "Выбрана песня {{ song.title }} группы {{ song.band.title }}\n"
-            "Аккорды в песне:\n"
-            f"Am: {am}"
+            "Выбрана песня {{ song.title }} группы {{ song.band.title }}"
         ),
         Button(
             Const("[Emodji]Добавить в избранное"),
@@ -83,25 +76,11 @@ all_songs = Dialog(
     ),
     Window(
         # Hardcode jinja but whatever
-        Jinja(
-            "Аккорды для песни \n"
-            "{% for verse in verses %}"
-            "\n\n{{ verse.title }}:\n"
-            "{% for verse_string in verse.strings%}"
-            "{% for chord in verse_string.chords %}"
-            "{% if verse_string.chords_count == 1 %}"
-            "{{ chord.title }}"
-            "{% elif verse_string.chords_count == 2 %}"
-            "{{ '%-50s'|format(chord.title) }}"
-            "{% elif verse_string.chords_count == 3 %}"
-            "{{ '%-26s'|format(chord.title) }}"
-            "{% elif verse_string.chords_count == 4 %}"
-            "{{ '%-17s'|format(chord.title) }}"
-            "{% endif %}"
-            "{% endfor %}"
-            "\n\n{{ verse_string.lyrics }}\n"
-            "{% endfor %}"
-            "{% endfor %}"
+        song.SONG_CHORDS_WITHOUT_TABS_TEMPLATE,
+        SwitchTo(
+            Const("[Emodji]Показать аккорды"),
+            id="to_chords_tabs",
+            state=states.AllSongsPanelSG.song_chords_with_tabs,
         ),
         SwitchTo(
             Const("[Emodji]Назад к меню песни"),
@@ -111,6 +90,23 @@ all_songs = Dialog(
         state=states.AllSongsPanelSG.song_chords,
         preview_data={"song": PREVIEW_SONG},
         getter=get_chords,
+    ),
+    Window(
+        # Hardcode jinja but whatever
+        song.SONG_CHORDS_WITH_TABS_TEMPLATE,
+        SwitchTo(
+            Const("[Emodji]Убрать аккорды"),
+            id="to_chords",
+            state=states.AllSongsPanelSG.song_chords,
+        ),
+        SwitchTo(
+            Const("[Emodji]Назад к меню песни"),
+            id="to_song",
+            state=states.AllSongsPanelSG.song_menu,
+        ),
+        state=states.AllSongsPanelSG.song_chords_with_tabs,
+        preview_data={"song": PREVIEW_SONG},
+        getter=get_chords_with_tabs,
     ),
 )
 
@@ -166,25 +162,11 @@ songs_by_group = Dialog(
     ),
     Window(
         # Hardcode jinja but whatever
-        Jinja(
-            "Аккорды для песни \n"
-            "{% for verse in verses %}"
-            "\n\n{{ verse.title }}:\n"
-            "{% for verse_string in verse.strings%}"
-            "{% for chord in verse_string.chords %}"
-            "{% if verse_string.chords_count == 1 %}"
-            "{{ chord.title }}"
-            "{% elif verse_string.chords_count == 2 %}"
-            "{{ '%-50s'|format(chord.title) }}"
-            "{% elif verse_string.chords_count == 3 %}"
-            "{{ '%-26s'|format(chord.title) }}"
-            "{% elif verse_string.chords_count == 4 %}"
-            "{{ '%-17s'|format(chord.title) }}"
-            "{% endif %}"
-            "{% endfor %}"
-            "\n\n{{ verse_string.lyrics }}\n"
-            "{% endfor %}"
-            "{% endfor %}"
+        song.SONG_CHORDS_WITHOUT_TABS_TEMPLATE,
+        SwitchTo(
+            Const("[Emodji]Показать аккорды"),
+            id="to_chords_tabs",
+            state=states.BandSongsPanelSG.song_chords_with_tabs,
         ),
         SwitchTo(
             Const("[Emodji]Назад к меню песни"),
@@ -194,6 +176,23 @@ songs_by_group = Dialog(
         state=states.BandSongsPanelSG.song_chords,
         preview_data={"song": PREVIEW_SONG},
         getter=get_chords,
+    ),
+    Window(
+        # Hardcode jinja but whatever
+        song.SONG_CHORDS_WITH_TABS_TEMPLATE,
+        SwitchTo(
+            Const("[Emodji]Убрать аккорды"),
+            id="to_chords",
+            state=states.BandSongsPanelSG.song_chords,
+        ),
+        SwitchTo(
+            Const("[Emodji]Назад к меню песни"),
+            id="to_song",
+            state=states.BandSongsPanelSG.song_menu,
+        ),
+        state=states.BandSongsPanelSG.song_chords_with_tabs,
+        preview_data={"song": PREVIEW_SONG},
+        getter=get_chords_with_tabs,
     ),
 )
 
@@ -250,25 +249,11 @@ favorite_songs = Dialog(
     ),
     Window(
         # Hardcode jinja but whatever
-        Jinja(
-            "Аккорды для песни \n"
-            "{% for verse in verses %}"
-            "\n\n{{ verse.title }}:\n"
-            "{% for verse_string in verse.strings%}"
-            "{% for chord in verse_string.chords %}"
-            "{% if verse_string.chords_count == 1 %}"
-            "{{ chord.title }}"
-            "{% elif verse_string.chords_count == 2 %}"
-            "{{ '%-50s'|format(chord.title) }}"
-            "{% elif verse_string.chords_count == 3 %}"
-            "{{ '%-26s'|format(chord.title) }}"
-            "{% elif verse_string.chords_count == 4 %}"
-            "{{ '%-17s'|format(chord.title) }}"
-            "{% endif %}"
-            "{% endfor %}"
-            "\n\n{{ verse_string.lyrics }}\n"
-            "{% endfor %}"
-            "{% endfor %}"
+        song.SONG_CHORDS_WITHOUT_TABS_TEMPLATE,
+        SwitchTo(
+            Const("[Emodji]Показать аккорды"),
+            id="to_chords_tabs",
+            state=states.FavoriteSongsPanelSG.song_chords_with_tabs,
         ),
         SwitchTo(
             Const("[Emodji]Назад к меню песни"),
@@ -278,6 +263,23 @@ favorite_songs = Dialog(
         state=states.FavoriteSongsPanelSG.song_chords,
         preview_data={"song": PREVIEW_SONG},
         getter=get_chords,
+    ),
+    Window(
+        # Hardcode jinja but whatever
+        song.SONG_CHORDS_WITH_TABS_TEMPLATE,
+        SwitchTo(
+            Const("[Emodji]Убрать аккорды"),
+            id="to_chords",
+            state=states.FavoriteSongsPanelSG.song_chords,
+        ),
+        SwitchTo(
+            Const("[Emodji]Назад к меню песни"),
+            id="to_song",
+            state=states.FavoriteSongsPanelSG.song_menu,
+        ),
+        state=states.FavoriteSongsPanelSG.song_chords_with_tabs,
+        preview_data={"song": PREVIEW_SONG},
+        getter=get_chords_with_tabs,
     ),
 )
 
@@ -340,25 +342,11 @@ songs_founded_by_title = Dialog(
     ),
     Window(
         # Hardcode jinja but whatever
-        Jinja(
-            "Аккорды для песни \n"
-            "{% for verse in verses %}"
-            "\n\n{{ verse.title }}:\n"
-            "{% for verse_string in verse.strings%}"
-            "{% for chord in verse_string.chords %}"
-            "{% if verse_string.chords_count == 1 %}"
-            "{{ chord.title }}"
-            "{% elif verse_string.chords_count == 2 %}"
-            "{{ '%-50s'|format(chord.title) }}"
-            "{% elif verse_string.chords_count == 3 %}"
-            "{{ '%-26s'|format(chord.title) }}"
-            "{% elif verse_string.chords_count == 4 %}"
-            "{{ '%-17s'|format(chord.title) }}"
-            "{% endif %}"
-            "{% endfor %}"
-            "\n\n{{ verse_string.lyrics }}\n"
-            "{% endfor %}"
-            "{% endfor %}"
+        song.SONG_CHORDS_WITHOUT_TABS_TEMPLATE,
+        SwitchTo(
+            Const("[Emodji]Показать аккорды"),
+            id="to_chords_tabs",
+            state=states.FoundedSongsPanelSG.song_chords_with_tabs,
         ),
         SwitchTo(
             Const("[Emodji]Назад к меню песни"),
@@ -368,5 +356,22 @@ songs_founded_by_title = Dialog(
         state=states.FoundedSongsPanelSG.song_chords,
         preview_data={"song": PREVIEW_SONG},
         getter=get_chords,
+    ),
+    Window(
+        # Hardcode jinja but whatever
+        song.SONG_CHORDS_WITH_TABS_TEMPLATE,
+        SwitchTo(
+            Const("[Emodji]Убрать аккорды"),
+            id="to_chords",
+            state=states.FoundedSongsPanelSG.song_chords,
+        ),
+        SwitchTo(
+            Const("[Emodji]Назад к меню песни"),
+            id="to_song",
+            state=states.FoundedSongsPanelSG.song_menu,
+        ),
+        state=states.FoundedSongsPanelSG.song_chords_with_tabs,
+        preview_data={"song": PREVIEW_SONG},
+        getter=get_chords_with_tabs,
     ),
 )
