@@ -2,71 +2,7 @@ import pytest_asyncio
 from sqlalchemy import insert
 from sqlalchemy.orm import sessionmaker
 
-from src.infrastructure.db.models import Band, Musician, Song, Verse, User, UserFavorite
-
-
-@pytest_asyncio.fixture(scope='function')
-async def create_band_in_database(db_session_test: sessionmaker):
-    async def create_band_in_database_wrap(
-        band_id: int,
-        title: str
-    ):
-        async with db_session_test() as session:
-            await session.execute(
-                insert(Band).values(
-                    id=band_id,
-                    title=title,
-                )
-            )
-            await session.commit()
-
-    return create_band_in_database_wrap
-
-
-@pytest_asyncio.fixture(scope='function')
-async def band_data():
-    return {
-        'band_id': 1,
-        'title': 'test_band'
-    }
-
-
-@pytest_asyncio.fixture(scope='function')
-async def create_musician_in_database(db_session_test: sessionmaker):
-    async def create_musician_in_database_wrap(
-        musician_id: int,
-        first_name: str,
-        last_name: str
-    ):
-        async with db_session_test() as session:
-            await session.execute(
-                insert(Musician).values(
-                    id=musician_id,
-                    first_name=first_name,
-                    last_name=last_name
-                )
-            )
-            await session.commit()
-
-    return create_musician_in_database_wrap
-
-
-@pytest_asyncio.fixture(scope='function')
-async def musician_data():
-    return {
-        'musician_id': 1,
-        'first_name': 'first_name',
-        'last_name': 'last_name',
-    }
-
-
-@pytest_asyncio.fixture(scope='function')
-async def musician_data2():
-    return {
-        'musician_id': 2,
-        'first_name': '2first_name',
-        'last_name': '2lastname',
-    }
+from src.infrastructure.db.models import Song, Verse, UserFavorite
 
 
 @pytest_asyncio.fixture(scope='function')
@@ -203,32 +139,6 @@ async def after_modulate_song_data2():
                     'chords': 'G A#m C Fm'
                 },
             ],
-    }
-
-
-@pytest_asyncio.fixture(scope='function')
-async def create_user_in_database(db_session_test: sessionmaker):
-    async def create_user_in_database_wrap(
-        user_id: int,
-        telegram_id: str,
-    ):
-        async with db_session_test() as session:
-            await session.execute(
-                insert(User).values(
-                    id=user_id,
-                    telegram_id=telegram_id,
-                )
-            )
-            await session.commit()
-
-    return create_user_in_database_wrap
-
-
-@pytest_asyncio.fixture(scope='function')
-async def user_data():
-    return {
-        'user_id': 1,
-        'telegram_id': 121212,
     }
 
 

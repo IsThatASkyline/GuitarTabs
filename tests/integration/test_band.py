@@ -40,7 +40,6 @@ async def test_get_band(
 @pytest.mark.asyncio
 async def test_create_band(
         client: AsyncClient,
-        create_band_in_database,
         band_data
 ) -> None:
     data_json = {

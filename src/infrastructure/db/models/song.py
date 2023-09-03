@@ -2,7 +2,7 @@ from sqlalchemy import ForeignKey, String
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from src.application.guitarapp.dto import SongDTO, FullSongDTO
-from src.infrastructure.db.models import BaseAlchemyModels, Verse, Band, User
+from src.infrastructure.db.models import BaseAlchemyModels
 
 
 class Song(BaseAlchemyModels):

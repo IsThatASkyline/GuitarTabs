@@ -63,3 +63,11 @@ async def prepare_database():
 async def client() -> AsyncGenerator[AsyncClient, None]:
     async with AsyncClient(app=build_test_app(), base_url='http://test') as client_:
         yield client_
+
+
+pytest_plugins = [
+    'tests.fixtures.band_fixtures',
+    'tests.fixtures.musician_fixtures',
+    'tests.fixtures.song_fixtures',
+    'tests.fixtures.user_fixtures',
+]
