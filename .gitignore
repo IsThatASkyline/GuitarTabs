@@ -1,7 +1,7 @@
 .idea
 __pycache__
 .env
-.dev.env
+.env
 *.png
 *.jpg
 .pytest_cache
