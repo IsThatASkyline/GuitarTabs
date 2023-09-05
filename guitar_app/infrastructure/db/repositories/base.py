@@ -11,23 +11,23 @@ Model = TypeVar("Model", bound=BaseAlchemyModels)
 class AbstractRepository(ABC):
 
     @abstractmethod
-    async def create_obj(self, dto):
+    async def add(self, **kwargs):
         raise NotImplementedError
 
     @abstractmethod
-    async def get_by_id(self, id_: int):
+    async def get(self, **kwargs):
         raise NotImplementedError
 
     @abstractmethod
-    async def get_all(self):
+    async def list(self, **kwargs):
         raise NotImplementedError
 
     @abstractmethod
-    async def update_obj(self, id_: int, **kwargs):
+    async def update(self, **kwargs):
         raise NotImplementedError
 
     @abstractmethod
-    async def delete_obj(self, id_: int):
+    async def delete(self, **kwargs):
         raise NotImplementedError
 
 
@@ -36,24 +36,24 @@ class BaseRepository(Generic[Model], AbstractRepository):
         self._model = model
         self._session = session
 
-    async def create_obj(self, dto) -> Model:
+    async def add(self, dto) -> Model:
         ent = self._model(dto)
         self._session.add(ent)
         await self._session.flush()
         return ent
 
-    async def get_by_id(self, id_: int) -> Model | None:
+    async def get(self, id_: int) -> Model | None:
         query = select(self._model).where(self._model.id == id_)
         return (await self._session.execute(query)).scalar_one_or_none()
 
-    async def get_all(self) -> Sequence[Model] | None:
+    async def list(self, **kwargs) -> Sequence[Model] | None:
         result = await self._session.execute(select(self._model))
         return result.scalars().all()
 
-    async def update_obj(self, id_: int, **kwargs) -> None:
+    async def update(self, id_: int, **kwargs) -> None:
         query = update(self._model).where(self._model.id == id_).values(kwargs)
         await self._session.execute(query)
 
-    async def delete_obj(self, id_: int) -> None:
+    async def delete(self, id_: int) -> None:
         query = delete(self._model).where(self._model.id == id_)
         await self._session.execute(query)

@@ -47,7 +47,6 @@ async def test_get_song(
 @pytest.mark.asyncio
 async def test_create_song(
         client: AsyncClient,
-        create_song_in_database,
         create_band_in_database,
         song_data,
         band_data

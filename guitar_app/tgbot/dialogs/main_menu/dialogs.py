@@ -8,26 +8,26 @@ from guitar_app.tgbot.dialogs.main_menu.getters import get_main
 main_menu = Dialog(
     Window(
         Jinja(
-            "Привет, {{ username }}!\n"
+            "Привет, {{ user.username }}!\n"
             "Ты находишься в главном меню.\n"
         ),
         Start(
-            Const("[Emodji]Избранные песни"),
+            Const("⭐️Избранные песни"),
             id="favorite_songs",
             state=states.FavoriteSongsPanelSG.choose_song,
         ),
         Start(
-            Const("[Emodji]Все песни"),
+            Const("🎵Все песни"),
             id="all_songs",
             state=states.AllSongsPanelSG.choose_song,
         ),
         Start(
-            Const("[Emodji]Все группы"),
+            Const("🎸Все группы"),
             id="all_bands",
             state=states.AllBandsPanelSG.choose_band,
         ),
         Start(
-            Const("[Emodji]Найти песню по названию"),
+            Const("🔍Найти песню по названию"),
             id="find_songs",
             state=states.FoundedSongsPanelSG.input_song_title,
         ),

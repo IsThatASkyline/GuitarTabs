@@ -10,7 +10,7 @@ class BandMembersRepository(BaseRepository[BandMembers]):
         self.session = session
         super().__init__(BandMembers, session)
 
-    async def create_obj(self, musician_dto: UpdateMusicianBandDTO) -> None:
+    async def add(self, musician_dto: UpdateMusicianBandDTO) -> None:
         musician = BandMembers(**musician_dto.dict())
         self.session.add(musician)
         return

@@ -11,7 +11,7 @@ class BandRepository(BaseRepository[Band]):
         self.session = session
         super().__init__(Band, session)
 
-    async def create_obj(self, band_dto: CreateBandDTO) -> BandDTO:
+    async def add(self, band_dto: CreateBandDTO) -> BandDTO:
         band = Band(
             title=band_dto.title,
         )
@@ -19,18 +19,18 @@ class BandRepository(BaseRepository[Band]):
         await self.session.flush()
         return band.to_dto()
 
-    async def get_by_id(self, id_: int) -> FullBandDTO:
+    async def get(self, id_: int) -> FullBandDTO:
         query = select(Band).options(joinedload(Band.songs), joinedload(Band.members)).where(Band.id == id_)
         band = (await self._session.execute(query)).unique().scalar_one_or_none()
 
         return band.to_full_dto() if band else None
 
-    async def get_all(self) -> list[BandDTO]:
-        bands = await super().get_all()
+    async def list(self) -> list[BandDTO]:
+        bands = await super().list()
         return [band.to_dto() for band in bands] if bands else None
 
-    async def update_obj(self, id_: int, **kwargs) -> None:
-        await super().update_obj(id_, **kwargs)
+    async def update(self, id_: int, **kwargs) -> None:
+        await super().update(id_, **kwargs)
 
-    async def delete_obj(self, id_: int):
-        await super().delete_obj(id_)
+    async def delete(self, id_: int):
+        await super().delete(id_)

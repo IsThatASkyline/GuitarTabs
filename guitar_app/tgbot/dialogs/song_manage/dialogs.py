@@ -19,9 +19,9 @@ from .handlers import (
     remove_song_from_favorite, find_song_by_title, select_song_founded_by_title,
 )
 from guitar_app.tgbot import states
-from guitar_app.tgbot.jinja.templates import song
+from guitar_app.tgbot.jinja.templates import song as templates
 from ..preview_data import PREVIEW_SONG
-
+from guitar_app.tgbot.jinja.chords import CHORDS_TABULATURE as ch
 
 all_songs = Dialog(
     Window(
@@ -38,34 +38,34 @@ all_songs = Dialog(
             width=1,
             height=7,
         ),
-        Cancel(Const("[Emodji]Назад")),
+        Cancel(Const("🔙Назад")),
         state=states.AllSongsPanelSG.choose_song,
         preview_data={"songs": [PREVIEW_SONG]},
         getter=get_all_songs,
     ),
     Window(
         Jinja(
-            "Выбрана песня {{ song.title }} группы {{ song.band.title }}"
+            "'{{ song.title }}' группы {{ song.band.title }}"
         ),
         Button(
-            Const("[Emodji]Добавить в избранное"),
+            Const("⭐️Добавить в избранное"),
             id="add_to_favorite",
             on_click=add_song_to_favorite,
             when=~F["in_favorites"],
         ),
         Button(
-            Const("[Emodji]Убрать из избранного"),
+            Const("🗑Убрать из избранного"),
             id="remove_from_favorite",
             on_click=remove_song_from_favorite,
             when=F["in_favorites"],
         ),
         SwitchTo(
-            Const("[Emodji]Аккорды"),
+            Const("📖 Текст и аккорды"),
             id="to_chords",
             state=states.AllSongsPanelSG.song_chords,
         ),
         SwitchTo(
-            Const("[Emodji]Назад ко всем песням"),
+            Const("🔙Назад ко всем песням"),
             id="to_all_songs",
             state=states.AllSongsPanelSG.choose_song,
         ),
@@ -74,15 +74,14 @@ all_songs = Dialog(
         getter=get_song,
     ),
     Window(
-        # Hardcode jinja but whatever
-        song.SONG_CHORDS_WITHOUT_TABS_TEMPLATE,
+        templates.SONG_CHORDS_WITHOUT_TABS_TEMPLATE,
         SwitchTo(
-            Const("[Emodji]Показать аккорды"),
+            Const("📜Показать аккорды"),
             id="to_chords_tabs",
             state=states.AllSongsPanelSG.song_chords_with_tabs,
         ),
         SwitchTo(
-            Const("[Emodji]Назад к меню песни"),
+            Const("🔙Назад к меню песни"),
             id="to_song",
             state=states.AllSongsPanelSG.song_menu,
         ),
@@ -91,15 +90,14 @@ all_songs = Dialog(
         getter=get_chords,
     ),
     Window(
-        # Hardcode jinja but whatever
-        song.SONG_CHORDS_WITH_TABS_TEMPLATE,
+        templates.SONG_CHORDS_WITH_TABS_TEMPLATE,
         SwitchTo(
-            Const("[Emodji]Убрать аккорды"),
+            Const("📜Убрать аккорды"),
             id="to_chords",
             state=states.AllSongsPanelSG.song_chords,
         ),
         SwitchTo(
-            Const("[Emodji]Назад к меню песни"),
+            Const("🔙Назад к меню песни"),
             id="to_song",
             state=states.AllSongsPanelSG.song_menu,
         ),
@@ -125,7 +123,7 @@ songs_by_group = Dialog(
             width=1,
             height=7,
         ),
-        Cancel(Const("[Emodji]Назад")),
+        Cancel(Const("🔙Назад")),
         state=states.BandSongsPanelSG.choose_song,
         getter=get_songs_by_band,
     ),
@@ -134,24 +132,24 @@ songs_by_group = Dialog(
             "Выбрана песня {{ song.title }} группы {{ song.band.title }}"
         ),
         Button(
-            Const("[Emodji]Добавить в избранное"),
+            Const("⭐️Добавить в избранное"),
             id="add_to_favorite",
             on_click=add_song_to_favorite,
             when=~F["in_favorites"],
         ),
         Button(
-            Const("[Emodji]Убрать из избранного"),
+            Const("🗑Убрать из избранного"),
             id="remove_from_favorite",
             on_click=remove_song_from_favorite,
             when=F["in_favorites"],
         ),
         SwitchTo(
-            Const("[Emodji]Аккорды"),
+            Const("📖 Текст и аккорды"),
             id="to_chords",
             state=states.BandSongsPanelSG.song_chords,
         ),
         SwitchTo(
-            Const("[Emodji]Назад к песням группы"),
+            Const("🔙Назад к песням группы"),
             id="to_all_songs",
             state=states.BandSongsPanelSG.choose_song,
         ),
@@ -160,15 +158,14 @@ songs_by_group = Dialog(
         getter=get_song,
     ),
     Window(
-        # Hardcode jinja but whatever
-        song.SONG_CHORDS_WITHOUT_TABS_TEMPLATE,
+        templates.SONG_CHORDS_WITHOUT_TABS_TEMPLATE,
         SwitchTo(
-            Const("[Emodji]Показать аккорды"),
+            Const("📜Показать аккорды"),
             id="to_chords_tabs",
             state=states.BandSongsPanelSG.song_chords_with_tabs,
         ),
         SwitchTo(
-            Const("[Emodji]Назад к меню песни"),
+            Const("🔙Назад к меню песни"),
             id="to_song",
             state=states.BandSongsPanelSG.song_menu,
         ),
@@ -177,15 +174,14 @@ songs_by_group = Dialog(
         getter=get_chords,
     ),
     Window(
-        # Hardcode jinja but whatever
-        song.SONG_CHORDS_WITH_TABS_TEMPLATE,
+        templates.SONG_CHORDS_WITH_TABS_TEMPLATE,
         SwitchTo(
-            Const("[Emodji]Убрать аккорды"),
+            Const("📜Убрать аккорды"),
             id="to_chords",
             state=states.BandSongsPanelSG.song_chords,
         ),
         SwitchTo(
-            Const("[Emodji]Назад к меню песни"),
+            Const("🔙Назад к меню песни"),
             id="to_song",
             state=states.BandSongsPanelSG.song_menu,
         ),
@@ -211,7 +207,7 @@ favorite_songs = Dialog(
             width=1,
             height=7,
         ),
-        Cancel(Const("[Emodji]Назад")),
+        Cancel(Const("🔙Назад")),
         state=states.FavoriteSongsPanelSG.choose_song,
         preview_data={"songs": [PREVIEW_SONG]},
         getter=get_favorite_songs,
@@ -221,24 +217,24 @@ favorite_songs = Dialog(
             "Выбрана песня {{ song.title }} группы {{ song.band.title }}"
         ),
         Button(
-            Const("[Emodji]Добавить в избранное"),
+            Const("⭐️Добавить в избранное"),
             id="add_to_favorite",
             on_click=add_song_to_favorite,
             when=~F["in_favorites"],
         ),
         Button(
-            Const("[Emodji]Убрать из избранного"),
+            Const("🗑Убрать из избранного"),
             id="remove_from_favorite",
             on_click=remove_song_from_favorite,
             when=F["in_favorites"],
         ),
         SwitchTo(
-            Const("[Emodji]Аккорды"),
+            Const("📖 Текст и аккорды"),
             id="to_chords",
             state=states.FavoriteSongsPanelSG.song_chords,
         ),
         SwitchTo(
-            Const("[Emodji]Назад к избранным песням"),
+            Const("🔙Назад к избранным песням"),
             id="to_all_songs",
             state=states.FavoriteSongsPanelSG.choose_song,
         ),
@@ -247,15 +243,14 @@ favorite_songs = Dialog(
         getter=get_song,
     ),
     Window(
-        # Hardcode jinja but whatever
-        song.SONG_CHORDS_WITHOUT_TABS_TEMPLATE,
+        templates.SONG_CHORDS_WITHOUT_TABS_TEMPLATE,
         SwitchTo(
-            Const("[Emodji]Показать аккорды"),
+            Const("📜Показать аккорды"),
             id="to_chords_tabs",
             state=states.FavoriteSongsPanelSG.song_chords_with_tabs,
         ),
         SwitchTo(
-            Const("[Emodji]Назад к меню песни"),
+            Const("🔙Назад к меню песни"),
             id="to_song",
             state=states.FavoriteSongsPanelSG.song_menu,
         ),
@@ -264,15 +259,14 @@ favorite_songs = Dialog(
         getter=get_chords,
     ),
     Window(
-        # Hardcode jinja but whatever
-        song.SONG_CHORDS_WITH_TABS_TEMPLATE,
+        templates.SONG_CHORDS_WITH_TABS_TEMPLATE,
         SwitchTo(
-            Const("[Emodji]Убрать аккорды"),
+            Const("📜Убрать аккорды"),
             id="to_chords",
             state=states.FavoriteSongsPanelSG.song_chords,
         ),
         SwitchTo(
-            Const("[Emodji]Назад к меню песни"),
+            Const("🔙Назад к меню песни"),
             id="to_song",
             state=states.FavoriteSongsPanelSG.song_menu,
         ),
@@ -291,7 +285,13 @@ songs_founded_by_title = Dialog(
         state=states.FoundedSongsPanelSG.input_song_title,
     ),
     Window(
-        Jinja("Найденные песни по названию: {{ song_title }}"),
+        Jinja(
+            "{% if songs %}"
+            "Песни с названием: {{ song_title }}"
+            "{% else %}"
+            "Песен с названием {{ song_title }} не найдено"
+            "{% endif %}"
+        ),
         ScrollingGroup(
             Select(
                 Format("{item.title}"),
@@ -303,8 +303,9 @@ songs_founded_by_title = Dialog(
             id="founded_songs_sg",
             width=1,
             height=7,
+            when=F["songs"]
         ),
-        Cancel(Const("[Emodji]Назад")),
+        Cancel(Const("🔙Назад")),
         state=states.FoundedSongsPanelSG.choose_song,
         preview_data={"songs": [PREVIEW_SONG]},
         getter=get_songs_founded_by_title,
@@ -314,24 +315,24 @@ songs_founded_by_title = Dialog(
             "Выбрана песня {{ song.title }} группы {{ song.band.title }}"
         ),
         Button(
-            Const("[Emodji]Добавить в избранное"),
+            Const("⭐️Добавить в избранное"),
             id="add_to_favorite",
             on_click=add_song_to_favorite,
             when=~F["in_favorites"],
         ),
         Button(
-            Const("[Emodji]Убрать из избранного"),
+            Const("🗑Убрать из избранного"),
             id="remove_from_favorite",
             on_click=remove_song_from_favorite,
             when=F["in_favorites"],
         ),
         SwitchTo(
-            Const("[Emodji]Аккорды"),
+            Const("📖 Текст и аккорды"),
             id="to_chords",
             state=states.FoundedSongsPanelSG.song_chords,
         ),
         SwitchTo(
-            Const("[Emodji]Назад к найденным песням"),
+            Const("🔙Назад к найденным песням"),
             id="to_all_songs",
             state=states.FoundedSongsPanelSG.choose_song,
         ),
@@ -340,15 +341,14 @@ songs_founded_by_title = Dialog(
         getter=get_song,
     ),
     Window(
-        # Hardcode jinja but whatever
-        song.SONG_CHORDS_WITHOUT_TABS_TEMPLATE,
+        templates.SONG_CHORDS_WITHOUT_TABS_TEMPLATE,
         SwitchTo(
-            Const("[Emodji]Показать аккорды"),
+            Const("📜Показать аккорды"),
             id="to_chords_tabs",
             state=states.FoundedSongsPanelSG.song_chords_with_tabs,
         ),
         SwitchTo(
-            Const("[Emodji]Назад к меню песни"),
+            Const("🔙Назад к меню песни"),
             id="to_song",
             state=states.FoundedSongsPanelSG.song_menu,
         ),
@@ -357,15 +357,14 @@ songs_founded_by_title = Dialog(
         getter=get_chords,
     ),
     Window(
-        # Hardcode jinja but whatever
-        song.SONG_CHORDS_WITH_TABS_TEMPLATE,
+        templates.SONG_CHORDS_WITH_TABS_TEMPLATE,
         SwitchTo(
-            Const("[Emodji]Убрать аккорды"),
+            Const("📜Убрать аккорды"),
             id="to_chords",
             state=states.FoundedSongsPanelSG.song_chords,
         ),
         SwitchTo(
-            Const("[Emodji]Назад к меню песни"),
+            Const("🔙Назад к меню песни"),
             id="to_song",
             state=states.FoundedSongsPanelSG.song_menu,
         ),

@@ -1,3 +1,5 @@
+import abc
+
 from sqlalchemy.ext.asyncio import AsyncSession
 from guitar_app.infrastructure.db.repositories import (UserRepository, MusicianRepository, SongRepository,
                                                        BandRepository, FavoriteRepository, BandMembersRepository,

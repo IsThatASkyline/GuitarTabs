@@ -11,25 +11,26 @@ class UserRepository(BaseRepository[User]):
         self.session = session
         super().__init__(User, session)
 
-    async def create_user(self, user_dto: CreateUserDTO) -> UserDTO:
+    async def add(self, user_dto: CreateUserDTO) -> UserDTO:
         user = User(
             telegram_id=user_dto.telegram_id,
+            username=user_dto.username
         )
         self.session.add(user)
         return user.to_dto()
 
-    async def get_user_by_id(self, id_: int) -> UserDTO:
+    async def get(self, id_: int) -> UserDTO | None:
         query = select(User).where(User.telegram_id == id_)
-        user: User = (await self._session.execute(query)).scalar_one_or_none()
-        return user.to_dto()
+        user = (await self._session.execute(query)).scalar_one_or_none()
+        return user.to_dto() if user else None
 
-    async def get_all_users(self) -> list[UserDTO]:
+    async def list(self) -> list[UserDTO]:
         query = select(User)
         users = (await self._session.execute(query)).scalars()
         return [user.to_dto() for user in users]
 
-    async def update_user(self, id_: int, **kwargs) -> None:
-        await super().update_obj(id_, **kwargs)
+    async def update(self, id_: int, **kwargs) -> None:
+        await super().update(id_, **kwargs)
 
-    async def delete_user(self, id_: int):
-        await super().delete_obj(id_)
+    async def delete(self, id_: int):
+        await super().delete(id_)

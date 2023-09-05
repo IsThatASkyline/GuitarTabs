@@ -11,25 +11,25 @@ class MusicianUseCase(BaseUseCase):
 
 class GetMusicianById(MusicianUseCase):
     async def __call__(self, id_: int) -> MusicianDTO:
-        if musician := await self.uow.app_holder.musician_repo.get_by_id(id_):
+        if musician := await self.uow.app_holder.musician_repo.get(id_):
             return musician
         raise MusicianNotExists
 
 
 class CreateMusician(MusicianUseCase):
     async def __call__(self, musician_dto: CreateMusicianDTO) -> MusicianDTO:
-        return await self.uow.app_holder.musician_repo.create_obj(musician_dto)
+        return await self.uow.app_holder.musician_repo.add(musician_dto)
 
 
 class GetMusicians(MusicianUseCase):
     async def __call__(self) -> list[MusicianDTO]:
-        return await self.uow.app_holder.musician_repo.get_all()
+        return await self.uow.app_holder.musician_repo.list()
 
 
 class UpdateMusician(MusicianUseCase):
     async def __call__(self, musician_update_dto: UpdateMusicianDTO) -> None:
-        if await self.uow.app_holder.musician_repo.get_by_id(musician_update_dto.id):
-            await self.uow.app_holder.musician_repo.update_obj(
+        if await self.uow.app_holder.musician_repo.get(musician_update_dto.id):
+            await self.uow.app_holder.musician_repo.update(
                 musician_update_dto.id,
                 **musician_update_dto.dict(exclude_none=True, exclude=set("id")),
             )
@@ -40,7 +40,7 @@ class UpdateMusician(MusicianUseCase):
 
 class DeleteMusician(MusicianUseCase):
     async def __call__(self, id_: int) -> None:
-        if await self.uow.app_holder.musician_repo.get_by_id(id_):
-            await self.uow.app_holder.musician_repo.delete_obj(id_)
+        if await self.uow.app_holder.musician_repo.get(id_):
+            await self.uow.app_holder.musician_repo.delete(id_)
             return
         raise MusicianNotExists

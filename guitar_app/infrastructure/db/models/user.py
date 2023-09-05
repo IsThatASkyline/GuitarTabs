@@ -8,10 +8,12 @@ class User(BaseAlchemyModels):
     __tablename__ = "user_table"
 
     id: Mapped[int] = mapped_column(primary_key=True)
+    username: Mapped[str] = mapped_column(nullable=True)
     telegram_id: Mapped[int] = mapped_column(nullable=False, unique=True)
     favorites: Mapped["Song"] = relationship(secondary='user_favorite_table', back_populates='in_favorites')
 
     def to_dto(self) -> UserDTO:
         return UserDTO(
-            telegram_id=self.telegram_id
+            telegram_id=self.telegram_id,
+            username=self.username,
         )

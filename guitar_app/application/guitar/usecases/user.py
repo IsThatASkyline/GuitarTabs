@@ -11,25 +11,25 @@ class UserUseCase(BaseUseCase):
 
 class CreateUser(UserUseCase):
     async def __call__(self, user_dto: CreateUserDTO) -> UserDTO:
-        user = await self.uow.app_holder.user_repo.create_user(user_dto)
+        user = await self.uow.app_holder.user_repo.add(user_dto)
         await self.uow.commit()
         return user
 
 
 class GetUserById(UserUseCase):
     async def __call__(self, id_: int) -> UserDTO:
-        user = await self.uow.app_holder.user_repo.get_user_by_id(id_)
+        user = await self.uow.app_holder.user_repo.get(id_)
         return user
 
 
 class GetUsers(UserUseCase):
     async def __call__(self) -> list[UserDTO]:
-        return await self.uow.app_holder.user_repo.get_all_users()
+        return await self.uow.app_holder.user_repo.list()
 
 
 class UpdateUser(UserUseCase):
     async def __call__(self, user_update_dto: UpdateUserDTO) -> None:
-        await self.uow.app_holder.user_repo.update_user(
+        await self.uow.app_holder.user_repo.update(
             user_update_dto.id,
             **user_update_dto.dict(exclude_none=True, exclude=set("id"))
         )
@@ -38,8 +38,8 @@ class UpdateUser(UserUseCase):
 
 class DeleteUser(UserUseCase):
     async def __call__(self, id_: int) -> None:
-        if await self.uow.app_holder.user_repo.get_user_by_id(id_):
-            await self.uow.app_holder.user_repo.delete_user(id_)
+        if await self.uow.app_holder.user_repo.get(id_):
+            await self.uow.app_holder.user_repo.delete(id_)
             await self.uow.commit()
             return
         raise UserNotExists

@@ -11,7 +11,7 @@ class SongRepository(BaseRepository[Song]):
         self.session = session
         super().__init__(Song, session)
 
-    async def create_obj(self, song_dto: CreateSongDTO) -> int:
+    async def add(self, song_dto: CreateSongDTO) -> int:
         song = Song(
             title=song_dto.title,
             band_id=song_dto.band_id,
@@ -32,28 +32,28 @@ class SongRepository(BaseRepository[Song]):
 
         return song.id
 
-    async def get_by_id(self, id_: int) -> FullSongDTO:
+    async def get(self, id_: int) -> FullSongDTO:
         query = select(Song).options(joinedload(Song.verses), joinedload(Song.band)).where(Song.id == id_)
         song = (await self.session.execute(query)).unique().scalar_one_or_none()
         return song.to_full_dto() if song else None
 
-    async def get_all(self) -> list[SongDTO]:
+    async def list(self) -> list[SongDTO]:
         query = select(Song).options(joinedload(Song.band))
         songs = (await self.session.execute(query)).scalars().all()
         return [song.to_dto() for song in songs] if songs else None
 
-    async def get_songs_by_band(self, band_id) -> list[SongDTO]:
+    async def get_songs_by_band(self, band_id):
         query = select(Song).options(joinedload(Song.band)).where(Song.band_id == band_id)
         songs = (await self.session.execute(query)).scalars().all()
         return [song.to_dto() for song in songs] if songs else None
 
-    async def find_song(self, criteria: FindSongDTO) -> list[SongDTO]:
+    async def find_song(self, criteria: FindSongDTO):
         query = select(Song).options(joinedload(Song.band)).where(Song.title.ilike('%' + criteria.value + '%'))
         songs = (await self.session.execute(query, params=criteria.dict())).scalars().all()
-        return [song.to_dto() for song in songs] if songs else None
+        return [song.to_dto() for song in songs] if songs else []
 
-    async def update_obj(self, id_: int, **kwargs) -> None:
-        await super().update_obj(id_, **kwargs)
+    async def update(self, id_: int, **kwargs) -> None:
+        await super().update(id_, **kwargs)
 
-    async def delete_obj(self, id_: int):
-        await super().delete_obj(id_)
+    async def delete(self, id_: int):
+        await super().delete(id_)

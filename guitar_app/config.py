@@ -1,18 +1,16 @@
 import os
 
+from dotenv import load_dotenv, find_dotenv
 from pydantic import BaseSettings
+
+load_dotenv(find_dotenv())
 
 
 class Settings(BaseSettings):
-    DB_URL: str = 'postgresql+asyncpg://postgres:1234@localhost:5432/guitar'
+    DB_URL: str = os.environ.get('DB_URL')
+    BOT_TOKEN: str = os.environ.get('BOT_TOKEN')
 
-    class Config:
-        if os.getenv("PROD"):
-            env_file = ".env"
-        elif os.getenv("TEST"):
-            env_file = ".test.env"
-        else:
-            env_file = ".dev.env"
+    TEST_DB_URL: str = os.environ.get('TEST_DB_URL')
 
 
 def get_settings() -> Settings:

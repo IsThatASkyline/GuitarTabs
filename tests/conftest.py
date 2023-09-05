@@ -1,23 +1,25 @@
 import asyncio
+import os
 from typing import AsyncGenerator
-
 import pytest
 import pytest_asyncio
 from fastapi import FastAPI
 from httpx import AsyncClient
 from sqlalchemy import text
 from sqlalchemy.orm import sessionmaker, close_all_sessions
+
+from guitar_app.config import get_settings
 from guitar_app.infrastructure.db.models.base import BaseAlchemyModels
 from guitar_app.presentation.api.controllers import setup_controllers
 from guitar_app.infrastructure.db.main import build_sessions, create_engine
 from guitar_app.presentation.api.di import setup_di
 
-db_engine = create_engine('postgresql+asyncpg://postgres:1234@localhost:5432/testdb')
+
+db_engine = create_engine(get_settings().TEST_DB_URL)
 
 
 def build_test_app() -> FastAPI:
     app = FastAPI()
-    # settings = get_settings()
     BaseAlchemyModels.metadata.bind = db_engine
     setup_di(app, build_sessions(db_engine))
 
@@ -28,13 +30,12 @@ def build_test_app() -> FastAPI:
 
 @pytest_asyncio.fixture(scope='session')
 async def db_session_test() -> sessionmaker:
-    yield build_sessions(create_engine('postgresql+asyncpg://postgres:1234@localhost:5432/testdb'))
+    yield build_sessions(db_engine)
     close_all_sessions()
 
 
 @pytest.fixture(scope='session')
 def event_loop(request):
-    """Create smth"""
     loop = asyncio.get_event_loop_policy().new_event_loop()
     yield loop
     loop.close()

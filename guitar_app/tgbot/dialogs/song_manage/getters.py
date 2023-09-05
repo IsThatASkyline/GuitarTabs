@@ -16,8 +16,6 @@ async def get_song(uow: UnitOfWork, user: dto.UserDTO, dialog_manager: DialogMan
         "in_favorites": song.compress() in await services.SongServices(uow).get_favorite_songs_by_user(user_dto=user),
     }
 
-'2116614325'
-
 
 async def get_chords(uow: UnitOfWork, dialog_manager: DialogManager, **_):
     song_id = (
