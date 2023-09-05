@@ -1,6 +1,11 @@
 from fastapi import APIRouter, Response, status
 from fastapi.params import Depends
-from guitar_app.application.guitar.dto import CreateMusicianDTO, MusicianDTO, UpdateMusicianDTO
+
+from guitar_app.application.guitar.dto import (
+    CreateMusicianDTO,
+    MusicianDTO,
+    UpdateMusicianDTO,
+)
 from guitar_app.application.guitar.exceptions import MusicianNotExists
 from guitar_app.application.guitar.services import MusicianServices
 from guitar_app.presentation.api.controllers.requests import (
@@ -8,9 +13,10 @@ from guitar_app.presentation.api.controllers.requests import (
     UpdateMusicianRequest,
 )
 from guitar_app.presentation.api.controllers.responses import MusicianDeleteResponse
-from guitar_app.presentation.api.controllers.responses.exceptions import NotFoundMusicianError
+from guitar_app.presentation.api.controllers.responses.exceptions import (
+    NotFoundMusicianError,
+)
 from guitar_app.presentation.api.di.providers.services import get_musician_services
-
 
 router = APIRouter(prefix="/musician", tags=["musician"])
 
@@ -36,7 +42,7 @@ async def get_all_musicians(
 async def get_musician_by_id(
     musician_id: int,
     response: Response,
-    musician_services: MusicianServices = Depends(get_musician_services)
+    musician_services: MusicianServices = Depends(get_musician_services),
 ) -> MusicianDTO | NotFoundMusicianError:
     try:
         return await musician_services.get_musician_by_id(musician_id)
@@ -53,7 +59,9 @@ async def update_musician(
     musician_services: MusicianServices = Depends(get_musician_services),
 ) -> MusicianDTO | NotFoundMusicianError:
     try:
-        return await musician_services.update_musician(UpdateMusicianDTO(id=musician_id, **musician.dict()))
+        return await musician_services.update_musician(
+            UpdateMusicianDTO(id=musician_id, **musician.dict())
+        )
     except MusicianNotExists:
         response.status_code = status.HTTP_404_NOT_FOUND
         return NotFoundMusicianError()

@@ -1,4 +1,5 @@
 from pydantic import Field
+
 from guitar_app.presentation.api.controllers.responses.exceptions.base import ApiError
 
 

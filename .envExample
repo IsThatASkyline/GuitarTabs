@@ -1,7 +1,4 @@
-POSTGRES_DB=postgres
-POSTGRES_USER=postgres
-POSTGRES_PASSWORD=postgres
-POSTGRES_HOST=localhost
-POSTGRES_PORT=5432
+BOT_TOKEN=TELEGRAM_BOT_API_TOKEN
 
 DB_URL=postgresql+asyncpg://postgres:postgres@localhost:5432/guitar
+TEST_DB_URL=postgresql+asyncpg://postgres:postgres@localhost:5432/testdb

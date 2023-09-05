@@ -1,7 +1,13 @@
 from fastapi import APIRouter, Response, status
 from fastapi.params import Depends
 
-from guitar_app.application.guitar.dto import CreateBandDTO, BandDTO, UpdateBandDTO, FullBandDTO, UpdateMusicianBandDTO
+from guitar_app.application.guitar.dto import (
+    BandDTO,
+    CreateBandDTO,
+    FullBandDTO,
+    UpdateBandDTO,
+    UpdateMusicianBandDTO,
+)
 from guitar_app.application.guitar.exceptions import BandNotExists, MusicianNotExists
 from guitar_app.application.guitar.services import BandServices
 from guitar_app.presentation.api.controllers.requests import (
@@ -10,7 +16,10 @@ from guitar_app.presentation.api.controllers.requests import (
     UpdateMusicianBandRequest,
 )
 from guitar_app.presentation.api.controllers.responses import BandDeleteResponse
-from guitar_app.presentation.api.controllers.responses.exceptions import NotFoundBandError, NotFoundMusicianError
+from guitar_app.presentation.api.controllers.responses.exceptions import (
+    NotFoundBandError,
+    NotFoundMusicianError,
+)
 from guitar_app.presentation.api.di.providers.services import get_band_services
 
 router = APIRouter(prefix="/band", tags=["band"])
@@ -37,7 +46,7 @@ async def get_all_bands(
 async def get_band_by_id(
     band_id: int,
     response: Response,
-    band_services: BandServices = Depends(get_band_services)
+    band_services: BandServices = Depends(get_band_services),
 ) -> FullBandDTO | NotFoundBandError:
     try:
         return await band_services.get_band_by_id(band_id)
@@ -68,7 +77,9 @@ async def add_musician_to_band(
     band_services: BandServices = Depends(get_band_services),
 ) -> FullBandDTO | NotFoundBandError | NotFoundMusicianError:
     try:
-        return await band_services.add_musician_to_band(UpdateMusicianBandDTO(band_id=band_id, **band.dict()))
+        return await band_services.add_musician_to_band(
+            UpdateMusicianBandDTO(band_id=band_id, **band.dict())
+        )
     except BandNotExists:
         response.status_code = status.HTTP_404_NOT_FOUND
         return NotFoundBandError()

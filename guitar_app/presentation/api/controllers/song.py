@@ -1,16 +1,30 @@
 from fastapi import APIRouter, Response, status
 from fastapi.params import Depends
-from guitar_app.application.guitar.dto import CreateSongDTO, SongDTO, UpdateSongDTO, FullSongDTO, ModulateSongDTO, \
-    FavoriteSongDTO, FindSongDTO, UserDTO
-from guitar_app.application.guitar.exceptions import SongNotExists, CreateSongException
+
+from guitar_app.application.guitar.dto import (
+    CreateSongDTO,
+    FavoriteSongDTO,
+    FindSongDTO,
+    FullSongDTO,
+    ModulateSongDTO,
+    SongDTO,
+    UpdateSongDTO,
+    UserDTO,
+)
+from guitar_app.application.guitar.exceptions import CreateSongException, SongNotExists
 from guitar_app.application.guitar.services import SongServices
 from guitar_app.presentation.api.controllers.requests import (
+    AddFavoriteSongRequest,
     CreateSongRequest,
+    FindSongRequest,
+    ModulateSongRequest,
     UpdateSongRequest,
-    ModulateSongRequest, AddFavoriteSongRequest, FindSongRequest
 )
 from guitar_app.presentation.api.controllers.responses import SongDeleteResponse
-from guitar_app.presentation.api.controllers.responses.exceptions import NotFoundSongError, SongIntegrityError
+from guitar_app.presentation.api.controllers.responses.exceptions import (
+    NotFoundSongError,
+    SongIntegrityError,
+)
 from guitar_app.presentation.api.di.providers.services import get_song_services
 
 router = APIRouter(prefix="/song", tags=["song"])
@@ -40,7 +54,7 @@ async def get_all_songs(
 async def get_song_by_id(
     song_id: int,
     response: Response,
-    song_services: SongServices = Depends(get_song_services)
+    song_services: SongServices = Depends(get_song_services),
 ) -> FullSongDTO | NotFoundSongError:
     try:
         return await song_services.get_song_by_id(song_id)
@@ -51,8 +65,7 @@ async def get_song_by_id(
 
 @router.get("/get-user-favorite-songs/{user_id}")
 async def get_favorite_songs(
-    user_id: int,
-    song_services: SongServices = Depends(get_song_services)
+    user_id: int, song_services: SongServices = Depends(get_song_services)
 ) -> list[SongDTO]:
     return await song_services.get_favorite_songs_by_user(UserDTO(telegram_id=user_id))
 
@@ -109,7 +122,7 @@ async def add_song_to_favorite(
 ):
     try:
         await song_services.add_song_to_favorite(FavoriteSongDTO(song_id=song_id, **user_id.dict()))
-        return {'detail': 'Песня добавлена в избранное'}
+        return {"detail": "Песня добавлена в избранное"}
     except SongNotExists:
         response.status_code = status.HTTP_404_NOT_FOUND
         return NotFoundSongError()
@@ -123,8 +136,10 @@ async def remove_song_from_favorite(
     song_services: SongServices = Depends(get_song_services),
 ):
     try:
-        await song_services.remove_song_from_favorite(FavoriteSongDTO(song_id=song_id, **user_id.dict()))
-        return {'detail': 'Песня убрана из избранного'}
+        await song_services.remove_song_from_favorite(
+            FavoriteSongDTO(song_id=song_id, **user_id.dict())
+        )
+        return {"detail": "Песня убрана из избранного"}
     except SongNotExists:
         response.status_code = status.HTTP_404_NOT_FOUND
         return NotFoundSongError()

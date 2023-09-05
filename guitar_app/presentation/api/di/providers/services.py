@@ -1,5 +1,11 @@
 from fastapi import Depends
-from guitar_app.application.guitar.services import MusicianServices, UserServices, BandServices, SongServices
+
+from guitar_app.application.guitar.services import (
+    BandServices,
+    MusicianServices,
+    SongServices,
+    UserServices,
+)
 from guitar_app.infrastructure.db.uow import UnitOfWork
 from guitar_app.presentation.api.di.providers.db import uow_provider
 
@@ -8,7 +14,9 @@ def get_user_services(uow: UnitOfWork = Depends(uow_provider)) -> UserServices:
     return UserServices(uow)
 
 
-def get_musician_services(uow: UnitOfWork = Depends(uow_provider)) -> MusicianServices:
+def get_musician_services(
+    uow: UnitOfWork = Depends(uow_provider),
+) -> MusicianServices:
     return MusicianServices(uow)
 
 

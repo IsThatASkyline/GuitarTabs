@@ -1,7 +1,13 @@
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import joinedload
-from guitar_app.application.guitar.dto import CreateSongDTO, SongDTO, FullSongDTO, FindSongDTO
+
+from guitar_app.application.guitar.dto import (
+    CreateSongDTO,
+    FindSongDTO,
+    FullSongDTO,
+    SongDTO,
+)
 from guitar_app.infrastructure.db.models import Song, Verse
 from guitar_app.infrastructure.db.repositories.base import BaseRepository
 
@@ -11,7 +17,7 @@ class SongRepository(BaseRepository[Song]):
         self.session = session
         super().__init__(Song, session)
 
-    async def add(self, song_dto: CreateSongDTO) -> int:
+    async def add_song(self, song_dto: CreateSongDTO) -> int:
         song = Song(
             title=song_dto.title,
             band_id=song_dto.band_id,
@@ -32,12 +38,16 @@ class SongRepository(BaseRepository[Song]):
 
         return song.id
 
-    async def get(self, id_: int) -> FullSongDTO:
-        query = select(Song).options(joinedload(Song.verses), joinedload(Song.band)).where(Song.id == id_)
+    async def get_song(self, id_: int) -> FullSongDTO:
+        query = (
+            select(Song)
+            .options(joinedload(Song.verses), joinedload(Song.band))
+            .where(Song.id == id_)
+        )
         song = (await self.session.execute(query)).unique().scalar_one_or_none()
         return song.to_full_dto() if song else None
 
-    async def list(self) -> list[SongDTO]:
+    async def list_songs(self) -> list[SongDTO]:
         query = select(Song).options(joinedload(Song.band))
         songs = (await self.session.execute(query)).scalars().all()
         return [song.to_dto() for song in songs] if songs else None
@@ -47,13 +57,17 @@ class SongRepository(BaseRepository[Song]):
         songs = (await self.session.execute(query)).scalars().all()
         return [song.to_dto() for song in songs] if songs else None
 
-    async def find_song(self, criteria: FindSongDTO):
-        query = select(Song).options(joinedload(Song.band)).where(Song.title.ilike('%' + criteria.value + '%'))
+    async def find_song_by_title(self, criteria: FindSongDTO):
+        query = (
+            select(Song)
+            .options(joinedload(Song.band))
+            .where(Song.title.ilike("%" + criteria.value + "%"))
+        )
         songs = (await self.session.execute(query, params=criteria.dict())).scalars().all()
         return [song.to_dto() for song in songs] if songs else None
 
-    async def update(self, id_: int, **kwargs) -> None:
+    async def update_song(self, id_: int, **kwargs) -> None:
         await super().update(id_, **kwargs)
 
-    async def delete(self, id_: int):
+    async def delete_song(self, id_: int):
         await super().delete(id_)

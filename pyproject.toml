@@ -109,7 +109,7 @@ yarl = "1.9.2"
 zipp = "3.16.2"
 
 [tool.poetry.scripts]
-guitar-tgbot = 'guitar_app.tgbot.__main__:run'
+guitar-tgbot = 'guitar_app.presentation.tgbot.__main__:run'
 
 [tool.pytest.ini_options]
 asyncio_mode = "auto"

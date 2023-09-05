@@ -1,10 +1,23 @@
-from guitar_app.application.guitar.dto import CreateBandDTO, BandDTO, UpdateBandDTO, FullBandDTO, UpdateMusicianBandDTO
-from guitar_app.application.guitar.usecases import CreateBand, GetBandById, GetBands, UpdateBand, UpdateMusicianBand, DeleteBand
-from guitar_app.infrastructure.db.uow import AbstractUnitOfWork
+from guitar_app.application.guitar.dto import (
+    BandDTO,
+    CreateBandDTO,
+    FullBandDTO,
+    UpdateBandDTO,
+    UpdateMusicianBandDTO,
+)
+from guitar_app.application.guitar.usecases import (
+    CreateBand,
+    DeleteBand,
+    GetBandById,
+    GetBands,
+    UpdateBand,
+    UpdateMusicianBand,
+)
+from guitar_app.infrastructure.db.uow import UnitOfWork
 
 
 class BandServices:
-    def __init__(self, uow: AbstractUnitOfWork) -> None:
+    def __init__(self, uow: UnitOfWork) -> None:
         self.uow = uow
 
     async def create_band(self, band_dto: CreateBandDTO) -> FullBandDTO:
@@ -25,7 +38,9 @@ class BandServices:
             await self.uow.commit()
             return await GetBandById(self.uow)(update_band_dto.id)
 
-    async def add_musician_to_band(self, update_musician_band_dto: UpdateMusicianBandDTO) -> FullBandDTO:
+    async def add_musician_to_band(
+        self, update_musician_band_dto: UpdateMusicianBandDTO
+    ) -> FullBandDTO:
         async with self.uow:
             await UpdateMusicianBand(self.uow)(update_musician_band_dto)
             await self.uow.commit()

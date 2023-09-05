@@ -1,23 +1,22 @@
 from fastapi import APIRouter, Response, status
 from fastapi.params import Depends
+
 from guitar_app.application.guitar.dto import CreateUserDTO, UserDTO
 from guitar_app.application.guitar.exceptions import UserNotExists
 from guitar_app.application.guitar.services import UserServices
-from guitar_app.presentation.api.controllers.requests.user import (
-    CreateUserRequest,
-)
+from guitar_app.presentation.api.controllers.requests.user import CreateUserRequest
 from guitar_app.presentation.api.controllers.responses import UserDeleteResponse
-from guitar_app.presentation.api.controllers.responses.exceptions import NotFoundUserError
+from guitar_app.presentation.api.controllers.responses.exceptions import (
+    NotFoundUserError,
+)
 from guitar_app.presentation.api.di.providers.services import get_user_services
-
 
 router = APIRouter(prefix="/user", tags=["user"])
 
 
 @router.get("/get-user/{user_id}")
 async def get_user_by_id(
-    user_id: int,
-    user_services: UserServices = Depends(get_user_services)
+    user_id: int, user_services: UserServices = Depends(get_user_services)
 ) -> UserDTO:
     return await user_services.get_user_by_id(user_id)
 

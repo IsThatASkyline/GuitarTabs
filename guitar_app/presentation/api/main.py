@@ -1,5 +1,6 @@
 import uvicorn
 from fastapi import FastAPI
+
 from guitar_app.config import get_settings
 from guitar_app.infrastructure.db.main import build_sessions, create_engine
 

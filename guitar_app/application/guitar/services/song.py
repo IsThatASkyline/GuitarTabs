@@ -1,14 +1,31 @@
 from guitar_app.application.guitar.dto import UserDTO
-from guitar_app.application.guitar.dto.song import CreateSongDTO, SongDTO, UpdateSongDTO, FullSongDTO, ModulateSongDTO, \
-    FavoriteSongDTO, FindSongDTO
-from guitar_app.application.guitar.usecases import CreateSong, GetSongs, GetSongById, UpdateSong, DeleteSong, \
-    GetModulatedSong, FindSong, GetFavoriteSongsByUser, AddSongToFavorite, RemoveSongFromFavorite, \
-    GetSongsByGroup
-from guitar_app.infrastructure.db.uow import AbstractUnitOfWork
+from guitar_app.application.guitar.dto.song import (
+    CreateSongDTO,
+    FavoriteSongDTO,
+    FindSongDTO,
+    FullSongDTO,
+    ModulateSongDTO,
+    SongDTO,
+    UpdateSongDTO,
+)
+from guitar_app.application.guitar.usecases import (
+    AddSongToFavorite,
+    CreateSong,
+    DeleteSong,
+    FindSong,
+    GetFavoriteSongsByUser,
+    GetModulatedSong,
+    GetSongById,
+    GetSongs,
+    GetSongsByGroup,
+    RemoveSongFromFavorite,
+    UpdateSong,
+)
+from guitar_app.infrastructure.db.uow import UnitOfWork
 
 
 class SongServices:
-    def __init__(self, uow: AbstractUnitOfWork) -> None:
+    def __init__(self, uow: UnitOfWork) -> None:
         self.uow = uow
 
     async def create_song(self, song_dto: CreateSongDTO) -> SongDTO:

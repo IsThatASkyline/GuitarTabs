@@ -5,7 +5,7 @@ from sqlalchemy.orm import sessionmaker
 from guitar_app.infrastructure.db.models import User
 
 
-@pytest_asyncio.fixture(scope='function')
+@pytest_asyncio.fixture(scope="function")
 async def create_user_in_database(db_session_test: sessionmaker):
     async def create_user_in_database_wrap(
         user_id: int,
@@ -23,9 +23,9 @@ async def create_user_in_database(db_session_test: sessionmaker):
     return create_user_in_database_wrap
 
 
-@pytest_asyncio.fixture(scope='function')
+@pytest_asyncio.fixture(scope="function")
 async def user_data():
     return {
-        'user_id': 1,
-        'telegram_id': 121212,
+        "user_id": 1,
+        "telegram_id": 121212,
     }
