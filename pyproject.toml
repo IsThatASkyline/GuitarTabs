@@ -1,9 +1,9 @@
 [tool.poetry]
 name = "guitar-app"
 version = "0.1.0"
-description = ""
+description = "Bot and API for guitar tabs app"
 authors = ["artklk12 <artem-kulik@list.ru>"]
-readme = "README.md"
+
 
 [tool.poetry.dependencies]
 python = "^3.10"
