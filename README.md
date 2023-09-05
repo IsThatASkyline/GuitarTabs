@@ -16,7 +16,18 @@
 ```shell
 git clone https://github.com/artklk12/GuitarTabs.git
 cd GuitarTabs
-poetry build
-pip install ./dist/guitar_app-0.1.0-py3-none-any.whl
-guitar-tgbot
+```
+Создайте файл .env и заполните его по примеру из .envExample 
+
+### С помощью Poetry
+```shell
+pip install poetry==1.5.1
+poetry install
+alembic upgrade head
+poetry run guitar-tgbot
+```
+### С помощью Docker
+```shell
+docker build --tag guitar_bot .
+docker run guitar_bot
 ```
