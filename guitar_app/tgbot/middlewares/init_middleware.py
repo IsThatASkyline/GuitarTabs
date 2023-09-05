@@ -1,5 +1,5 @@
 from typing import Callable, Any, Awaitable
-
+from aiogram_dialog.api.exceptions import UnknownIntent
 from aiogram import BaseMiddleware
 from aiogram.types import TelegramObject
 from sqlalchemy.ext.asyncio import async_sessionmaker, AsyncSession
@@ -20,9 +20,13 @@ class InitMiddleware(BaseMiddleware):
         event: TelegramObject,
         data: MiddlewareData,
     ) -> Any:
-        async with self.pool() as session:
-            uow = UnitOfWork(session)
-            data["uow"] = uow
-            result = await handler(event, data)
-            del data["uow"]
-        return result
+        try:
+            async with self.pool() as session:
+                uow = UnitOfWork(session)
+                data["uow"] = uow
+                result = await handler(event, data)
+                del data["uow"]
+            return result
+        except UnknownIntent:
+            # When user press buttons from old menu, when bot was restarted
+            pass

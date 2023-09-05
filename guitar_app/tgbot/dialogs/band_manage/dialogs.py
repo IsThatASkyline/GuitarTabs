@@ -1,3 +1,4 @@
+from aiogram import F
 from aiogram_dialog import Dialog, Window
 from aiogram_dialog.widgets.kbd import Cancel, Select, ScrollingGroup
 from aiogram_dialog.widgets.text import Const, Format
@@ -25,6 +26,7 @@ all_bands = Dialog(
             id="bands_sg",
             width=2,
             height=7,
+            when=F["bands"],
         ),
         Cancel(Const("[Emodji]Назад")),
         state=states.AllBandsPanelSG.choose_band,

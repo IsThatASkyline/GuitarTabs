@@ -50,7 +50,7 @@ class SongRepository(BaseRepository[Song]):
     async def find_song(self, criteria: FindSongDTO):
         query = select(Song).options(joinedload(Song.band)).where(Song.title.ilike('%' + criteria.value + '%'))
         songs = (await self.session.execute(query, params=criteria.dict())).scalars().all()
-        return [song.to_dto() for song in songs] if songs else []
+        return [song.to_dto() for song in songs] if songs else None
 
     async def update(self, id_: int, **kwargs) -> None:
         await super().update(id_, **kwargs)

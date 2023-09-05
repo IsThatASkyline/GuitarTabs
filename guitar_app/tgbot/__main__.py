@@ -8,7 +8,6 @@ from guitar_app.infrastructure.db.main import create_engine, build_sessions
 from guitar_app.tgbot.main_factory import create_bot, create_dispatcher
 
 
-
 async def main():
     engine = create_engine(get_settings().DB_URL)
     pool = build_sessions(engine)

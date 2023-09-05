@@ -1,11 +1,11 @@
 from guitar_app.application.common.usecases.base import BaseUseCase
 from guitar_app.application.guitar.dto import MusicianDTO, CreateMusicianDTO, UpdateMusicianDTO
-from guitar_app.infrastructure.db.uow import UnitOfWork
+from guitar_app.infrastructure.db.uow import AbstractUnitOfWork
 from guitar_app.application.guitar.exceptions import MusicianNotExists
 
 
 class MusicianUseCase(BaseUseCase):
-    def __init__(self, uow: UnitOfWork) -> None:
+    def __init__(self, uow: AbstractUnitOfWork) -> None:
         super().__init__(uow)
 
 

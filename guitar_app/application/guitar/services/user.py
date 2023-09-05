@@ -1,10 +1,10 @@
 from guitar_app.application.guitar.dto.user import CreateUserDTO, UpdateUserDTO, UserDTO
 from guitar_app.application.guitar.usecases import CreateUser, GetUserById, GetUsers, UpdateUser, DeleteUser
-from guitar_app.infrastructure.db.uow import UnitOfWork
+from guitar_app.infrastructure.db.uow import AbstractUnitOfWork
 
 
 class UserServices:
-    def __init__(self, uow: UnitOfWork) -> None:
+    def __init__(self, uow: AbstractUnitOfWork) -> None:
         self.uow = uow
 
     async def create_user(self, user_dto: CreateUserDTO) -> UserDTO:

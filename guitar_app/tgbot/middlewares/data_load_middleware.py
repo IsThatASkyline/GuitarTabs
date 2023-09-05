@@ -1,4 +1,6 @@
 from typing import Callable, Any, Awaitable
+
+from aiogram_dialog.api.exceptions import UnknownIntent
 from sqlalchemy.exc import IntegrityError
 from aiogram import BaseMiddleware
 from aiogram.types import TelegramObject, Update
@@ -18,28 +20,32 @@ class LoadDataMiddleware(BaseMiddleware):
         event: TelegramObject,
         data: MiddlewareData,
     ) -> Any:
-        uow = data["uow"]
-        # BUG
-        if isinstance(event, Update):
-            try:
-                user = await save_user(data, uow)
-            except IntegrityError:
-                if user_tg := data.get("event_from_user", None):
-                    user = await services.UserServices(uow).get_user_by_id(user_tg.id)
-                else:
-                    user = None
-        # Supposed to be:
-        # if isinstance(event, DialogUpdate):
-        #             if user_tg := data.get("event_from_user", None):
-        #                user = await services.UserServices(uow).get_user_by_id(user_tg.id)
-        #             else:
-        #                user = None
-        #         else:
-        #             user = await save_user(data, uow)
+        try:
+            uow = data["uow"]
+            # BUG
+            if isinstance(event, Update):
+                try:
+                    user = await save_user(data, uow)
+                except IntegrityError:
+                    if user_tg := data.get("event_from_user", None):
+                        user = await services.UserServices(uow).get_user_by_id(user_tg.id)
+                    else:
+                        user = None
+            # Supposed to be:
+            # if isinstance(event, DialogUpdate):
+            #             if user_tg := data.get("event_from_user", None):
+            #                user = await services.UserServices(uow).get_user_by_id(user_tg.id)
+            #             else:
+            #                user = None
+            #         else:
+            #             user = await save_user(data, uow)
 
-        data["user"] = user
-        result = await handler(event, data)
-        return result
+            data["user"] = user
+            result = await handler(event, data)
+            return result
+        except UnknownIntent:
+            # When user press buttons from old menu, when bot was restarted
+            pass
 
 
 async def save_user(data: MiddlewareData, uow: UnitOfWork) -> dto.UserDTO | None:

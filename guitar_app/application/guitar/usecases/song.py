@@ -2,13 +2,13 @@ from guitar_app.application.common.usecases.base import BaseUseCase
 from guitar_app.application.guitar.dto import FullSongDTO, CreateSongDTO, SongDTO, UpdateSongDTO, FavoriteSongDTO, \
     FindSongDTO, \
     ModulateSongDTO
-from guitar_app.infrastructure.db.uow import UnitOfWork
+from guitar_app.infrastructure.db.uow import AbstractUnitOfWork
 from guitar_app.application.guitar.exceptions import SongNotExists, CreateSongException
 from guitar_app.application.guitar.domain.services.modulation import get_modulate_verses
 
 
 class SongUseCase(BaseUseCase):
-    def __init__(self, uow: UnitOfWork) -> None:
+    def __init__(self, uow: AbstractUnitOfWork) -> None:
         super().__init__(uow)
 
 

@@ -37,6 +37,7 @@ all_songs = Dialog(
             id="all_songs_sg",
             width=1,
             height=7,
+            when=F["songs"],
         ),
         Cancel(Const("🔙Назад")),
         state=states.AllSongsPanelSG.choose_song,
@@ -76,7 +77,7 @@ all_songs = Dialog(
     Window(
         templates.SONG_CHORDS_WITHOUT_TABS_TEMPLATE,
         SwitchTo(
-            Const("📜Показать аккорды"),
+            Const("📜Показать аппликатуры аккордов"),
             id="to_chords_tabs",
             state=states.AllSongsPanelSG.song_chords_with_tabs,
         ),
@@ -92,7 +93,7 @@ all_songs = Dialog(
     Window(
         templates.SONG_CHORDS_WITH_TABS_TEMPLATE,
         SwitchTo(
-            Const("📜Убрать аккорды"),
+            Const("📜Убрать аппликатуры аккордов"),
             id="to_chords",
             state=states.AllSongsPanelSG.song_chords,
         ),
@@ -118,6 +119,7 @@ songs_by_group = Dialog(
                 item_id_getter=lambda x: x.id,
                 items="songs",
                 on_click=select_song_by_band,
+                when=F["songs"],
             ),
             id="songs_by_band_sg",
             width=1,
@@ -129,7 +131,7 @@ songs_by_group = Dialog(
     ),
     Window(
         Jinja(
-            "Выбрана песня {{ song.title }} группы {{ song.band.title }}"
+            "'{{ song.title }}' группы {{ song.band.title }}"
         ),
         Button(
             Const("⭐️Добавить в избранное"),
@@ -160,7 +162,7 @@ songs_by_group = Dialog(
     Window(
         templates.SONG_CHORDS_WITHOUT_TABS_TEMPLATE,
         SwitchTo(
-            Const("📜Показать аккорды"),
+            Const("📜Показать аппликатуры аккордов"),
             id="to_chords_tabs",
             state=states.BandSongsPanelSG.song_chords_with_tabs,
         ),
@@ -176,7 +178,7 @@ songs_by_group = Dialog(
     Window(
         templates.SONG_CHORDS_WITH_TABS_TEMPLATE,
         SwitchTo(
-            Const("📜Убрать аккорды"),
+            Const("📜Убрать аппликатуры аккордов"),
             id="to_chords",
             state=states.BandSongsPanelSG.song_chords,
         ),
@@ -206,6 +208,7 @@ favorite_songs = Dialog(
             id="favorite_songs_sg",
             width=1,
             height=7,
+            when=F["songs"],
         ),
         Cancel(Const("🔙Назад")),
         state=states.FavoriteSongsPanelSG.choose_song,
@@ -214,7 +217,7 @@ favorite_songs = Dialog(
     ),
     Window(
         Jinja(
-            "Выбрана песня {{ song.title }} группы {{ song.band.title }}"
+            "'{{ song.title }}' группы {{ song.band.title }}"
         ),
         Button(
             Const("⭐️Добавить в избранное"),
@@ -245,7 +248,7 @@ favorite_songs = Dialog(
     Window(
         templates.SONG_CHORDS_WITHOUT_TABS_TEMPLATE,
         SwitchTo(
-            Const("📜Показать аккорды"),
+            Const("📜Показать аппликатуры аккордов"),
             id="to_chords_tabs",
             state=states.FavoriteSongsPanelSG.song_chords_with_tabs,
         ),
@@ -261,7 +264,7 @@ favorite_songs = Dialog(
     Window(
         templates.SONG_CHORDS_WITH_TABS_TEMPLATE,
         SwitchTo(
-            Const("📜Убрать аккорды"),
+            Const("📜Убрать аппликатуры аккордов"),
             id="to_chords",
             state=states.FavoriteSongsPanelSG.song_chords,
         ),
@@ -287,9 +290,9 @@ songs_founded_by_title = Dialog(
     Window(
         Jinja(
             "{% if songs %}"
-            "Песни с названием: {{ song_title }}"
+            "Песни с названием: '{{ song_title }}'"
             "{% else %}"
-            "Песен с названием {{ song_title }} не найдено"
+            "Песен с названием '{{ song_title }}' не найдено"
             "{% endif %}"
         ),
         ScrollingGroup(
@@ -303,7 +306,7 @@ songs_founded_by_title = Dialog(
             id="founded_songs_sg",
             width=1,
             height=7,
-            when=F["songs"]
+            when=F["songs"],
         ),
         Cancel(Const("🔙Назад")),
         state=states.FoundedSongsPanelSG.choose_song,
@@ -312,7 +315,7 @@ songs_founded_by_title = Dialog(
     ),
     Window(
         Jinja(
-            "Выбрана песня {{ song.title }} группы {{ song.band.title }}"
+            "'{{ song.title }}' группы {{ song.band.title }}"
         ),
         Button(
             Const("⭐️Добавить в избранное"),
@@ -343,7 +346,7 @@ songs_founded_by_title = Dialog(
     Window(
         templates.SONG_CHORDS_WITHOUT_TABS_TEMPLATE,
         SwitchTo(
-            Const("📜Показать аккорды"),
+            Const("📜Показать аппликатуры аккордов"),
             id="to_chords_tabs",
             state=states.FoundedSongsPanelSG.song_chords_with_tabs,
         ),
@@ -359,7 +362,7 @@ songs_founded_by_title = Dialog(
     Window(
         templates.SONG_CHORDS_WITH_TABS_TEMPLATE,
         SwitchTo(
-            Const("📜Убрать аккорды"),
+            Const("📜Убрать аппликатуры аккордов"),
             id="to_chords",
             state=states.FoundedSongsPanelSG.song_chords,
         ),

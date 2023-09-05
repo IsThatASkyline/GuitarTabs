@@ -35,6 +35,7 @@ async def get_chords(uow: UnitOfWork, dialog_manager: DialogManager, **_):
             verse_strings.append(pair)
         result.append(Verse(title=verse.title, strings=verse_strings))
     return {
+        "song_title": song.title,
         "verses": result,
     }
 
@@ -60,6 +61,7 @@ async def get_chords_with_tabs(uow: UnitOfWork, dialog_manager: DialogManager, *
             verse_strings.append(pair)
         result.append(Verse(title=verse.title, strings=verse_strings))
     return {
+        "song_title": song.title,
         "verses": result,
         'chords_tabs': [
             Chord(

@@ -6,7 +6,24 @@ from guitar_app.infrastructure.db.repositories import (UserRepository, MusicianR
                                                        )
 
 
-class SqlAlchemyUOW:
+class AbstractUnitOfWork(abc.ABC):
+
+    def __int__(self):
+        self.app_holder = AbstractHolder()
+
+    def __exit__(self, *args):
+        self.rollback()
+
+    @abc.abstractmethod
+    def commit(self):
+        raise NotImplementedError
+
+    @abc.abstractmethod
+    def rollback(self):
+        raise NotImplementedError
+
+
+class SqlAlchemyUOW(AbstractUnitOfWork):
     def __init__(self, session: AsyncSession):
         self.session = session
 
@@ -24,7 +41,11 @@ class SqlAlchemyUOW:
         await self.session.rollback()
 
 
-class AppHolder:
+class AbstractHolder:
+    pass
+
+
+class AppHolder(AbstractHolder):
     def __init__(self, session: AsyncSession) -> None:
         self.user_repo = UserRepository(session)
         self.musician_repo = MusicianRepository(session)

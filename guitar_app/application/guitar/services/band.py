@@ -1,10 +1,10 @@
 from guitar_app.application.guitar.dto import CreateBandDTO, BandDTO, UpdateBandDTO, FullBandDTO, UpdateMusicianBandDTO
 from guitar_app.application.guitar.usecases import CreateBand, GetBandById, GetBands, UpdateBand, UpdateMusicianBand, DeleteBand
-from guitar_app.infrastructure.db.uow import UnitOfWork
+from guitar_app.infrastructure.db.uow import AbstractUnitOfWork
 
 
 class BandServices:
-    def __init__(self, uow: UnitOfWork) -> None:
+    def __init__(self, uow: AbstractUnitOfWork) -> None:
         self.uow = uow
 
     async def create_band(self, band_dto: CreateBandDTO) -> FullBandDTO:
