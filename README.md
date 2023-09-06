@@ -18,7 +18,7 @@
 
 ## Установка и запуск:
 ```shell
-git clone https://github.com/artklk12/GuitarTabs.git
+git clone https://github.com/IsThatASkyline/GuitarTabs.git
 cd GuitarTabs
 ```
 Создайте файл .env и заполните его по примеру из .envExample 
