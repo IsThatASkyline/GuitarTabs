@@ -12,7 +12,7 @@ from aiogram_dialog.widgets.kbd import (
 from aiogram_dialog.widgets.text import Const, Format, Jinja
 
 from ... import states
-from ...jinja.templates import song as templates
+from ...jinja.templates import templates
 from ..preview_data import PREVIEW_SONG
 from .getters import (
     get_all_songs,
@@ -32,6 +32,7 @@ from .handlers import (
     select_song_by_band,
     select_song_founded_by_title,
 )
+
 
 all_songs = Dialog(
     Window(

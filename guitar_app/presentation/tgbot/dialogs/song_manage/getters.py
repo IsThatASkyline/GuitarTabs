@@ -2,7 +2,7 @@ from aiogram_dialog import DialogManager
 
 from guitar_app.application.guitar import dto, services
 from guitar_app.infrastructure.db.uow import UnitOfWork
-from guitar_app.presentation.tgbot.jinja.chords import CHORDS_TABULATURE
+from guitar_app.presentation.tgbot.jinja.chords import CHORDS_TABLATURE
 from guitar_app.presentation.tgbot.models.verse import Chord, Verse, VerseString
 
 
@@ -206,7 +206,7 @@ async def get_chords_with_tabs(uow: UnitOfWork, dialog_manager: DialogManager, *
         "song_title": song.title,
         "verses": result,
         "chords_tabs": [
-            Chord(title=chord, tab=CHORDS_TABULATURE[f"{chord}"]) for chord in unique_chords
+            Chord(title=chord, tab=CHORDS_TABLATURE[f"{chord}"]) for chord in unique_chords
         ],
     }
 
