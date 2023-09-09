@@ -45,7 +45,7 @@ all_songs = Dialog(
                 on_click=select_song,
             ),
             id="all_songs_sg",
-            width=1,
+            width=2,
             height=7,
             when=F["songs"],
         ),
@@ -314,7 +314,6 @@ songs_founded_by_title = Dialog(
         ),
         Cancel(Const("🔙Назад")),
         state=states.FoundedSongsPanelSG.choose_song,
-        preview_data={"songs": [PREVIEW_SONG]},
         getter=get_songs_founded_by_title,
     ),
     Window(
@@ -376,5 +375,12 @@ songs_founded_by_title = Dialog(
         state=states.FoundedSongsPanelSG.song_chords_with_tabs,
         preview_data={"song": PREVIEW_SONG},
         getter=get_chords_with_tabs,
+    ),
+    Window(
+        Const(
+            "Введите текстовое название"
+        ),
+        Cancel(Const("🔙Назад")),
+        state=states.FoundedSongsPanelSG.message_type_error,
     ),
 )

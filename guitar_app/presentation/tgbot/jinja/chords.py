@@ -68,6 +68,28 @@ CHORDS_TABULATURE[
 """
 
 CHORDS_TABULATURE[
+    "H"
+] = """
+        E | A | D | G | B | e
+       ‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒
+         |   O    O   O   O   O           2
+         |    |     |     |    |    |          3
+         |    |    O    O   O   |           4
+         |    |     |     |    |    |          5
+"""
+
+CHORDS_TABULATURE[
+    "Hm"
+] = """
+        E | A | D | G | B | e
+       ‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒
+         |   O    O   O   O   O           2
+         |    |     |     |   O    |          3
+         |    |    O    O    |    |          4
+         |    |     |     |    |    |          5
+"""
+
+CHORDS_TABULATURE[
     "C"
 ] = """
         E | A | D | G | B | e

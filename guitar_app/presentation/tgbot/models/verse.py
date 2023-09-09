@@ -9,12 +9,14 @@ class Chord:
 
 @dataclass
 class VerseString:
-    lyrics: str
-    chords: list[Chord]
-    chords_count: int
+    chords_count: int | None = None
+    space_between_chords: str | None = None
+    chords: list[Chord] | None = None
+    end_chords: list[Chord] | None = None
+    lyrics: str | None = None
 
 
 @dataclass
 class Verse:
     title: str
-    strings: list[VerseString]
+    strings: list[VerseString] | None

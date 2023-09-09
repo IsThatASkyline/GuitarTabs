@@ -36,6 +36,7 @@ class AllSongsPanelSG(StatesGroup):
 
 class FoundedSongsPanelSG(StatesGroup):
     input_song_title = State()
+    message_type_error = State()
     choose_song = State()
     song = State()
     song_menu = State()

@@ -17,3 +17,5 @@ class Verse(BaseAlchemyModels):
 
     lyrics: Mapped[str] = mapped_column(String(500), nullable=True)
     chords: Mapped[str] = mapped_column(String(250), nullable=True)
+
+

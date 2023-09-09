@@ -110,7 +110,7 @@ zipp = "3.16.2"
 
 [tool.poetry.scripts]
 guitar-tgbot = 'guitar_app.presentation.tgbot.__main__:run'
-guitar-server = 'guitar_app.presentation.api.main:run'
+guitar-server = 'guitar_app.presentation.api.main:build_app:run'
 
 [tool.pytest.ini_options]
 asyncio_mode = "auto"
