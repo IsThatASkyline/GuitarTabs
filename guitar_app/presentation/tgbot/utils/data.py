@@ -11,8 +11,6 @@ from aiogram_dialog.context.storage import StorageProxy
 from guitar_app.application.guitar import dto
 from guitar_app.infrastructure.db.uow import UnitOfWork
 
-# from shvatka.tgbot.config.models.bot import BotConfig
-
 
 class AiogramMiddlewareData(TypedDict, total=False):
     event_from_user: types.User

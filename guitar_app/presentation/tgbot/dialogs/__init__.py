@@ -1,4 +1,5 @@
-from aiogram import Router
+from aiogram import Router, F
+from aiogram.enums import ChatType
 from aiogram_dialog import setup_dialogs
 from aiogram_dialog.api.protocols import MessageManagerProtocol
 
@@ -12,6 +13,7 @@ from guitar_app.presentation.tgbot.dialogs import song_manage
 
 def setup(message_manager: MessageManagerProtocol) -> Router:
     dialogs_router = Router(name=__name__)
+    dialogs_router.message.filter(F.chat.type == ChatType.PRIVATE)
 
     dialogs_router.include_router(starters.setup())
     dialogs_router.include_router(setup_all_dialogs())

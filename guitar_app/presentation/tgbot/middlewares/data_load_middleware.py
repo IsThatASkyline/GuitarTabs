@@ -1,5 +1,4 @@
-from collections.abc import Awaitable, Callable, Mapping
-from typing import Any
+from typing import Any, Awaitable, Callable, Mapping
 
 from aiogram import BaseMiddleware
 from aiogram.types import TelegramObject, Update
@@ -10,41 +9,28 @@ from guitar_app.application.guitar import dto, services
 from guitar_app.infrastructure.db.uow import UnitOfWork
 from guitar_app.presentation.tgbot.utils.data import MiddlewareData
 
-# from aiogram_dialog.api.entities import DialogUpdate
+from aiogram_dialog.api.entities import DialogUpdate
 
 
 class LoadDataMiddleware(BaseMiddleware):
     async def __call__(  # type: ignore
-        self,
-        handler: Callable[[TelegramObject, Mapping[str, Any]], Awaitable[Any]],
-        event: TelegramObject,
-        data: MiddlewareData,
+            self,
+            handler: Callable[[TelegramObject, Mapping[str, Any]], Awaitable[Any]],
+            event: TelegramObject,
+            data: MiddlewareData,
     ) -> Any:
         try:
             uow = data["uow"]
-            # BUG
-            # Supposed to be:
-            # if isinstance(event, DialogUpdate):
-            #     if user_tg := data.get("event_from_user", None):
-            #        user = await services.UserServices(uow).get_user_by_id(user_tg.id)
-            #     else:
-            #        user = None
-            # else:
-            #     user = await save_user(data, uow)
-            if isinstance(event, Update):
-                try:
-                    user = await save_user(data, uow)
-                except IntegrityError:
-                    if user_tg := data.get("event_from_user", None):
-                        user = await services.UserServices(uow).get_user_by_id(user_tg.id)
-                    else:
-                        user = None
-
+            if user_tg := data.get("event_from_user", None):
+                user = await services.UserServices(uow).get_user_by_id(user_tg.id)
+            else:
+                user = await save_user(data, uow)
             data["user"] = user
             result = await handler(event, data)
             return result
         except UnknownIntent:
             # In case, when bot been restarted and user press old menu buttons
+            # Bug with aiogram_dialog library
             pass
 
 

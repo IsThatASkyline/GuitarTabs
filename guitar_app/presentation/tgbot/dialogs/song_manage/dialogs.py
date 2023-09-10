@@ -17,7 +17,6 @@ from ..preview_data import PREVIEW_SONG
 from .getters import (
     get_all_songs,
     get_chords,
-    get_chords_with_tabs,
     get_favorite_songs,
     get_song,
     get_songs_by_band,
@@ -113,7 +112,7 @@ all_songs = Dialog(
         ),
         state=states.AllSongsPanelSG.song_chords_with_tabs,
         preview_data={"song": PREVIEW_SONG},
-        getter=get_chords_with_tabs,
+        getter=get_chords,
     ),
 )
 
@@ -196,7 +195,7 @@ songs_by_group = Dialog(
         ),
         state=states.BandSongsPanelSG.song_chords_with_tabs,
         preview_data={"song": PREVIEW_SONG},
-        getter=get_chords_with_tabs,
+        getter=get_chords,
     ),
 )
 
@@ -280,7 +279,7 @@ favorite_songs = Dialog(
         ),
         state=states.FavoriteSongsPanelSG.song_chords_with_tabs,
         preview_data={"song": PREVIEW_SONG},
-        getter=get_chords_with_tabs,
+        getter=get_chords,
     ),
 )
 
@@ -375,7 +374,7 @@ songs_founded_by_title = Dialog(
         ),
         state=states.FoundedSongsPanelSG.song_chords_with_tabs,
         preview_data={"song": PREVIEW_SONG},
-        getter=get_chords_with_tabs,
+        getter=get_chords,
     ),
     Window(
         Const(

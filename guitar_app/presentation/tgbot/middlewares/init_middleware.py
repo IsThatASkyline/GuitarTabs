@@ -32,4 +32,5 @@ class InitMiddleware(BaseMiddleware):
             return result
         except UnknownIntent:
             # In case, when bot been restarted and user press old menu buttons
+            # Bug with aiogram_dialog library
             pass
