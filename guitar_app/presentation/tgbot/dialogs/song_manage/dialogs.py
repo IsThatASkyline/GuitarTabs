@@ -12,12 +12,11 @@ from aiogram_dialog.widgets.kbd import (
 from aiogram_dialog.widgets.text import Const, Format, Jinja
 
 from ... import states
-from ...jinja.templates import song as templates
+from ...jinja.templates import templates
 from ..preview_data import PREVIEW_SONG
 from .getters import (
     get_all_songs,
     get_chords,
-    get_chords_with_tabs,
     get_favorite_songs,
     get_song,
     get_songs_by_band,
@@ -45,7 +44,7 @@ all_songs = Dialog(
                 on_click=select_song,
             ),
             id="all_songs_sg",
-            width=1,
+            width=2,
             height=7,
             when=F["songs"],
         ),
@@ -55,7 +54,7 @@ all_songs = Dialog(
         getter=get_all_songs,
     ),
     Window(
-        Jinja("{{ song.title }} группы {{ song.band.title }}"),
+        Jinja("<b>{{ song.title }}</b> группы <b>{{ song.band.title }}</b>"),
         Button(
             Const("⭐️Добавить в избранное"),
             id="add_to_favorite",
@@ -112,14 +111,14 @@ all_songs = Dialog(
         ),
         state=states.AllSongsPanelSG.song_chords_with_tabs,
         preview_data={"song": PREVIEW_SONG},
-        getter=get_chords_with_tabs,
+        getter=get_chords,
     ),
 )
 
 
 songs_by_group = Dialog(
     Window(
-        Jinja("🎵Песни группы {{ band_title }} (Всего: {{ songs|length }})"),
+        Jinja("🎵Песни группы <b>{{ band_title }}</b> (Всего: <b>{{ songs|length }}</b>)"),
         ScrollingGroup(
             Select(
                 Format("{item.title}"),
@@ -130,7 +129,7 @@ songs_by_group = Dialog(
                 when=F["songs"],
             ),
             id="songs_by_band_sg",
-            width=1,
+            width=2,
             height=7,
         ),
         Cancel(Const("🔙Назад")),
@@ -138,7 +137,7 @@ songs_by_group = Dialog(
         getter=get_songs_by_band,
     ),
     Window(
-        Jinja("{{ song.title }} группы {{ song.band.title }}"),
+        Jinja("<b>{{ song.title }}</b> группы <b>{{ song.band.title }}</b>"),
         Button(
             Const("⭐️Добавить в избранное"),
             id="add_to_favorite",
@@ -195,7 +194,7 @@ songs_by_group = Dialog(
         ),
         state=states.BandSongsPanelSG.song_chords_with_tabs,
         preview_data={"song": PREVIEW_SONG},
-        getter=get_chords_with_tabs,
+        getter=get_chords,
     ),
 )
 
@@ -222,7 +221,7 @@ favorite_songs = Dialog(
         getter=get_favorite_songs,
     ),
     Window(
-        Jinja("{{ song.title }} группы {{ song.band.title }}"),
+        Jinja("<b>{{ song.title }}</b> группы <b>{{ song.band.title }}</b>"),
         Button(
             Const("⭐️Добавить в избранное"),
             id="add_to_favorite",
@@ -279,7 +278,7 @@ favorite_songs = Dialog(
         ),
         state=states.FavoriteSongsPanelSG.song_chords_with_tabs,
         preview_data={"song": PREVIEW_SONG},
-        getter=get_chords_with_tabs,
+        getter=get_chords,
     ),
 )
 
@@ -294,9 +293,9 @@ songs_founded_by_title = Dialog(
     Window(
         Jinja(
             "{% if songs %}"
-            "Песни с названием: '{{ song_title }}' (Всего: {{ songs|length }})"
+            "Песни с названием: <b>{{ song_title }}</b> (Всего: <b>{{ songs|length }}</b>)"
             "{% else %}"
-            "Песен с названием '{{ song_title }}' не найдено"
+            "Песен с названием <b>{{ song_title }}</b> не найдено"
             "{% endif %}"
         ),
         ScrollingGroup(
@@ -314,11 +313,10 @@ songs_founded_by_title = Dialog(
         ),
         Cancel(Const("🔙Назад")),
         state=states.FoundedSongsPanelSG.choose_song,
-        preview_data={"songs": [PREVIEW_SONG]},
         getter=get_songs_founded_by_title,
     ),
     Window(
-        Jinja("{{ song.title }} группы {{ song.band.title }}"),
+        Jinja("<b>{{ song.title }}</b> группы <b>{{ song.band.title }}</b>"),
         Button(
             Const("⭐️Добавить в избранное"),
             id="add_to_favorite",
@@ -375,6 +373,11 @@ songs_founded_by_title = Dialog(
         ),
         state=states.FoundedSongsPanelSG.song_chords_with_tabs,
         preview_data={"song": PREVIEW_SONG},
-        getter=get_chords_with_tabs,
+        getter=get_chords,
+    ),
+    Window(
+        Const("Введите текстовое название"),
+        Cancel(Const("🔙Назад")),
+        state=states.FoundedSongsPanelSG.message_type_error,
     ),
 )

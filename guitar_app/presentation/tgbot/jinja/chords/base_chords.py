@@ -1,7 +1,7 @@
-CHORDS_TABULATURE = dict()
+BASE_TABLATURE = dict()
 
 
-CHORDS_TABULATURE[
+BASE_TABLATURE[
     "A"
 ] = """
         E | A | D | G | B | e
@@ -12,7 +12,7 @@ CHORDS_TABULATURE[
          |    |     |     |    |    |          4
 """
 
-CHORDS_TABULATURE[
+BASE_TABLATURE[
     "A#"
 ] = """
         E | A | D | G | B | e
@@ -23,7 +23,7 @@ CHORDS_TABULATURE[
          |    |     |     |    |    |          9
 """
 
-CHORDS_TABULATURE[
+BASE_TABLATURE[
     "Am"
 ] = """
         E | A | D | G | B | e
@@ -34,7 +34,7 @@ CHORDS_TABULATURE[
          |    |     |     |    |    |          4
 """
 
-CHORDS_TABULATURE[
+BASE_TABLATURE[
     "A#m"
 ] = """
         E | A | D | G | B | e
@@ -45,7 +45,7 @@ CHORDS_TABULATURE[
          |    |     |     |    |    |          9
 """
 
-CHORDS_TABULATURE[
+BASE_TABLATURE[
     "B"
 ] = """
         E | A | D | G | B | e
@@ -56,7 +56,18 @@ CHORDS_TABULATURE[
          |    |     |     |    |    |          5
 """
 
-CHORDS_TABULATURE[
+BASE_TABLATURE[
+    "B7"
+] = """
+        E | A | D | G | B | e
+       ‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒
+         |    |    O     |    |    |          1
+         |   O     |    O    |   O         2
+         |    |     |     |    |    |          3
+         |    |     |     |    |    |          4
+"""
+
+BASE_TABLATURE[
     "Bm"
 ] = """
         E | A | D | G | B | e
@@ -67,7 +78,29 @@ CHORDS_TABULATURE[
          |    |     |     |    |    |          5
 """
 
-CHORDS_TABULATURE[
+BASE_TABLATURE[
+    "H"
+] = """
+        E | A | D | G | B | e
+       ‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒
+         |   O    O   O   O   O           2
+         |    |     |     |    |    |          3
+         |    |    O    O   O   |           4
+         |    |     |     |    |    |          5
+"""
+
+BASE_TABLATURE[
+    "Hm"
+] = """
+        E | A | D | G | B | e
+       ‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒
+         |   O    O   O   O   O           2
+         |    |     |     |   O    |          3
+         |    |    O    O    |    |          4
+         |    |     |     |    |    |          5
+"""
+
+BASE_TABLATURE[
     "C"
 ] = """
         E | A | D | G | B | e
@@ -78,7 +111,7 @@ CHORDS_TABULATURE[
          |    |     |     |    |    |          4
 """
 
-CHORDS_TABULATURE[
+BASE_TABLATURE[
     "C#"
 ] = """
         E | A | D | G | B | e
@@ -89,7 +122,7 @@ CHORDS_TABULATURE[
          |    |     |     |    |    |          7
 """
 
-CHORDS_TABULATURE[
+BASE_TABLATURE[
     "Cm"
 ] = """
         E | A | D | G | B | e
@@ -100,7 +133,7 @@ CHORDS_TABULATURE[
          |    |     |     |    |    |          6
 """
 
-CHORDS_TABULATURE[
+BASE_TABLATURE[
     "C#m"
 ] = """
         E | A | D | G | B | e
@@ -111,7 +144,7 @@ CHORDS_TABULATURE[
          |    |     |     |    |    |          7
 """
 
-CHORDS_TABULATURE[
+BASE_TABLATURE[
     "D"
 ] = """
         E | A | D | G | B | e
@@ -122,7 +155,7 @@ CHORDS_TABULATURE[
          |    |     |     |    |    |          4
 """
 
-CHORDS_TABULATURE[
+BASE_TABLATURE[
     "D#"
 ] = """
         E | A | D | G | B | e
@@ -133,7 +166,7 @@ CHORDS_TABULATURE[
          |    |     |     |    |    |          9
 """
 
-CHORDS_TABULATURE[
+BASE_TABLATURE[
     "Dm"
 ] = """
         E | A | D | G | B | e
@@ -144,7 +177,7 @@ CHORDS_TABULATURE[
          |    |     |     |    |    |          4
 """
 
-CHORDS_TABULATURE[
+BASE_TABLATURE[
     "D#m"
 ] = """
         E | A | D | G | B | e
@@ -155,7 +188,7 @@ CHORDS_TABULATURE[
          |    |     |     |    |    |          9
 """
 
-CHORDS_TABULATURE[
+BASE_TABLATURE[
     "E"
 ] = """
         E | A | D | G | B | e
@@ -166,7 +199,7 @@ CHORDS_TABULATURE[
          |    |     |     |    |    |          4
 """
 
-CHORDS_TABULATURE[
+BASE_TABLATURE[
     "Em"
 ] = """
         E | A | D | G | B | e
@@ -177,7 +210,7 @@ CHORDS_TABULATURE[
          |    |     |     |    |    |          4
 """
 
-CHORDS_TABULATURE[
+BASE_TABLATURE[
     "F"
 ] = """
         E | A | D | G | B | e
@@ -188,7 +221,7 @@ CHORDS_TABULATURE[
          |    |     |     |    |    |          4
 """
 
-CHORDS_TABULATURE[
+BASE_TABLATURE[
     "F#"
 ] = """
         E | A | D | G | B | e
@@ -199,7 +232,7 @@ CHORDS_TABULATURE[
          |    |     |     |    |    |          5
 """
 
-CHORDS_TABULATURE[
+BASE_TABLATURE[
     "Fm"
 ] = """
         E | A | D | G | B | e
@@ -210,7 +243,7 @@ CHORDS_TABULATURE[
          |    |     |     |    |    |          4
 """
 
-CHORDS_TABULATURE[
+BASE_TABLATURE[
     "F#m"
 ] = """
         E | A | D | G | B | e
@@ -221,7 +254,7 @@ CHORDS_TABULATURE[
          |    |     |     |    |    |          5
 """
 
-CHORDS_TABULATURE[
+BASE_TABLATURE[
     "G"
 ] = """
         E | A | D | G | B | e
@@ -232,7 +265,7 @@ CHORDS_TABULATURE[
          |    |     |     |    |    |          4
 """
 
-CHORDS_TABULATURE[
+BASE_TABLATURE[
     "G#"
 ] = """
         E | A | D | G | B | e
@@ -243,7 +276,7 @@ CHORDS_TABULATURE[
          |    |     |     |    |    |          7
 """
 
-CHORDS_TABULATURE[
+BASE_TABLATURE[
     "Gm"
 ] = """
         E | A | D | G | B | e
@@ -254,7 +287,7 @@ CHORDS_TABULATURE[
          |    |     |     |    |    |          6
 """
 
-CHORDS_TABULATURE[
+BASE_TABLATURE[
     "G#m"
 ] = """
         E | A | D | G | B | e

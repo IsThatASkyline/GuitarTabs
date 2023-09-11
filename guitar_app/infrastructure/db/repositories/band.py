@@ -25,6 +25,7 @@ class BandRepository(BaseRepository[Band]):
             select(Band)
             .options(joinedload(Band.songs), joinedload(Band.members))
             .where(Band.id == id_)
+            .order_by(Band.title)
         )
         band = (await self._session.execute(query)).unique().scalar_one_or_none()
 

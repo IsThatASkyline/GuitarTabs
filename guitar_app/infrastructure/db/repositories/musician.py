@@ -1,3 +1,4 @@
+from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from guitar_app.application.guitar.dto import CreateMusicianDTO, MusicianDTO
@@ -24,7 +25,9 @@ class MusicianRepository(BaseRepository[Musician]):
         return musician.to_dto() if musician else None
 
     async def list_musicians(self) -> list[MusicianDTO]:
-        musicians = await super().list()
+        musicians = (
+            await self.session.execute(select(Musician).order_by(Musician.first_name))
+        ).scalars()
         return [musician.to_dto() for musician in musicians] if musicians else None
 
     async def update_musician(self, id_: int, **kwargs) -> None:

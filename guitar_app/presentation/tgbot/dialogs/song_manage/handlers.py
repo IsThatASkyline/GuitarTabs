@@ -75,9 +75,11 @@ async def remove_song_from_favorite(c: CallbackQuery, widget: Button, manager: D
 
 
 async def find_song_by_title(m: Message, dialog: Any, manager: DialogManager):
-    assert m.text
-    data = manager.dialog_data
-    if not isinstance(data, dict):
-        data = {}
-    data["song_title"] = m.text.strip()
-    await manager.switch_to(states.FoundedSongsPanelSG.choose_song)
+    if not m.text:
+        await manager.switch_to(states.FoundedSongsPanelSG.message_type_error)
+    else:
+        data = manager.dialog_data
+        if not isinstance(data, dict):
+            data = {}
+        data["song_title"] = m.text.strip()
+        await manager.switch_to(states.FoundedSongsPanelSG.choose_song)
