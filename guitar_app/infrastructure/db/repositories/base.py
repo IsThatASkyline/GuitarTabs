@@ -48,7 +48,7 @@ class BaseRepository(Generic[Model], AbstractRepository):
         return (await self._session.execute(query)).scalar_one_or_none()
 
     async def list(self) -> Sequence[Model]:
-        result = await self._session.execute(select(self._model).order_by(self._model.title))
+        result = await self._session.execute(select(self._model))
         return result.scalars().all()
 
     async def update(self, id_: int, **kwargs) -> None:

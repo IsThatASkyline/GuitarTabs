@@ -32,7 +32,6 @@ from .handlers import (
     select_song_founded_by_title,
 )
 
-
 all_songs = Dialog(
     Window(
         Const("🎵Все песни"),
@@ -130,7 +129,7 @@ songs_by_group = Dialog(
                 when=F["songs"],
             ),
             id="songs_by_band_sg",
-            width=1,
+            width=2,
             height=7,
         ),
         Cancel(Const("🔙Назад")),
@@ -377,9 +376,7 @@ songs_founded_by_title = Dialog(
         getter=get_chords,
     ),
     Window(
-        Const(
-            "Введите текстовое название"
-        ),
+        Const("Введите текстовое название"),
         Cancel(Const("🔙Назад")),
         state=states.FoundedSongsPanelSG.message_type_error,
     ),

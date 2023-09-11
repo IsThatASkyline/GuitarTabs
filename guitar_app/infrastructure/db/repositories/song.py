@@ -53,7 +53,12 @@ class SongRepository(BaseRepository[Song]):
         return [song.to_dto() for song in songs] if songs else None
 
     async def get_songs_by_band(self, band_id):
-        query = select(Song).options(joinedload(Song.band)).where(Song.band_id == band_id).order_by(Song.title)
+        query = (
+            select(Song)
+            .options(joinedload(Song.band))
+            .where(Song.band_id == band_id)
+            .order_by(Song.title)
+        )
         songs = (await self.session.execute(query)).scalars().all()
         return [song.to_dto() for song in songs] if songs else None
 
@@ -61,7 +66,8 @@ class SongRepository(BaseRepository[Song]):
         query = (
             select(Song)
             .options(joinedload(Song.band))
-            .where(Song.title.ilike("%" + criteria.value + "%")).order_by(Song.title)
+            .where(Song.title.ilike("%" + criteria.value + "%"))
+            .order_by(Song.title)
         )
         songs = (await self.session.execute(query, params=criteria.dict())).scalars().all()
         return [song.to_dto() for song in songs] if songs else None

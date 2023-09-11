@@ -1,4 +1,4 @@
-from sqlalchemy import select
+from sqlalchemy import delete, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from guitar_app.application.guitar.dto import CreateUserDTO, UserDTO
@@ -29,4 +29,5 @@ class UserRepository(BaseRepository[User]):
         await super().update(id_, **kwargs)
 
     async def delete_user(self, id_: int):
-        await super().delete(id_)
+        query = delete(User).where(User.telegram_id == id_)
+        await self.session.execute(query)

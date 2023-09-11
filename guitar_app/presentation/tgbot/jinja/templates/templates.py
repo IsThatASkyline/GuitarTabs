@@ -22,11 +22,11 @@ SONG_CHORDS_WITHOUT_TABS_TEMPLATE = Jinja(
     "{{ chord.title }} {{ verse_string.space_between_chords }}"
     "{% endif %}"
     "{% endfor %}"
-    "{% endif %}"   
+    "{% endif %}"
     "{% endif %}"
     "{% if verse_string.end_chords %}"
     "{{ verse_string.end_chords|join(' ', attribute='title')}}"
-    "{% endif %}" 
+    "{% endif %}"
     "\n\n{{ verse_string.lyrics }}\n"
     "{% else %}"
     "{{ verse_string.chords|join(' ', attribute='title')}}\n"
@@ -36,10 +36,13 @@ SONG_CHORDS_WITHOUT_TABS_TEMPLATE = Jinja(
     "{% endfor %}"
 )
 
-SONG_CHORDS_WITH_TABS_TEMPLATE = Jinja(
-    "Аппликатура аккордов для песни <b>{{ song_title }}</b>\n\n"
-    "{% for chord in chords_tabs %}"
-    "{{ chord.title }}:"
-    "{{ chord.tab }}\n"
-    "{% endfor %}"
-) + SONG_CHORDS_WITHOUT_TABS_TEMPLATE
+SONG_CHORDS_WITH_TABS_TEMPLATE = (
+    Jinja(
+        "Аппликатура аккордов для песни <b>{{ song_title }}</b>\n\n"
+        "{% for chord in chords_tabs %}"
+        "{{ chord.title }}:"
+        "{{ chord.tab }}\n"
+        "{% endfor %}"
+    )
+    + SONG_CHORDS_WITHOUT_TABS_TEMPLATE
+)

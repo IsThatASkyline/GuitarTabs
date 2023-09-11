@@ -25,7 +25,9 @@ class MusicianRepository(BaseRepository[Musician]):
         return musician.to_dto() if musician else None
 
     async def list_musicians(self) -> list[MusicianDTO]:
-        musicians = (await self.session.execute(select(Musician).order_by(Musician.first_name))).scalars()
+        musicians = (
+            await self.session.execute(select(Musician).order_by(Musician.first_name))
+        ).scalars()
         return [musician.to_dto() for musician in musicians] if musicians else None
 
     async def update_musician(self, id_: int, **kwargs) -> None:

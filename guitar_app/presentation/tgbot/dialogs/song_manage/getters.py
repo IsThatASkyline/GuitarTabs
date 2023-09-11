@@ -23,7 +23,9 @@ async def get_chords(uow: UnitOfWork, dialog_manager: DialogManager, **_):
             lyrics_list = None
 
         if lyrics_list and chords_list:
-            verse_strings, chords = await get_verse_strings_with_tabs_for_full_verse(chords_list, lyrics_list)
+            verse_strings, chords = await get_verse_strings_with_tabs_for_full_verse(
+                chords_list, lyrics_list
+            )
             unique_chords.update(chords)
             result.append(Verse(title=verse.title, strings=verse_strings))
         elif not lyrics_list and chords_list:
@@ -65,8 +67,8 @@ async def get_song(uow: UnitOfWork, user: dto.UserDTO, dialog_manager: DialogMan
 async def get_verse_strings_for_full_verse(chords_list, lyrics_list):
     verse_strings = []
     for chords, lyrics in zip(*(chords_list, lyrics_list)):
-        if ' || ' in chords:
-            chords, end_chords = chords.split('||')
+        if " || " in chords:
+            chords, end_chords = chords.split("||")
             end_chords = [Chord(title=chord) for chord in end_chords.split()]
         else:
             end_chords = None
@@ -78,7 +80,7 @@ async def get_verse_strings_for_full_verse(chords_list, lyrics_list):
             chords=chords,
             end_chords=end_chords,
             chords_count=len(chords),
-            space_between_chords=space_between_chords
+            space_between_chords=space_between_chords,
         )
         verse_strings.append(pair)
     return verse_strings
@@ -101,7 +103,7 @@ async def get_space_between(lyrics, chords):
     elif lyrics_len > 30:
         space_between_chords = space_ranges.space_more_30[chords_len]
     else:
-        space_between_chords = ' ' * 2
+        space_between_chords = " " * 2
 
     return space_between_chords
 
@@ -122,10 +124,10 @@ async def get_verse_strings_with_tabs_for_full_verse(chords_list, lyrics_list):
     verse_strings = []
     unique_chords = set()
     for chords, lyrics in zip(*(chords_list, lyrics_list)):
-        all_chords_in_verse_string = chords[:].replace('||', '').split()
+        all_chords_in_verse_string = chords[:].replace("||", "").split()
         unique_chords.update(all_chords_in_verse_string)
-        if ' || ' in chords:
-            chords, end_chords = chords.split(' || ')
+        if " || " in chords:
+            chords, end_chords = chords.split(" || ")
             end_chords = [Chord(title=chord) for chord in end_chords.split()]
         else:
             end_chords = None
@@ -137,7 +139,7 @@ async def get_verse_strings_with_tabs_for_full_verse(chords_list, lyrics_list):
             chords=chords,
             end_chords=end_chords,
             chords_count=len(chords),
-            space_between_chords=space_between_chords
+            space_between_chords=space_between_chords,
         )
         verse_strings.append(pair)
     return verse_strings, unique_chords
