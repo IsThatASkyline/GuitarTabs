@@ -16,6 +16,7 @@ async def main():
         print("Started")
         await dp.start_polling(
             bot,
+            skip_updates=True,
         )
     finally:
         print("Stopped")
