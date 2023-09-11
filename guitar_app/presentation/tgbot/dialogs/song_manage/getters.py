@@ -33,13 +33,23 @@ async def get_chords(uow: UnitOfWork, dialog_manager: DialogManager, **_):
         elif not lyrics_list and not chords_list:
             result.append(Verse(title=verse.title, strings=None))
 
+    chords_tabs = await get_chords_tabs(unique_chords)
+
     return {
         "song_title": song.title,
         "verses": result,
-        "chords_tabs": [
-            Chord(title=chord, tab=CHORDS_TABLATURE[f"{chord}"]) for chord in unique_chords
-        ],
+        "chords_tabs": chords_tabs,
     }
+
+
+async def get_chords_tabs(chords):
+    chords_tabs = []
+    for chord in chords:
+        try:
+            chords_tabs.append(Chord(title=chord, tab=CHORDS_TABLATURE[f"{chord}"]))
+        except KeyError:
+            pass
+    return chords_tabs
 
 
 async def get_song(uow: UnitOfWork, user: dto.UserDTO, dialog_manager: DialogManager, **_):
