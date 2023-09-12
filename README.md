@@ -1,7 +1,6 @@
 # GuitarTabs
 [![wakatime](https://wakatime.com/badge/user/60b3df07-9c18-4363-8c82-95a353ff7e15/project/02a2c739-df79-4c42-a72e-3a0b124e60bf.svg)](https://wakatime.com/badge/user/60b3df07-9c18-4363-8c82-95a353ff7e15/project/02a2c739-df79-4c42-a72e-3a0b124e60bf)
 ###
-https://t.me/GuitarSongsChords_bot
 
 Приложение для гитаристов
 
