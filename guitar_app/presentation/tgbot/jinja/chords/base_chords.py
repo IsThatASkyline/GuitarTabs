@@ -57,13 +57,13 @@ BASE_TABLATURE[
 """
 
 BASE_TABLATURE[
-    "B7"
+    "Bb"
 ] = """
         E | A | D | G | B | e
        ‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒
-         |    |    O     |    |    |          1
-         |   O     |    O    |   O         2
-         |    |     |     |    |    |          3
+         |   O    O   O   O   O           1
+         |    |     |     |    |    |          2
+         |    |    O    O   O   |           3
          |    |     |     |    |    |          4
 """
 

@@ -23,14 +23,9 @@ class InitMiddleware(BaseMiddleware):
         event: TelegramObject,
         data: MiddlewareData,
     ) -> Any:
-        try:
-            async with self.pool() as session:
-                uow = UnitOfWork(session)
-                data["uow"] = uow
-                result = await handler(event, data)
-                del data["uow"]
-            return result
-        except UnknownIntent:
-            # In case, when bot been restarted and user press old menu buttons
-            # Bug with aiogram_dialog library
-            pass
+        async with self.pool() as session:
+            uow = UnitOfWork(session)
+            data["uow"] = uow
+            result = await handler(event, data)
+            del data["uow"]
+        return result
