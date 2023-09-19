@@ -20,11 +20,11 @@ def create_dispatcher(
     message_manager: MessageManager,
 ) -> Dispatcher:
     dp = create_only_dispatcher()
+    setup_handlers(dp, message_manager)
     setup_middlewares(
         dp=dp,
         pool=pool,
     )
-    setup_handlers(dp, message_manager)
     return dp
 
 
