@@ -36,6 +36,7 @@ async def test_get_song(
 
     response = await client.get(f'song/get-song/{song_data["song_id"]}')
     response_404 = await client.get("song/get-song/123")
+
     assert response.status_code == status.HTTP_200_OK
     assert response.json()["title"] == song_data["title"]
     assert response.json()["band"]["id"] == song_data["band_id"]

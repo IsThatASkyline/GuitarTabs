@@ -26,8 +26,12 @@ class UserServices:
         return await GetUsers(self.uow)()
 
     async def update_user(self, update_user_dto: UpdateUserDTO) -> UserDTO:
-        await UpdateUser(self.uow)(update_user_dto)
-        return await GetUserById(self.uow)(update_user_dto.id)
+        async with self.uow:
+            await UpdateUser(self.uow)(update_user_dto)
+            await self.uow.commit()
+            return await GetUserById(self.uow)(update_user_dto.id)
 
     async def delete_user(self, id_: int) -> None:
-        await DeleteUser(self.uow)(id_)
+        async with self.uow:
+            await DeleteUser(self.uow)(id_)
+            await self.uow.commit()

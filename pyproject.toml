@@ -110,6 +110,7 @@ zipp = "3.16.2"
 
 #[tool.poetry.group.test.dependencies]
 #aiogram-tests = {git = "https://github.com/bomzheg/aiogram_tests.git", branch = "fix/aiogram3rc"}
+pytest-cov = "^4.1.0"
 
 
 [tool.poetry.scripts]
