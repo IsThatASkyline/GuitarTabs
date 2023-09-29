@@ -15,8 +15,7 @@ async def main():
     try:
         print("Started")
         await dp.start_polling(
-            bot,
-            allowed_updates=dp.resolve_used_update_types(skip_events={"aiogd_update"})
+            bot, allowed_updates=dp.resolve_used_update_types(skip_events={"aiogd_update"})
         )
     finally:
         print("Stopped")

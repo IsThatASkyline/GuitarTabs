@@ -1,14 +1,13 @@
-from pydantic.main import BaseModel
+from dataclasses import dataclass
 
 
-class BaseVerseDTO(BaseModel):
+@dataclass
+class BaseVerseDTO:
     title: str
     lyrics: str | None
     chords: str | None
 
-    class Config:
-        orm_mode = True
 
-
+@dataclass
 class CreateVerseDTO(BaseVerseDTO):
     song_id: int

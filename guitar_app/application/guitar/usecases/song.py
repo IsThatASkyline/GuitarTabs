@@ -50,10 +50,7 @@ class GetSongsByGroup(SongUseCase):
 class UpdateSong(SongUseCase):
     async def __call__(self, song_update_dto: UpdateSongDTO) -> None:
         if await self.uow.app_holder.song_repo.get_song(song_update_dto.id):
-            await self.uow.app_holder.song_repo.update_song(
-                song_update_dto.id,
-                **song_update_dto.dict(exclude_none=True, exclude=set("id")),
-            )
+            await self.uow.app_holder.song_repo.update_song(song_update_dto)
             return
         raise SongNotExists
 
@@ -61,9 +58,11 @@ class UpdateSong(SongUseCase):
 class AddSongToFavorite(SongUseCase):
     async def __call__(self, song_dto: FavoriteSongDTO) -> None:
         if song := await self.uow.app_holder.song_repo.get_song(song_dto.song_id):
-            song = SongDTO(**song.dict())
-            if song not in await self.uow.app_holder.favorites_repo.get_user_favorite_songs(
-                song_dto.user_id
+            if (
+                song.compress()
+                not in await self.uow.app_holder.favorites_repo.get_user_favorite_songs(
+                    song_dto.user_id
+                )
             ):
                 return await self.uow.app_holder.favorites_repo.add_favorite_song(song_dto)
         raise SongNotExists
@@ -72,8 +71,7 @@ class AddSongToFavorite(SongUseCase):
 class RemoveSongFromFavorite(SongUseCase):
     async def __call__(self, song_dto: FavoriteSongDTO) -> None:
         if song := await self.uow.app_holder.song_repo.get_song(song_dto.song_id):
-            song = SongDTO(**song.dict())
-            if song in await self.uow.app_holder.favorites_repo.get_user_favorite_songs(
+            if song.compress() in await self.uow.app_holder.favorites_repo.get_user_favorite_songs(
                 song_dto.user_id
             ):
                 return await self.uow.app_holder.favorites_repo.delete_favorite_song(song_dto)

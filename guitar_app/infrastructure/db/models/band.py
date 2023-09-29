@@ -27,4 +27,9 @@ class Band(BaseAlchemyModels):
         )
 
     def to_full_dto(self) -> FullBandDTO:
-        return FullBandDTO(id=self.id, title=self.title, members=self.members, songs=self.songs)
+        return FullBandDTO(
+            id=self.id,
+            title=self.title,
+            members=[member.to_dto() for member in self.members],
+            songs=[song.to_dto() for song in self.songs],
+        )

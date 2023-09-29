@@ -33,10 +33,7 @@ class GetMusicians(MusicianUseCase):
 class UpdateMusician(MusicianUseCase):
     async def __call__(self, musician_update_dto: UpdateMusicianDTO) -> None:
         if await self.uow.app_holder.musician_repo.get_musician(musician_update_dto.id):
-            await self.uow.app_holder.musician_repo.update_musician(
-                musician_update_dto.id,
-                **musician_update_dto.dict(exclude_none=True, exclude=set("id")),
-            )
+            await self.uow.app_holder.musician_repo.update_musician(musician_update_dto)
             return
         else:
             raise MusicianNotExists

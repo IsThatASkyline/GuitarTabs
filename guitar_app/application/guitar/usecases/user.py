@@ -29,9 +29,7 @@ class GetUsers(UserUseCase):
 
 class UpdateUser(UserUseCase):
     async def __call__(self, user_update_dto: UpdateUserDTO) -> None:
-        await self.uow.app_holder.user_repo.update_user(
-            user_update_dto.id, **user_update_dto.dict(exclude_none=True, exclude=set("id"))
-        )
+        await self.uow.app_holder.user_repo.update_user(user_update_dto.id)
 
 
 class DeleteUser(UserUseCase):

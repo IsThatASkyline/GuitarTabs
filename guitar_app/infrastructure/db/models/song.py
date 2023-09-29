@@ -24,8 +24,13 @@ class Song(BaseAlchemyModels):
         return SongDTO(
             id=self.id,
             title=self.title,
-            band=self.band,
+            band=self.band.to_dto(),
         )
 
     def to_full_dto(self) -> FullSongDTO:
-        return FullSongDTO(id=self.id, title=self.title, band=self.band, verses=self.verses)
+        return FullSongDTO(
+            id=self.id,
+            title=self.title,
+            band=self.band.to_dto(),
+            verses=[verse.to_dto() for verse in self.verses],
+        )

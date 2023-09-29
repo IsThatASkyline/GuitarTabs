@@ -3,7 +3,6 @@ from typing import Any
 
 from aiogram import BaseMiddleware
 from aiogram.types import TelegramObject, Update
-from aiogram_dialog.api.exceptions import UnknownIntent
 from sqlalchemy.exc import IntegrityError
 
 from guitar_app.application.guitar import dto, services

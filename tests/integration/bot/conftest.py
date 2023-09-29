@@ -1,6 +1,7 @@
 import pytest
-from aiogram import Dispatcher, Bot
+from aiogram import Bot, Dispatcher
 from aiogram_dialog.test_tools import BotClient
+
 from tests.fixtures.user_constants import create_tg_user
 
 

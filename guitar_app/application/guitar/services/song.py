@@ -28,7 +28,7 @@ class SongServices:
     def __init__(self, uow: UnitOfWork) -> None:
         self.uow = uow
 
-    async def create_song(self, song_dto: CreateSongDTO) -> SongDTO:
+    async def create_song(self, song_dto: CreateSongDTO) -> FullSongDTO:
         async with self.uow:
             song_id = await CreateSong(self.uow)(song_dto)
             await self.uow.commit()

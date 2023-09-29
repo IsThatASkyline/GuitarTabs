@@ -18,6 +18,7 @@ from guitar_app.presentation.api.controllers.requests import (
     CreateSongRequest,
     FindSongRequest,
     ModulateSongRequest,
+    RemoveFavoriteSongRequest,
     UpdateSongRequest,
 )
 from guitar_app.presentation.api.controllers.responses import SongDeleteResponse
@@ -35,7 +36,7 @@ async def create_song(
     song: CreateSongRequest,
     response: Response,
     song_services: SongServices = Depends(get_song_services),
-) -> SongDTO | SongIntegrityError:
+) -> FullSongDTO | SongIntegrityError:
     try:
         response.status_code = status.HTTP_201_CREATED
         return await song_services.create_song(CreateSongDTO(**song.dict()))
@@ -132,7 +133,7 @@ async def add_song_to_favorite(
 async def remove_song_from_favorite(
     song_id: int,
     response: Response,
-    user_id: AddFavoriteSongRequest,
+    user_id: RemoveFavoriteSongRequest,
     song_services: SongServices = Depends(get_song_services),
 ):
     try:

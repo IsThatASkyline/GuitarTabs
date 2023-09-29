@@ -1,12 +1,12 @@
-from typing import AsyncGenerator, Generator
+from collections.abc import AsyncGenerator, Generator
 
 import pytest
 import pytest_asyncio
 from aiogram import Dispatcher
 from aiogram_dialog.test_tools import MockMessageManager
 from aiogram_tests.mocked_bot import MockedBot
-from sqlalchemy.ext.asyncio import async_sessionmaker, AsyncSession, create_async_engine
-from sqlalchemy.orm import sessionmaker, close_all_sessions
+from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_async_engine
+from sqlalchemy.orm import close_all_sessions, sessionmaker
 
 from guitar_app.config import get_settings
 from guitar_app.presentation.tgbot.handlers import setup_handlers

@@ -30,5 +30,5 @@ async def user_data():
     return {
         "user_id": 1,
         "telegram_id": 121212,
-        "username": 'Johnny Marr',
+        "username": "Johnny Marr",
     }

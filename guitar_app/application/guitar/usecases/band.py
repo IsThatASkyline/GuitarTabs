@@ -23,7 +23,7 @@ class GetBandById(BandUseCase):
 
 
 class CreateBand(BandUseCase):
-    async def __call__(self, band_dto: CreateBandDTO) -> FullBandDTO:
+    async def __call__(self, band_dto: CreateBandDTO) -> BandDTO:
         return await self.uow.app_holder.band_repo.add_band(band_dto)
 
 
@@ -35,23 +35,18 @@ class GetBands(BandUseCase):
 class UpdateBand(BandUseCase):
     async def __call__(self, band_update_dto: UpdateBandDTO) -> None:
         if await self.uow.app_holder.band_repo.get_band(band_update_dto.id):
-            await self.uow.app_holder.band_repo.update_band(
-                band_update_dto.id,
-                **band_update_dto.dict(exclude_none=True, exclude=set("id")),
-            )
+            await self.uow.app_holder.band_repo.update_band(band_update_dto)
             return
         raise BandNotExists
 
 
 class UpdateMusicianBand(BandUseCase):
-    async def __call__(self, musician_band_update_dto: UpdateMusicianBandDTO) -> None:
-        if await self.uow.app_holder.band_repo.get_band(musician_band_update_dto.band_id):
+    async def __call__(self, membership_update_dto: UpdateMusicianBandDTO) -> None:
+        if await self.uow.app_holder.band_repo.get_band(membership_update_dto.band_id):
             if await self.uow.app_holder.musician_repo.get_musician(
-                musician_band_update_dto.musician_id
+                membership_update_dto.musician_id
             ):
-                return await self.uow.app_holder.band_members_repo.add_member(
-                    musician_band_update_dto
-                )
+                return await self.uow.app_holder.band_members_repo.add_member(membership_update_dto)
             raise MusicianNotExists
         raise BandNotExists
 

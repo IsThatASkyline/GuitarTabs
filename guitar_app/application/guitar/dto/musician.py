@@ -1,23 +1,24 @@
-from pydantic.main import BaseModel
+from dataclasses import dataclass
 
 
-class BaseMusicianDTO(BaseModel):
+@dataclass
+class BaseMusicianDTO:
     first_name: str
     last_name: str
 
-    class Config:
-        orm_mode = True
 
-
+@dataclass
 class CreateMusicianDTO(BaseMusicianDTO):
     pass
 
 
-class UpdateMusicianDTO(BaseModel):
+@dataclass
+class UpdateMusicianDTO:
     id: int
     first_name: str | None = None
     last_name: str | None = None
 
 
+@dataclass
 class MusicianDTO(BaseMusicianDTO):
     id: int
