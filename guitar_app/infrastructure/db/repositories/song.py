@@ -25,7 +25,6 @@ class SongRepository(BaseRepository[Song]):
         )
         self.session.add(song)
         await self.session.flush()
-
         if song_dto.verses:
             for v in song_dto.verses:
                 self.session.add(

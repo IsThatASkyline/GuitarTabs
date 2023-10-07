@@ -54,7 +54,16 @@ all_songs = Dialog(
         getter=get_all_songs,
     ),
     Window(
-        Jinja("<b>{{ song.title }}</b> группы <b>{{ song.band.title }}</b>"),
+        Jinja(
+            "<b>{{ song.title }}</b> группы <b>{{ song.band.title }}</b> ({{ song.hits_count }}"
+            "{% if (song.hits_count|string)[-1:] == '1' %}"
+            " просмотр)"
+            "{% elif (song.hits_count|string)[-1:] in ['2','3','4'] %}"
+            " просмотра)"
+            "{% elif (song.hits_count|string)[-1:] in ['5','6','7','8','9','0'] %}"
+            " просмотров)"
+            "{% endif %}"
+        ),
         Button(
             Const("⭐️Добавить в избранное"),
             id="add_to_favorite",

@@ -15,5 +15,7 @@ from .song import (
     ModulateSongDTO,
     FavoriteSongDTO,
     FindSongDTO,
+    GetSongDTO,
 )
 from .verse import BaseVerseDTO
+from .hit_counter import HitDTO, BaseHitDTO, CreateHitDTO

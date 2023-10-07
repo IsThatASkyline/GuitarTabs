@@ -5,6 +5,7 @@ from guitar_app.application.guitar.dto import (
     FavoriteSongDTO,
     FindSongDTO,
     FullSongDTO,
+    GetSongDTO,
     ModulateSongDTO,
     SongDTO,
     UpdateSongDTO,
@@ -89,7 +90,13 @@ class GetModulatedSong(SongUseCase):
     async def __call__(self, song_modulate_dto: ModulateSongDTO) -> FullSongDTO:
         if song := await self.uow.app_holder.song_repo.get_song(song_modulate_dto.id):
             modulate_verses = get_modulate_verses(song.verses, song_modulate_dto.value)
-            return FullSongDTO(id=song.id, title=song.title, band=song.band, verses=modulate_verses)
+            return FullSongDTO(
+                id=song.id,
+                title=song.title,
+                band=song.band,
+                verses=modulate_verses,
+                hits_count=song.hits_count,
+            )
         raise SongNotExists
 
 
@@ -99,3 +106,14 @@ class DeleteSong(SongUseCase):
             await self.uow.app_holder.song_repo.delete_song(id_)
             return
         raise SongNotExists
+
+
+class HitSong(SongUseCase):
+    async def __call__(self, hit_dto: GetSongDTO) -> None:
+        if hit_dto.user_id:
+            if hit := await self.uow.app_holder.hit_counter_repo.get_hit(hit_dto):
+                if not hit.can_be_hit:
+                    return
+                else:
+                    await self.uow.app_holder.hit_counter_repo.delete_hit(hit.id)
+            await self.uow.app_holder.hit_counter_repo.add_hit(hit_dto)

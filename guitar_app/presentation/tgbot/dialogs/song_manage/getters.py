@@ -1,15 +1,21 @@
 from aiogram_dialog import DialogManager
 
 from guitar_app.application.guitar import dto, services
+from guitar_app.application.guitar.dto import GetSongDTO
 from guitar_app.infrastructure.db.uow import UnitOfWork
 from guitar_app.presentation.tgbot.jinja.chords import CHORDS_TABLATURE
 from guitar_app.presentation.tgbot.models.verse import Chord, Verse, VerseString
 from guitar_app.presentation.tgbot.utils import space_ranges
 
 
-async def get_chords(uow: UnitOfWork, dialog_manager: DialogManager, **_):
+async def get_chords(uow: UnitOfWork, user: dto.UserDTO, dialog_manager: DialogManager, **_):
     song_id = dialog_manager.dialog_data.get("song_id", None) or dialog_manager.start_data["song_id"]
-    song = await services.SongServices(uow).get_song_by_id(id_=song_id)
+    song = await services.SongServices(uow).get_song_by_id(
+        GetSongDTO(
+            song_id=song_id,
+            user_id=user.telegram_id,
+        )
+    )
     result = []
     unique_chords = set()
     for verse in song.verses:
@@ -56,9 +62,14 @@ async def get_chords_tabs(chords):
 
 async def get_song(uow: UnitOfWork, user: dto.UserDTO, dialog_manager: DialogManager, **_):
     song_id = dialog_manager.dialog_data.get("song_id", None) or dialog_manager.start_data["song_id"]
-    song = await services.SongServices(uow).get_song_by_id(id_=song_id)
+    song = await services.SongServices(uow).get_song_by_id(
+        GetSongDTO(
+            song_id=song_id,
+            user_id=user.telegram_id,
+        )
+    )
     return {
-        "song": await services.SongServices(uow).get_song_by_id(id_=song_id),
+        "song": song,
         "in_favorites": song.compress()
         in await services.SongServices(uow).get_favorite_songs_by_user(user_dto=user),
     }

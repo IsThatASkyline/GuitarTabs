@@ -2,10 +2,12 @@ from fastapi import APIRouter, Response, status
 from fastapi.params import Depends
 
 from guitar_app.application.guitar.dto import (
+    BaseVerseDTO,
     CreateSongDTO,
     FavoriteSongDTO,
     FindSongDTO,
     FullSongDTO,
+    GetSongDTO,
     ModulateSongDTO,
     SongDTO,
     UpdateSongDTO,
@@ -39,7 +41,18 @@ async def create_song(
 ) -> FullSongDTO | SongIntegrityError:
     try:
         response.status_code = status.HTTP_201_CREATED
-        return await song_services.create_song(CreateSongDTO(**song.dict()))
+        return await song_services.create_song(
+            CreateSongDTO(
+                title=song.title,
+                band_id=song.band_id,
+                verses=[
+                    BaseVerseDTO(title=v.title, lyrics=v.lyrics, chords=v.chords)
+                    for v in song.verses
+                ]
+                if song.verses
+                else None,
+            )
+        )
     except CreateSongException:
         return SongIntegrityError()
 
@@ -58,7 +71,11 @@ async def get_song_by_id(
     song_services: SongServices = Depends(get_song_services),
 ) -> FullSongDTO | NotFoundSongError:
     try:
-        return await song_services.get_song_by_id(song_id)
+        return await song_services.get_song_by_id(
+            GetSongDTO(
+                song_id=song_id,
+            )
+        )
     except SongNotExists:
         response.status_code = status.HTTP_404_NOT_FOUND
         return NotFoundSongError()

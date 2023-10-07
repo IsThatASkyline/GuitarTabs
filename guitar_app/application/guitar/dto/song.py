@@ -11,6 +11,12 @@ class BaseSongDTO:
 
 
 @dataclass
+class GetSongDTO:
+    song_id: int
+    user_id: int | None = None
+
+
+@dataclass
 class CreateSongDTO(BaseSongDTO):
     verses: list[BaseVerseDTO] | None = None
 
@@ -35,6 +41,7 @@ class FullSongDTO:
     title: str
     band: BandDTO
     verses: list[BaseVerseDTO]
+    hits_count: int | None
 
     def compress(self):
         return SongDTO(id=self.id, title=self.title, band=self.band)
