@@ -7,6 +7,7 @@ from guitar_app.application.guitar.dto import (
     FindSongDTO,
     FullSongDTO,
     SongDTO,
+    UpdateSongDTO,
 )
 from guitar_app.infrastructure.db.models import Song, Verse
 from guitar_app.infrastructure.db.repositories.base import BaseRepository
@@ -24,7 +25,6 @@ class SongRepository(BaseRepository[Song]):
         )
         self.session.add(song)
         await self.session.flush()
-
         if song_dto.verses:
             for v in song_dto.verses:
                 self.session.add(
@@ -69,11 +69,11 @@ class SongRepository(BaseRepository[Song]):
             .where(Song.title.ilike("%" + criteria.value + "%"))
             .order_by(Song.title)
         )
-        songs = (await self.session.execute(query, params=criteria.dict())).scalars().all()
+        songs = (await self.session.execute(query)).scalars().all()
         return [song.to_dto() for song in songs] if songs else None
 
-    async def update_song(self, id_: int, **kwargs) -> None:
-        await super().update(id_, **kwargs)
+    async def update_song(self, update_song_dto: UpdateSongDTO) -> None:
+        await super().update(id_=update_song_dto.id, title=update_song_dto.title)
 
     async def delete_song(self, id_: int):
         await super().delete(id_)

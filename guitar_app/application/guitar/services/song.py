@@ -4,6 +4,7 @@ from guitar_app.application.guitar.dto.song import (
     FavoriteSongDTO,
     FindSongDTO,
     FullSongDTO,
+    GetSongDTO,
     ModulateSongDTO,
     SongDTO,
     UpdateSongDTO,
@@ -18,6 +19,7 @@ from guitar_app.application.guitar.usecases import (
     GetSongById,
     GetSongs,
     GetSongsByGroup,
+    HitSong,
     RemoveSongFromFavorite,
     UpdateSong,
 )
@@ -28,7 +30,7 @@ class SongServices:
     def __init__(self, uow: UnitOfWork) -> None:
         self.uow = uow
 
-    async def create_song(self, song_dto: CreateSongDTO) -> SongDTO:
+    async def create_song(self, song_dto: CreateSongDTO) -> FullSongDTO:
         async with self.uow:
             song_id = await CreateSong(self.uow)(song_dto)
             await self.uow.commit()
@@ -37,8 +39,11 @@ class SongServices:
     async def get_all_songs(self) -> list[SongDTO]:
         return await GetSongs(self.uow)()
 
-    async def get_song_by_id(self, id_: int) -> FullSongDTO:
-        return await GetSongById(self.uow)(id_)
+    async def get_song_by_id(self, get_song_dto: GetSongDTO) -> FullSongDTO:
+        async with self.uow:
+            await HitSong(self.uow)(get_song_dto)
+            await self.uow.commit()
+            return await GetSongById(self.uow)(get_song_dto.song_id)
 
     async def get_favorite_songs_by_user(self, user_dto: UserDTO) -> list[SongDTO]:
         return await GetFavoriteSongsByUser(self.uow)(user_dto.telegram_id)

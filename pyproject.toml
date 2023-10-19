@@ -108,9 +108,13 @@ wtforms = "3.0.1"
 yarl = "1.9.2"
 zipp = "3.16.2"
 
+#[tool.poetry.group.test.dependencies]
+#aiogram-tests = {git = "https://github.com/bomzheg/aiogram_tests.git", branch = "fix/aiogram3rc"}
+pytest-cov = "^4.1.0"
+
+
 [tool.poetry.scripts]
 guitar-tgbot = 'guitar_app.presentation.tgbot.__main__:run'
-guitar-server = 'guitar_app.presentation.api.main:build_app:run'
 
 [tool.pytest.ini_options]
 asyncio_mode = "auto"

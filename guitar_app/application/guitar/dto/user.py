@@ -1,22 +1,26 @@
-from pydantic.main import BaseModel
+from dataclasses import dataclass
 
 
-class BaseUserDTO(BaseModel):
-    id: int | None
+@dataclass
+class BaseUserDTO:
     telegram_id: int
-    username: str | None
+    id: int | None = None
+    username: str | None = None
+    is_bot: bool = False
+    first_name: str | None = None
+    last_name: str | None = None
 
-    class Config:
-        orm_mode = True
 
-
+@dataclass
 class CreateUserDTO(BaseUserDTO):
     pass
 
 
+@dataclass
 class UserDTO(BaseUserDTO):
     pass
 
 
+@dataclass
 class UpdateUserDTO(UserDTO):
     pass

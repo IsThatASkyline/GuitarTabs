@@ -1,12 +1,10 @@
 from aiogram import Bot, Dispatcher
 from aiogram.filters import ExceptionTypeFilter
 from aiogram.types.error_event import ErrorEvent
-from aiogram_dialog import DialogManager
 from aiogram_dialog.api.exceptions import UnknownIntent
 
 
-async def clear_unknown_intent(error: ErrorEvent, dialog_manager: DialogManager, bot: Bot):
-    await dialog_manager.reset_stack(True)
+async def clear_unknown_intent(error: ErrorEvent, bot: Bot):
     assert error.update.callback_query
     assert error.update.callback_query.message
     await bot.edit_message_reply_markup(

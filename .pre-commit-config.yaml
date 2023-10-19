@@ -38,7 +38,7 @@ repos:
     hooks:
       - id: flake8
         exclude: __init__.py
-        args: [ "--ignore=F821", "--max-line-length=101" ]
+        args: [ "--ignore=F821,W503", "--max-line-length=101" ]
 
   # Форматирует код под PEP8 c помощью black
   - repo: https://github.com/psf/black

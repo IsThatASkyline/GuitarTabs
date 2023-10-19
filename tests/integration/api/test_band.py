@@ -25,7 +25,6 @@ async def test_get_band(client: AsyncClient, create_band_in_database, band_data)
 
     response = await client.get(f'band/get-band/{band_data["band_id"]}')
     response_404 = await client.get("band/get-band/123")
-
     assert response.status_code == status.HTTP_200_OK
     assert response.json()["title"] == band_data["title"]
 
@@ -96,7 +95,6 @@ async def test_add_musician_to_band(
     await client.post(f'band/add-musician-to-band/{band_data["band_id"]}', json=data_json2)
     response = await client.get(f'band/get-band/{band_data["band_id"]}')
     r_data = response.json()
-
     assert response.status_code == status.HTTP_200_OK
     assert r_data["title"] == band_data["title"]
     assert r_data["id"] == band_data["band_id"]

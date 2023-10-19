@@ -3,7 +3,6 @@ from typing import Any
 
 from aiogram import BaseMiddleware
 from aiogram.types import TelegramObject, Update
-from aiogram_dialog.api.exceptions import UnknownIntent
 from sqlalchemy.exc import IntegrityError
 
 from guitar_app.application.guitar import dto, services
@@ -18,23 +17,19 @@ class LoadDataMiddleware(BaseMiddleware):
         event: TelegramObject,
         data: MiddlewareData,
     ) -> Any:
-        try:
-            uow = data["uow"]
-            if isinstance(event, Update):
-                try:
-                    user = await save_user(data, uow)
-                except IntegrityError:
-                    if user_tg := data.get("event_from_user", None):
-                        user = await services.UserServices(uow).get_user_by_id(user_tg.id)
-                    else:
-                        user = None
+        uow = data["uow"]
+        if isinstance(event, Update):
+            try:
+                user = await save_user(data, uow)
+            except IntegrityError:
+                if user_tg := data.get("event_from_user", None):
+                    user = await services.UserServices(uow).get_user_by_id(user_tg.id)
+                else:
+                    user = None
 
-            data["user"] = user
-            result = await handler(event, data)
-            return result
-        except UnknownIntent:
-            # In case, when bot been restarted and user press old menu buttons
-            pass
+        data["user"] = user
+        result = await handler(event, data)
+        return result
 
 
 async def save_user(data: MiddlewareData, uow: UnitOfWork) -> dto.UserDTO | None:

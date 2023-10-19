@@ -1,6 +1,7 @@
 from sqlalchemy import ForeignKey, String
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
+from guitar_app.application.guitar.dto import BaseVerseDTO
 from guitar_app.infrastructure.db.models import BaseAlchemyModels
 
 
@@ -17,3 +18,10 @@ class Verse(BaseAlchemyModels):
 
     lyrics: Mapped[str] = mapped_column(String(500), nullable=True)
     chords: Mapped[str] = mapped_column(String(250), nullable=True)
+
+    def to_dto(self) -> BaseVerseDTO:
+        return BaseVerseDTO(
+            title=self.title,
+            lyrics=self.lyrics,
+            chords=self.chords,
+        )

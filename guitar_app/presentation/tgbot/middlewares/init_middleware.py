@@ -3,7 +3,6 @@ from typing import Any
 
 from aiogram import BaseMiddleware
 from aiogram.types import TelegramObject
-from aiogram_dialog.api.exceptions import UnknownIntent
 from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker
 
 from guitar_app.infrastructure.db.uow import UnitOfWork
@@ -23,14 +22,9 @@ class InitMiddleware(BaseMiddleware):
         event: TelegramObject,
         data: MiddlewareData,
     ) -> Any:
-        try:
-            async with self.pool() as session:
-                uow = UnitOfWork(session)
-                data["uow"] = uow
-                result = await handler(event, data)
-                del data["uow"]
-            return result
-        except UnknownIntent:
-            # In case, when bot been restarted and user press old menu buttons
-            # Bug with aiogram_dialog library
-            pass
+        async with self.pool() as session:
+            uow = UnitOfWork(session)
+            data["uow"] = uow
+            result = await handler(event, data)
+            del data["uow"]
+        return result

@@ -1,36 +1,41 @@
-from pydantic.main import BaseModel
+from dataclasses import dataclass
 
 from .musician import MusicianDTO
 
 
-class BaseBandDTO(BaseModel):
+@dataclass
+class BaseBandDTO:
     title: str
 
-    class Config:
-        orm_mode = True
 
-
+@dataclass
 class CreateBandDTO(BaseBandDTO):
     pass
 
 
-class UpdateBandDTO(BaseModel):
+@dataclass
+class UpdateBandDTO:
     id: int
     title: str | None
 
 
+@dataclass
 class BandDTO(BaseBandDTO):
     id: int
 
 
-class FullBandDTO(BandDTO):
+@dataclass(frozen=True)
+class FullBandDTO:
     # if import in top, it will be a circular import problem (somehow idk)
     from .song import SongDTO
 
+    id: int
+    title: str
     members: list[MusicianDTO] | None
     songs: list[SongDTO] | None
 
 
-class UpdateMusicianBandDTO(BaseModel):
+@dataclass
+class UpdateMusicianBandDTO:
     musician_id: int
     band_id: int

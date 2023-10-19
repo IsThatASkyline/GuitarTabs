@@ -14,7 +14,6 @@ class CreateSongRequest(BaseSong):
 
 class UpdateSongRequest(BaseModel):
     title: str | None = None
-    lyrics: str | None = None
 
 
 class ModulateSongRequest(BaseModel):
@@ -22,6 +21,10 @@ class ModulateSongRequest(BaseModel):
 
 
 class AddFavoriteSongRequest(BaseModel):
+    user_id: int
+
+
+class RemoveFavoriteSongRequest(BaseModel):
     user_id: int
 
 

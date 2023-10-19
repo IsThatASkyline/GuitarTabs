@@ -1,52 +1,64 @@
-from pydantic.main import BaseModel
+from dataclasses import dataclass
 
 from .band import BandDTO
 from .verse import BaseVerseDTO
 
 
-class BaseSongDTO(BaseModel):
+@dataclass
+class BaseSongDTO:
     title: str
     band_id: int
 
-    class Config:
-        orm_mode = True
+
+@dataclass
+class GetSongDTO:
+    song_id: int
+    user_id: int | None = None
 
 
+@dataclass
 class CreateSongDTO(BaseSongDTO):
     verses: list[BaseVerseDTO] | None = None
 
 
-class UpdateSongDTO(BaseModel):
+@dataclass
+class UpdateSongDTO:
     id: int
     title: str | None = None
     verses: list[BaseVerseDTO] | None = None
 
 
-class SongDTO(BaseModel):
+@dataclass
+class SongDTO:
     id: int
     title: str
     band: BandDTO
 
-    class Config:
-        orm_mode = True
 
-
-class FullSongDTO(SongDTO):
-    verses: list[BaseVerseDTO] | None
+@dataclass
+class FullSongDTO:
+    id: int
+    title: str
+    band: BandDTO
+    verses: list[BaseVerseDTO]
+    hits_count: int | None
 
     def compress(self):
         return SongDTO(id=self.id, title=self.title, band=self.band)
 
 
-class ModulateSongDTO(BaseModel):
+@dataclass
+class ModulateSongDTO:
     id: int
     value: int
 
 
-class FavoriteSongDTO(BaseModel):
+@dataclass
+class FavoriteSongDTO:
     song_id: int
     user_id: int
 
 
-class FindSongDTO(BaseModel):
+@dataclass
+class FindSongDTO:
     value: str

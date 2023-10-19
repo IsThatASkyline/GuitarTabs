@@ -6,6 +6,7 @@ from guitar_app.infrastructure.db.repositories import (
     BandMembersRepository,
     BandRepository,
     FavoriteRepository,
+    HitCounterRepository,
     MusicianRepository,
     SongRepository,
     UserRepository,
@@ -52,6 +53,7 @@ class AppHolder(AbstractHolder):
         self.song_repo = SongRepository(session)
         self.favorites_repo = FavoriteRepository(session)
         self.band_members_repo = BandMembersRepository(session)
+        self.hit_counter_repo = HitCounterRepository(session)
 
 
 class UnitOfWork(SqlAlchemyUOW):

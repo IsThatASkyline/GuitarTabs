@@ -12,14 +12,14 @@ class UserUseCase(BaseUseCase):
 class CreateUser(UserUseCase):
     async def __call__(self, user_dto: CreateUserDTO) -> UserDTO:
         user = await self.uow.app_holder.user_repo.add_user(user_dto)
-        await self.uow.commit()
         return user
 
 
 class GetUserById(UserUseCase):
     async def __call__(self, id_: int) -> UserDTO:
-        user = await self.uow.app_holder.user_repo.get_user(id_)
-        return user
+        if user := await self.uow.app_holder.user_repo.get_user(id_):
+            return user
+        raise UserNotExists
 
 
 class GetUsers(UserUseCase):
@@ -29,16 +29,11 @@ class GetUsers(UserUseCase):
 
 class UpdateUser(UserUseCase):
     async def __call__(self, user_update_dto: UpdateUserDTO) -> None:
-        await self.uow.app_holder.user_repo.update_user(
-            user_update_dto.id, **user_update_dto.dict(exclude_none=True, exclude=set("id"))
-        )
-        await self.uow.commit()
+        await self.uow.app_holder.user_repo.update_user(user_update_dto.id)
 
 
 class DeleteUser(UserUseCase):
     async def __call__(self, id_: int) -> None:
         if await self.uow.app_holder.user_repo.get_user(id_):
-            await self.uow.app_holder.user_repo.delete_user(id_)
-            await self.uow.commit()
-            return
+            return await self.uow.app_holder.user_repo.delete_user(id_)
         raise UserNotExists

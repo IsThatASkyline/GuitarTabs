@@ -9,12 +9,14 @@ from guitar_app.infrastructure.db.models import User
 async def create_user_in_database(db_session_test: sessionmaker):
     async def create_user_in_database_wrap(
         user_id: int,
-        telegram_id: str,
+        telegram_id: int,
+        username: str,
     ):
         async with db_session_test() as session:
             await session.execute(
                 insert(User).values(
                     id=user_id,
+                    username=username,
                     telegram_id=telegram_id,
                 )
             )
@@ -28,4 +30,5 @@ async def user_data():
     return {
         "user_id": 1,
         "telegram_id": 121212,
+        "username": "Johnny Marr",
     }

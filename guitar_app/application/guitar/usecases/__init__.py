@@ -26,4 +26,5 @@ from .song import (
     GetFavoriteSongsByUser,
     GetModulatedSong,
     FindSong,
+    HitSong,
 )

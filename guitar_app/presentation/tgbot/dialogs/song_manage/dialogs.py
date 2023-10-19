@@ -54,7 +54,7 @@ all_songs = Dialog(
         getter=get_all_songs,
     ),
     Window(
-        Jinja("<b>{{ song.title }}</b> группы <b>{{ song.band.title }}</b>"),
+        templates.SONG_MENU,
         Button(
             Const("⭐️Добавить в избранное"),
             id="add_to_favorite",
@@ -137,7 +137,7 @@ songs_by_group = Dialog(
         getter=get_songs_by_band,
     ),
     Window(
-        Jinja("<b>{{ song.title }}</b> группы <b>{{ song.band.title }}</b>"),
+        templates.SONG_MENU,
         Button(
             Const("⭐️Добавить в избранное"),
             id="add_to_favorite",
@@ -221,7 +221,7 @@ favorite_songs = Dialog(
         getter=get_favorite_songs,
     ),
     Window(
-        Jinja("<b>{{ song.title }}</b> группы <b>{{ song.band.title }}</b>"),
+        templates.SONG_MENU,
         Button(
             Const("⭐️Добавить в избранное"),
             id="add_to_favorite",
@@ -316,7 +316,7 @@ songs_founded_by_title = Dialog(
         getter=get_songs_founded_by_title,
     ),
     Window(
-        Jinja("<b>{{ song.title }}</b> группы <b>{{ song.band.title }}</b>"),
+        templates.SONG_MENU,
         Button(
             Const("⭐️Добавить в избранное"),
             id="add_to_favorite",

@@ -7,7 +7,7 @@ from guitar_app.presentation.tgbot.dialogs.main_menu.getters import get_main
 
 main_menu = Dialog(
     Window(
-        Jinja("Привет, {{ user.username }}!\n" "Ты находишься в главном меню.\n"),
+        Jinja("Привет, Гитарист!\n" "Ты находишься в главном меню.\n"),
         Start(
             Const("⭐️Избранные песни"),
             id="favorite_songs",

@@ -8,6 +8,7 @@ from .song import (
     CreateSongRequest,
     ModulateSongRequest,
     AddFavoriteSongRequest,
+    RemoveFavoriteSongRequest,
     FindSongRequest,
 )
 from .band import UpdateBandRequest, CreateBandRequest, UpdateMusicianBandRequest

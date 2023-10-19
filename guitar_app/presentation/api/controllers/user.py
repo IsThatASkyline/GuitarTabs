@@ -16,9 +16,15 @@ router = APIRouter(prefix="/user", tags=["user"])
 
 @router.get("/get-user/{user_id}")
 async def get_user_by_id(
-    user_id: int, user_services: UserServices = Depends(get_user_services)
-) -> UserDTO:
-    return await user_services.get_user_by_id(user_id)
+    user_id: int,
+    response: Response,
+    user_services: UserServices = Depends(get_user_services),
+) -> UserDTO | NotFoundUserError:
+    try:
+        return await user_services.get_user_by_id(user_id)
+    except UserNotExists:
+        response.status_code = status.HTTP_404_NOT_FOUND
+        return NotFoundUserError()
 
 
 @router.get("/get-all-users")
@@ -40,7 +46,7 @@ async def create_user(
 
 
 @router.delete("/delete-user/{user_id}")
-async def delete_post(
+async def delete_user(
     user_id: int,
     response: Response,
     user_services: UserServices = Depends(get_user_services),
