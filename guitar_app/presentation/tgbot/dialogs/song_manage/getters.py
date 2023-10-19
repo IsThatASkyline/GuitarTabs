@@ -44,7 +44,7 @@ async def get_chords(uow: UnitOfWork, user: dto.UserDTO, dialog_manager: DialogM
     chords_tabs = await get_chords_tabs(unique_chords)
 
     return {
-        "song_title": song.title,
+        "song": song,
         "verses": result,
         "chords_tabs": chords_tabs,
     }

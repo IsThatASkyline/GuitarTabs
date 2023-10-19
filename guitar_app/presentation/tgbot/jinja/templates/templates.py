@@ -1,7 +1,7 @@
 from aiogram_dialog.widgets.text import Jinja
 
 SONG_CHORDS_WITHOUT_TABS_TEMPLATE = Jinja(
-    "Аккорды для песни <b>{{ song_title }}</b>\n"
+    "<b>{{ song.band.title }} - {{ song.title }}</b>\n"
     "{% for verse in verses %}"
     "{% if not verse.strings  %}"
     "\n\n{{ verse.title }}\n"
@@ -37,12 +37,17 @@ SONG_CHORDS_WITHOUT_TABS_TEMPLATE = Jinja(
 )
 
 SONG_CHORDS_WITH_TABS_TEMPLATE = (
-    Jinja(
-        "Аппликатура аккордов для песни <b>{{ song_title }}</b>\n\n"
-        "{% for chord in chords_tabs %}"
-        "{{ chord.title }}:"
-        "{{ chord.tab }}\n"
-        "{% endfor %}"
-    )
+    Jinja("{% for chord in chords_tabs %}" "{{ chord.title }}:" "{{ chord.tab }}\n" "{% endfor %}")
     + SONG_CHORDS_WITHOUT_TABS_TEMPLATE
+)
+
+SONG_MENU = Jinja(
+    "<b>{{ song.band.title }} - {{ song.title }}</b> ({{ song.hits_count }}"
+    "{% if (song.hits_count|string)[-1:] == '1' %}"
+    " просмотр)"
+    "{% elif (song.hits_count|string)[-1:] in ['2','3','4'] %}"
+    " просмотра)"
+    "{% elif (song.hits_count|string)[-1:] in ['5','6','7','8','9','0'] %}"
+    " просмотров)"
+    "{% endif %}"
 )
