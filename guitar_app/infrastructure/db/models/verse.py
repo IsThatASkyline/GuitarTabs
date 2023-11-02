@@ -16,8 +16,8 @@ class Verse(BaseAlchemyModels):
 
     song: Mapped["Song"] = relationship(back_populates="verses")
 
-    lyrics: Mapped[str] = mapped_column(String(500), nullable=True)
-    chords: Mapped[str] = mapped_column(String(250), nullable=True)
+    lyrics: Mapped[str] = mapped_column(String(2000), nullable=True)
+    chords: Mapped[str] = mapped_column(String(1000), nullable=True)
 
     def to_dto(self) -> BaseVerseDTO:
         return BaseVerseDTO(
