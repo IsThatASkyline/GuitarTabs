@@ -20,7 +20,7 @@ from .getters import (
     get_favorite_songs,
     get_song,
     get_songs_by_band,
-    get_songs_founded_by_title,
+    get_songs_founded_by_title, get_modulated_chords,
 )
 from .handlers import (
     add_song_to_favorite,
@@ -30,6 +30,7 @@ from .handlers import (
     select_song,
     select_song_by_band,
     select_song_founded_by_title,
+    up_key, refresh_mod_value, up_key_with_tabs, down_key, down_key_with_tabs,
 )
 
 all_songs = Dialog(
@@ -255,6 +256,16 @@ favorite_songs = Dialog(
             id="to_chords_tabs",
             state=states.FavoriteSongsPanelSG.song_chords_with_tabs,
         ),
+        Button(
+            Const("Понизить тональность"),
+            id="key_minus",
+            on_click=down_key,
+        ),
+        Button(
+            Const("Повысить тональность"),
+            id="key_plus",
+            on_click=up_key,
+        ),
         SwitchTo(
             Const("🔙Назад к меню песни"),
             id="to_song",
@@ -271,6 +282,16 @@ favorite_songs = Dialog(
             id="to_chords",
             state=states.FavoriteSongsPanelSG.song_chords,
         ),
+        Button(
+            Const("Понизить тональность"),
+            id="key_minus",
+            on_click=down_key,
+        ),
+        Button(
+            Const("Повысить тональность"),
+            id="key_plus",
+            on_click=up_key,
+        ),
         SwitchTo(
             Const("🔙Назад к меню песни"),
             id="to_song",
@@ -279,6 +300,60 @@ favorite_songs = Dialog(
         state=states.FavoriteSongsPanelSG.song_chords_with_tabs,
         preview_data={"song": PREVIEW_SONG},
         getter=get_chords,
+    ),
+    Window(
+        templates.SONG_CHORDS_WITHOUT_TABS_TEMPLATE,
+        SwitchTo(
+            Const("📜Показать аппликатуры аккордов"),
+            id="to_chords_tabs",
+            state=states.FavoriteSongsPanelSG.modulated_song_chords_with_tabs,
+        ),
+        Button(
+            Const("Понизить тональность"),
+            id="key_minus",
+            on_click=down_key,
+        ),
+        Button(
+            Const("Повысить тональность"),
+            id="key_plus",
+            on_click=up_key,
+        ),
+        SwitchTo(
+            Const("🔙Назад к меню песни"),
+            id="to_song",
+            state=states.FavoriteSongsPanelSG.song_menu,
+            on_click=refresh_mod_value,
+        ),
+        state=states.FavoriteSongsPanelSG.modulated_chords,
+        preview_data={"song": PREVIEW_SONG},
+        getter=get_modulated_chords,
+    ),
+    Window(
+        templates.SONG_CHORDS_WITH_TABS_TEMPLATE,
+        SwitchTo(
+            Const("📜Убрать аппликатуры аккордов"),
+            id="to_chords",
+            state=states.FavoriteSongsPanelSG.modulated_chords,
+        ),
+        Button(
+            Const("Понизить тональность"),
+            id="key_minus",
+            on_click=down_key_with_tabs,
+        ),
+        Button(
+            Const("Повысить тональность"),
+            id="key_plus",
+            on_click=up_key_with_tabs,
+        ),
+        SwitchTo(
+            Const("🔙Назад к меню песни"),
+            id="to_song",
+            state=states.FavoriteSongsPanelSG.song_menu,
+            on_click=refresh_mod_value,
+        ),
+        state=states.FavoriteSongsPanelSG.modulated_song_chords_with_tabs,
+        preview_data={"song": PREVIEW_SONG},
+        getter=get_modulated_chords,
     ),
 )
 

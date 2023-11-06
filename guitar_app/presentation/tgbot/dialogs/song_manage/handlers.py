@@ -5,9 +5,62 @@ from aiogram_dialog import DialogManager
 from aiogram_dialog.widgets.kbd import Button
 
 from guitar_app.application.guitar import dto, services
+from guitar_app.application.guitar.domain.services.modulation import get_modulated_verses
+from guitar_app.application.guitar.dto import GetSongDTO
 from guitar_app.application.guitar.exceptions import SongNotExists
 from guitar_app.infrastructure.db.uow import UnitOfWork
 from guitar_app.presentation.tgbot import states
+
+
+async def refresh_mod_value(c: CallbackQuery, widget: Any, manager: DialogManager):
+    await c.answer()
+    data = manager.dialog_data
+    data['mod_value'] = 0
+    print('Изменение тональности сброшено')
+
+
+async def up_key(c: CallbackQuery, widget: Any, manager: DialogManager):
+    await c.answer()
+    data = manager.dialog_data
+    if data['mod_value'] < 11:
+        data['mod_value'] += 1
+    else:
+        data['mod_value'] = 0
+    print('Изменить тональность на', data['mod_value'])
+    await manager.switch_to(states.FavoriteSongsPanelSG.modulated_chords)
+
+
+async def up_key_with_tabs(c: CallbackQuery, widget: Any, manager: DialogManager):
+    await c.answer()
+    data = manager.dialog_data
+    if data['mod_value'] < 11:
+        data['mod_value'] += 1
+    else:
+        data['mod_value'] = 0
+    print('Изменить тональность на', data['mod_value'])
+    await manager.switch_to(states.FavoriteSongsPanelSG.modulated_song_chords_with_tabs)
+
+
+async def down_key(c: CallbackQuery, widget: Any, manager: DialogManager):
+    await c.answer()
+    data = manager.dialog_data
+    if data['mod_value'] > -11:
+        data['mod_value'] -= 1
+    else:
+        data['mod_value'] = 0
+    print('Изменить тональность на', data['mod_value'])
+    await manager.switch_to(states.FavoriteSongsPanelSG.modulated_chords)
+
+
+async def down_key_with_tabs(c: CallbackQuery, widget: Any, manager: DialogManager):
+    await c.answer()
+    data = manager.dialog_data
+    if data['mod_value'] > -11:
+        data['mod_value'] -= 1
+    else:
+        data['mod_value'] = 0
+    print('Изменить тональность на', data['mod_value'])
+    await manager.switch_to(states.FavoriteSongsPanelSG.modulated_song_chords_with_tabs)
 
 
 async def select_song(c: CallbackQuery, widget: Any, manager: DialogManager, item_id: str):
@@ -45,6 +98,7 @@ async def select_favorite_song(c: CallbackQuery, widget: Any, manager: DialogMan
     if not isinstance(data, dict):
         data = {}
     data["song_id"] = int(item_id)
+    data['mod_value'] = 0
     await manager.switch_to(states.FavoriteSongsPanelSG.song_menu)
 
 

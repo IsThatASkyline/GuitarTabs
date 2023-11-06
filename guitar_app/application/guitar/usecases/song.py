@@ -1,5 +1,5 @@
 from guitar_app.application.common.usecases.base import BaseUseCase
-from guitar_app.application.guitar.domain.services.modulation import get_modulate_verses
+from guitar_app.application.guitar.domain.services.modulation import get_modulated_verses
 from guitar_app.application.guitar.dto import (
     CreateSongDTO,
     FavoriteSongDTO,
@@ -89,7 +89,7 @@ class FindSong(SongUseCase):
 class GetModulatedSong(SongUseCase):
     async def __call__(self, song_modulate_dto: ModulateSongDTO) -> FullSongDTO:
         if song := await self.uow.app_holder.song_repo.get_song(song_modulate_dto.id):
-            modulate_verses = get_modulate_verses(song.verses, song_modulate_dto.value)
+            modulate_verses = get_modulated_verses(song.verses, song_modulate_dto.value)
             return FullSongDTO(
                 id=song.id,
                 title=song.title,
