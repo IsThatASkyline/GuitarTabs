@@ -45,13 +45,28 @@ async def get_chords(uow: UnitOfWork, user: dto.UserDTO, dialog_manager: DialogM
             user_id=user.telegram_id,
         )
     )
-    verses, unique_chords = await _get_verses_and_unique_chords(song.verses)
-    chords_tabs = await get_chords_tabs(unique_chords)
+
+    mod_value = dialog_manager.dialog_data.get("mod_value", None)
+    if not mod_value == 0:
+        new_verses = get_modulated_verses(song.verses, mod_value)
+        new_song = dto.FullSongDTO(
+            id=song.id,
+            title=song.title,
+            band=song.band,
+            verses=new_verses,
+            hits_count=song.hits_count
+        )
+        verses, unique_chords = await _get_verses_and_unique_chords(new_song.verses)
+        chords_tabs = await get_chords_tabs(unique_chords)
+    else:
+        verses, unique_chords = await _get_verses_and_unique_chords(song.verses)
+        chords_tabs = await get_chords_tabs(unique_chords)
 
     return {
         "song": song,
         "verses": verses,
         "chords_tabs": chords_tabs,
+        "mod_value": mod_value
     }
 
 

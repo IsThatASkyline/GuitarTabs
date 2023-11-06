@@ -24,8 +24,6 @@ class FavoriteSongsPanelSG(StatesGroup):
     song_menu = State()
     song_chords = State()
     song_chords_with_tabs = State()
-    modulated_chords = State()
-    modulated_song_chords_with_tabs = State()
 
 
 class AllSongsPanelSG(StatesGroup):
