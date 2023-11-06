@@ -38,10 +38,9 @@ SONG_CHORDS_WITHOUT_TABS_TEMPLATE = Jinja(
 
 SONG_CHORDS_WITH_TABS_TEMPLATE = (
     Jinja("{% for chord in chords_tabs %}" 
-          "{{ chord.title }}:" 
+          "<b>{{ chord.title }}:</b>" 
           "{{ chord.tab }}\n" 
           "{% endfor %}")
-    + SONG_CHORDS_WITHOUT_TABS_TEMPLATE
 )
 
 SONG_MENU = Jinja(

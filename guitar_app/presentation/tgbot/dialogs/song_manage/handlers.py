@@ -14,7 +14,6 @@ async def refresh_mod_value(c: CallbackQuery, widget: Any, manager: DialogManage
     await c.answer()
     data = manager.dialog_data
     data['mod_value'] = 0
-    print('Изменение тональности сброшено')
 
 
 async def up_key(c: CallbackQuery, widget: Any, manager: DialogManager):
@@ -24,7 +23,6 @@ async def up_key(c: CallbackQuery, widget: Any, manager: DialogManager):
         data['mod_value'] += 1
     else:
         data['mod_value'] = 0
-    print('Изменить тональность на', data['mod_value'])
 
 
 async def down_key(c: CallbackQuery, widget: Any, manager: DialogManager):
@@ -34,7 +32,6 @@ async def down_key(c: CallbackQuery, widget: Any, manager: DialogManager):
         data['mod_value'] -= 1
     else:
         data['mod_value'] = 0
-    print('Изменить тональность на', data['mod_value'])
 
 
 async def select_song(c: CallbackQuery, widget: Any, manager: DialogManager, item_id: str):

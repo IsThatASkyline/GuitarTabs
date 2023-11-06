@@ -103,7 +103,7 @@ all_songs = Dialog(
     Window(
         templates.SONG_CHORDS_WITH_TABS_TEMPLATE,
         SwitchTo(
-            Const("📜Убрать аппликатуры аккордов"),
+            Const('📜Показать текст и аккорды'),
             id="to_chords",
             state=states.AllSongsPanelSG.song_chords,
         ),
@@ -190,7 +190,7 @@ songs_by_group = Dialog(
     Window(
         templates.SONG_CHORDS_WITH_TABS_TEMPLATE,
         SwitchTo(
-            Const("📜Убрать аппликатуры аккордов"),
+            Const("📜Показать текст и аккорды"),
             id="to_chords",
             state=states.BandSongsPanelSG.song_chords,
         ),
@@ -278,7 +278,7 @@ favorite_songs = Dialog(
     Window(
         templates.SONG_CHORDS_WITH_TABS_TEMPLATE,
         SwitchTo(
-            Const("📜Убрать аппликатуры аккордов"),
+            Const("📜Показать текст и аккорды"),
             id="to_chords",
             state=states.FavoriteSongsPanelSG.song_chords,
         ),
@@ -377,7 +377,7 @@ songs_founded_by_title = Dialog(
     Window(
         templates.SONG_CHORDS_WITH_TABS_TEMPLATE,
         SwitchTo(
-            Const("📜Убрать аппликатуры аккордов"),
+            Const("📜Показать текст и аккорды"),
             id="to_chords",
             state=states.FoundedSongsPanelSG.song_chords,
         ),
