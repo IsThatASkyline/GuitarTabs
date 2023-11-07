@@ -1,6 +1,9 @@
 from guitar_app.application.guitar.domain.utils.default_constants import (
     MAJOR_CHORDS_SEQUENCE,
     MINOR_CHORDS_SEQUENCE,
+    MAJOR_7_CHORDS_SEQUENCE,
+    MINOR_7_CHORDS_SEQUENCE,
+    STANDARD_CHORDS,
 )
 from guitar_app.application.guitar.dto import BaseVerseDTO
 
@@ -15,15 +18,20 @@ def modulate(song_chords: list[str], value: int) -> str:
             if chord == "||":
                 new_verse_line_chords.append("||")
                 continue
+            elif "m7" in chord:
+                base_seq = MINOR_7_CHORDS_SEQUENCE
+            elif "7" in chord:
+                base_seq = MAJOR_7_CHORDS_SEQUENCE
             elif "m" in chord:
                 base_seq = MINOR_CHORDS_SEQUENCE
             else:
                 base_seq = MAJOR_CHORDS_SEQUENCE
+
             try:
                 chord_index = base_seq.index(chord)
-            except Exception:
-                chord = refactor_chord_to_standard(chord)
-                chord_index = base_seq.index(chord)
+            except ValueError:
+                chord_index = base_seq.index(refactor_chord_to_standard(chord))
+
             new_sequence = base_seq[chord_index:] + base_seq[:chord_index]
             new_verse_line_chords.append(new_sequence[value])
         new_chord_sequence.append(' '.join(new_verse_line_chords))
@@ -43,7 +51,4 @@ def get_modulated_verses(verses: list[BaseVerseDTO], value: int) -> list[BaseVer
 
 
 def refactor_chord_to_standard(chord: str):
-    if chord == "Bb":
-        return "A#"
-    elif chord == "Hm":
-        return "Bm"
+    return STANDARD_CHORDS[chord]

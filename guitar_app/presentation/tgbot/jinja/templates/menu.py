@@ -16,9 +16,14 @@ modulation_menu = Row(
         when=F["mod_value"] == 0,
     ),
     Button(
+        Format("+{mod_value}"),
+        id="modulation_value",
+        when=F["mod_value"] > 0,
+    ),
+    Button(
         Format("{mod_value}"),
         id="modulation_value",
-        when=~F["mod_value"] == 0,
+        when=F["mod_value"] < 0,
     ),
     Button(
         Const("⬆"),
