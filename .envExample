@@ -1,4 +1,4 @@
-BOT_TOKEN=TELEGRAM_BOT_API_TOKEN
+BOT_TOKEN=6667099334:AAHwEshXCNmEwOat0FiEEGH2qagFdhujGjw
 
-DB_URL=postgresql+asyncpg://postgres:postgres@localhost:5432/guitar
+DB_URL=postgres+asyncpg://brooklyn:8TgfkyTZb1QC7sCrRQgew9HteBoqNoM8@dpg-cjred6lhe99c73eefb4g-a.frankfurt-postgres.render.com/guitarapp_xnkv
 TEST_DB_URL=postgresql+asyncpg://postgres:postgres@localhost:5432/testdb

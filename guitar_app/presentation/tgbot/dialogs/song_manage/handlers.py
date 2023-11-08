@@ -10,12 +10,37 @@ from guitar_app.infrastructure.db.uow import UnitOfWork
 from guitar_app.presentation.tgbot import states
 
 
+async def refresh_mod_value(c: CallbackQuery, widget: Any, manager: DialogManager):
+    await c.answer()
+    data = manager.dialog_data
+    data['mod_value'] = 0
+
+
+async def up_key(c: CallbackQuery, widget: Any, manager: DialogManager):
+    await c.answer()
+    data = manager.dialog_data
+    if data['mod_value'] < 11:
+        data['mod_value'] += 1
+    else:
+        data['mod_value'] = 0
+
+
+async def down_key(c: CallbackQuery, widget: Any, manager: DialogManager):
+    await c.answer()
+    data = manager.dialog_data
+    if data['mod_value'] > -11:
+        data['mod_value'] -= 1
+    else:
+        data['mod_value'] = 0
+
+
 async def select_song(c: CallbackQuery, widget: Any, manager: DialogManager, item_id: str):
     await c.answer()
     data = manager.dialog_data
     if not isinstance(data, dict):
         data = {}
     data["song_id"] = int(item_id)
+    data['mod_value'] = 0
     await manager.switch_to(states.AllSongsPanelSG.song_menu)
 
 
@@ -27,6 +52,7 @@ async def select_song_founded_by_title(
     if not isinstance(data, dict):
         data = {}
     data["song_id"] = int(item_id)
+    data['mod_value'] = 0
     await manager.switch_to(states.FoundedSongsPanelSG.song_menu)
 
 
@@ -36,6 +62,7 @@ async def select_song_by_band(c: CallbackQuery, widget: Any, manager: DialogMana
     if not isinstance(data, dict):
         data = {}
     data["song_id"] = int(item_id)
+    data['mod_value'] = 0
     await manager.switch_to(states.BandSongsPanelSG.song_menu)
 
 
@@ -45,6 +72,7 @@ async def select_favorite_song(c: CallbackQuery, widget: Any, manager: DialogMan
     if not isinstance(data, dict):
         data = {}
     data["song_id"] = int(item_id)
+    data['mod_value'] = 0
     await manager.switch_to(states.FavoriteSongsPanelSG.song_menu)
 
 

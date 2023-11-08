@@ -1,33 +1,54 @@
 from guitar_app.application.guitar.domain.utils.default_constants import (
     MAJOR_CHORDS_SEQUENCE,
     MINOR_CHORDS_SEQUENCE,
+    MAJOR_7_CHORDS_SEQUENCE,
+    MINOR_7_CHORDS_SEQUENCE,
+    STANDARD_CHORDS,
 )
 from guitar_app.application.guitar.dto import BaseVerseDTO
 
 
 def modulate(song_chords: list[str], value: int) -> str:
     new_chord_sequence = []
+    for verse_line in song_chords:
+        verse_line_chords = verse_line.split()
+        new_verse_line_chords = []
+        for i in range(len(verse_line_chords)):
+            chord = verse_line_chords[i]
+            if chord == "||":
+                new_verse_line_chords.append("||")
+                continue
+            elif "m7" in chord:
+                base_seq = MINOR_7_CHORDS_SEQUENCE
+            elif "7" in chord:
+                base_seq = MAJOR_7_CHORDS_SEQUENCE
+            elif "m" in chord:
+                base_seq = MINOR_CHORDS_SEQUENCE
+            else:
+                base_seq = MAJOR_CHORDS_SEQUENCE
 
-    for i in range(len(song_chords)):
-        chord = song_chords[i]
-        if "m" in chord:
-            base_seq = MINOR_CHORDS_SEQUENCE
-        else:
-            base_seq = MAJOR_CHORDS_SEQUENCE
+            try:
+                chord_index = base_seq.index(chord)
+            except ValueError:
+                chord_index = base_seq.index(refactor_chord_to_standard(chord))
 
-        chord_index = base_seq.index(chord)
-        new_sequence = base_seq[chord_index:] + base_seq[:chord_index]
-        new_chord_sequence.append(new_sequence[value])
-
-    return " ".join(new_chord_sequence)
+            new_sequence = base_seq[chord_index:] + base_seq[:chord_index]
+            new_verse_line_chords.append(new_sequence[value])
+        new_chord_sequence.append(' '.join(new_verse_line_chords))
+    return "//".join(new_chord_sequence)
 
 
-def get_modulate_verses(verses: list[BaseVerseDTO], value: int) -> list[BaseVerseDTO]:
+def get_modulated_verses(verses: list[BaseVerseDTO], value: int) -> list[BaseVerseDTO]:
     new_verses = []
-
     for verse in verses:
-        old_chords = verse.chords
-        new_chords = modulate(old_chords.split(), value)
-        new_verses.append(BaseVerseDTO(title=verse.title, lyrics=verse.lyrics, chords=new_chords))
-
+        if verse.lyrics:
+            old_chords = verse.chords.split('//')
+            new_chords = modulate(old_chords, value)
+            new_verses.append(BaseVerseDTO(title=verse.title, lyrics=verse.lyrics, chords=new_chords))
+        else:
+            new_verses.append(verse)
     return new_verses
+
+
+def refactor_chord_to_standard(chord: str):
+    return STANDARD_CHORDS[chord]

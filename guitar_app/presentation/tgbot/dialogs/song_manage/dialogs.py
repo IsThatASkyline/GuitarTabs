@@ -12,7 +12,7 @@ from aiogram_dialog.widgets.kbd import (
 from aiogram_dialog.widgets.text import Const, Format, Jinja
 
 from ... import states
-from ...jinja.templates import templates
+from ...jinja.templates import templates, menu
 from ..preview_data import PREVIEW_SONG
 from .getters import (
     get_all_songs,
@@ -30,6 +30,7 @@ from .handlers import (
     select_song,
     select_song_by_band,
     select_song_founded_by_title,
+    refresh_mod_value,
 )
 
 all_songs = Dialog(
@@ -88,10 +89,12 @@ all_songs = Dialog(
             id="to_chords_tabs",
             state=states.AllSongsPanelSG.song_chords_with_tabs,
         ),
+        menu.modulation_menu,
         SwitchTo(
             Const("🔙Назад к меню песни"),
             id="to_song",
             state=states.AllSongsPanelSG.song_menu,
+            on_click=refresh_mod_value,
         ),
         state=states.AllSongsPanelSG.song_chords,
         preview_data={"song": PREVIEW_SONG},
@@ -100,14 +103,16 @@ all_songs = Dialog(
     Window(
         templates.SONG_CHORDS_WITH_TABS_TEMPLATE,
         SwitchTo(
-            Const("📜Убрать аппликатуры аккордов"),
+            Const('📜Показать текст и аккорды'),
             id="to_chords",
             state=states.AllSongsPanelSG.song_chords,
         ),
+        menu.modulation_menu,
         SwitchTo(
             Const("🔙Назад к меню песни"),
             id="to_song",
             state=states.AllSongsPanelSG.song_menu,
+            on_click=refresh_mod_value,
         ),
         state=states.AllSongsPanelSG.song_chords_with_tabs,
         preview_data={"song": PREVIEW_SONG},
@@ -171,10 +176,12 @@ songs_by_group = Dialog(
             id="to_chords_tabs",
             state=states.BandSongsPanelSG.song_chords_with_tabs,
         ),
+        menu.modulation_menu,
         SwitchTo(
             Const("🔙Назад к меню песни"),
             id="to_song",
             state=states.BandSongsPanelSG.song_menu,
+            on_click=refresh_mod_value,
         ),
         state=states.BandSongsPanelSG.song_chords,
         preview_data={"song": PREVIEW_SONG},
@@ -183,14 +190,16 @@ songs_by_group = Dialog(
     Window(
         templates.SONG_CHORDS_WITH_TABS_TEMPLATE,
         SwitchTo(
-            Const("📜Убрать аппликатуры аккордов"),
+            Const("📜Показать текст и аккорды"),
             id="to_chords",
             state=states.BandSongsPanelSG.song_chords,
         ),
+        menu.modulation_menu,
         SwitchTo(
             Const("🔙Назад к меню песни"),
             id="to_song",
             state=states.BandSongsPanelSG.song_menu,
+            on_click=refresh_mod_value,
         ),
         state=states.BandSongsPanelSG.song_chords_with_tabs,
         preview_data={"song": PREVIEW_SONG},
@@ -255,10 +264,12 @@ favorite_songs = Dialog(
             id="to_chords_tabs",
             state=states.FavoriteSongsPanelSG.song_chords_with_tabs,
         ),
+        menu.modulation_menu,
         SwitchTo(
             Const("🔙Назад к меню песни"),
             id="to_song",
             state=states.FavoriteSongsPanelSG.song_menu,
+            on_click=refresh_mod_value,
         ),
         state=states.FavoriteSongsPanelSG.song_chords,
         preview_data={"song": PREVIEW_SONG},
@@ -267,14 +278,16 @@ favorite_songs = Dialog(
     Window(
         templates.SONG_CHORDS_WITH_TABS_TEMPLATE,
         SwitchTo(
-            Const("📜Убрать аппликатуры аккордов"),
+            Const("📜Показать текст и аккорды"),
             id="to_chords",
             state=states.FavoriteSongsPanelSG.song_chords,
         ),
+        menu.modulation_menu,
         SwitchTo(
             Const("🔙Назад к меню песни"),
             id="to_song",
             state=states.FavoriteSongsPanelSG.song_menu,
+            on_click=refresh_mod_value,
         ),
         state=states.FavoriteSongsPanelSG.song_chords_with_tabs,
         preview_data={"song": PREVIEW_SONG},
@@ -350,10 +363,12 @@ songs_founded_by_title = Dialog(
             id="to_chords_tabs",
             state=states.FoundedSongsPanelSG.song_chords_with_tabs,
         ),
+        menu.modulation_menu,
         SwitchTo(
             Const("🔙Назад к меню песни"),
             id="to_song",
             state=states.FoundedSongsPanelSG.song_menu,
+            on_click=refresh_mod_value,
         ),
         state=states.FoundedSongsPanelSG.song_chords,
         preview_data={"song": PREVIEW_SONG},
@@ -362,14 +377,16 @@ songs_founded_by_title = Dialog(
     Window(
         templates.SONG_CHORDS_WITH_TABS_TEMPLATE,
         SwitchTo(
-            Const("📜Убрать аппликатуры аккордов"),
+            Const("📜Показать текст и аккорды"),
             id="to_chords",
             state=states.FoundedSongsPanelSG.song_chords,
         ),
+        menu.modulation_menu,
         SwitchTo(
             Const("🔙Назад к меню песни"),
             id="to_song",
             state=states.FoundedSongsPanelSG.song_menu,
+            on_click=refresh_mod_value,
         ),
         state=states.FoundedSongsPanelSG.song_chords_with_tabs,
         preview_data={"song": PREVIEW_SONG},

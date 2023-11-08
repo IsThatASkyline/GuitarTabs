@@ -31,7 +31,7 @@ SEPT_CHORDS_TABLATURE[
         O   O    O   O   O   O           6
          |    |     |     |    |    |          7
          |   O     |     |    |    |          8
-         |    |     |     |    |    |          9
+         |    |     |     |   O    |          9
 """
 
 SEPT_CHORDS_TABLATURE[
@@ -42,7 +42,7 @@ SEPT_CHORDS_TABLATURE[
         O   O    O   O   O   O           7
          |    |     |     |    |    |          8
          |   O     |     |    |    |          9
-         |    |     |     |    |    |          10
+         |    |     |     |   O    |          10
 """
 
 SEPT_CHORDS_TABLATURE[
@@ -62,10 +62,10 @@ SEPT_CHORDS_TABLATURE[
 ] = """
         E | A | D | G | B | e
        ‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒
-         |   O    O   O   O   O           3
-         |    |     |     |   O    |          4
-         |    |    O     |    |    |          5
-         |    |     |     |    |    |          6
+         |   O    O   O   O   O           2
+         |    |     |     |   O    |          3
+         |    |    O     |    |    |          4
+         |    |     |     |    |    |          5
 """
 
 SEPT_CHORDS_TABLATURE[
@@ -235,7 +235,7 @@ SEPT_CHORDS_TABLATURE[
         O   O    O   O   O   O           1
          |    |     |     |    |    |          2
          |   O     |     |    |    |          3
-         |    |     |     |    |    |          4
+         |    |     |     |   O    |          4
 """
 
 SEPT_CHORDS_TABLATURE[
@@ -246,7 +246,7 @@ SEPT_CHORDS_TABLATURE[
         O   O    O   O   O   O           2
          |    |     |     |    |    |          3
          |   O     |     |    |    |          4
-         |    |     |     |    |    |          5
+         |    |     |     |   O    |          5
 """
 
 
@@ -280,7 +280,7 @@ SEPT_CHORDS_TABLATURE[
         O   O    O   O   O   O           3
          |    |     |     |    |    |          4
          |   O     |     |    |    |          5
-         |    |     |     |    |    |          6
+         |    |     |     |   O    |          6
 """
 
 SEPT_CHORDS_TABLATURE[
@@ -291,5 +291,5 @@ SEPT_CHORDS_TABLATURE[
         O   O    O   O   O   O           4
          |    |     |     |    |    |          5
          |   O     |     |    |    |          6
-         |    |     |     |    |    |          7
+         |    |     |     |   O    |          7
 """
