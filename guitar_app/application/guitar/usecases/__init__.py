@@ -29,4 +29,5 @@ from .song import (
     HitSong,
     GetTabsForSong,
     GetTabById,
+    DeleteTabs,
 )

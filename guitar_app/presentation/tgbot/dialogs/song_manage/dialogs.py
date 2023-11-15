@@ -34,7 +34,7 @@ from .handlers import (
     select_song_by_band,
     select_song_founded_by_title,
     refresh_mod_value,
-    select_favorite_song_tab,
+    select_favorite_song_tab, select_song_tab, select_band_song_tab, select_founded_song_tab,
 )
 
 all_songs = Dialog(
@@ -89,11 +89,17 @@ all_songs = Dialog(
     Window(
         templates.SONG_CHORDS_WITHOUT_TABS_TEMPLATE,
         SwitchTo(
+            Const("📜Показать табы"),
+            id="to_tabs",
+            state=states.AllSongsPanelSG.song_tabs,
+            when=F["song"].tabs,
+        ),
+        menu.modulation_menu,
+        SwitchTo(
             Const("📜Показать аппликатуры аккордов"),
             id="to_chords_tabs",
             state=states.AllSongsPanelSG.song_chords_with_tabs,
         ),
-        menu.modulation_menu,
         SwitchTo(
             Const("🔙Назад к меню песни"),
             id="to_song",
@@ -107,11 +113,17 @@ all_songs = Dialog(
     Window(
         templates.SONG_CHORDS_WITH_TABS_TEMPLATE,
         SwitchTo(
+            Const("📜Показать табы"),
+            id="to_tabs",
+            state=states.AllSongsPanelSG.song_tabs,
+            when=F["song"].tabs,
+        ),
+        menu.modulation_menu,
+        SwitchTo(
             Const('📜Показать текст и аккорды'),
             id="to_chords",
             state=states.AllSongsPanelSG.song_chords,
         ),
-        menu.modulation_menu,
         SwitchTo(
             Const("🔙Назад к меню песни"),
             id="to_song",
@@ -121,6 +133,41 @@ all_songs = Dialog(
         state=states.AllSongsPanelSG.song_chords_with_tabs,
         preview_data={"song": PREVIEW_SONG},
         getter=get_chords,
+    ),
+    Window(
+        Const("Список табов"),
+        ScrollingGroup(
+            Select(
+                Format("{item.title}"),
+                id="all_song_tabs",
+                item_id_getter=lambda x: x.id,
+                items="tabs",
+                on_click=select_song_tab,
+            ),
+            id="all_songs_tabs_sg",
+            width=1,
+            height=7,
+            when=F["tabs"],
+        ),
+        SwitchTo(
+            Const("🔙Назад к аккордам"),
+            id="to_song",
+            state=states.AllSongsPanelSG.song_chords,
+            on_click=refresh_mod_value,
+        ),
+        state=states.AllSongsPanelSG.song_tabs,
+        getter=get_all_tabs,
+    ),
+    Window(
+        Format("{title}"),
+        DynamicMedia("tab"),
+        SwitchTo(
+            Const("🔙Назад ко всем табам"),
+            id="to_tabs",
+            state=states.AllSongsPanelSG.song_tabs,
+        ),
+        state=states.AllSongsPanelSG.song_tab_detail,
+        getter=get_detail_tab,
     ),
 )
 
@@ -176,11 +223,17 @@ songs_by_group = Dialog(
     Window(
         templates.SONG_CHORDS_WITHOUT_TABS_TEMPLATE,
         SwitchTo(
+            Const("📜Показать табы"),
+            id="to_tabs",
+            state=states.BandSongsPanelSG.song_tabs,
+            when=F["song"].tabs,
+        ),
+        menu.modulation_menu,
+        SwitchTo(
             Const("📜Показать аппликатуры аккордов"),
             id="to_chords_tabs",
             state=states.BandSongsPanelSG.song_chords_with_tabs,
         ),
-        menu.modulation_menu,
         SwitchTo(
             Const("🔙Назад к меню песни"),
             id="to_song",
@@ -194,11 +247,17 @@ songs_by_group = Dialog(
     Window(
         templates.SONG_CHORDS_WITH_TABS_TEMPLATE,
         SwitchTo(
+            Const("📜Показать табы"),
+            id="to_tabs",
+            state=states.BandSongsPanelSG.song_tabs,
+            when=F["song"].tabs,
+        ),
+        menu.modulation_menu,
+        SwitchTo(
             Const("📜Показать текст и аккорды"),
             id="to_chords",
             state=states.BandSongsPanelSG.song_chords,
         ),
-        menu.modulation_menu,
         SwitchTo(
             Const("🔙Назад к меню песни"),
             id="to_song",
@@ -208,6 +267,41 @@ songs_by_group = Dialog(
         state=states.BandSongsPanelSG.song_chords_with_tabs,
         preview_data={"song": PREVIEW_SONG},
         getter=get_chords,
+    ),
+    Window(
+        Const("Список табов"),
+        ScrollingGroup(
+            Select(
+                Format("{item.title}"),
+                id="band_song_tabs",
+                item_id_getter=lambda x: x.id,
+                items="tabs",
+                on_click=select_band_song_tab,
+            ),
+            id="band_songs_tabs_sg",
+            width=1,
+            height=7,
+            when=F["tabs"],
+        ),
+        SwitchTo(
+            Const("🔙Назад к аккордам"),
+            id="to_song",
+            state=states.BandSongsPanelSG.song_chords,
+            on_click=refresh_mod_value,
+        ),
+        state=states.BandSongsPanelSG.song_tabs,
+        getter=get_all_tabs,
+    ),
+    Window(
+        Format("{title}"),
+        DynamicMedia("tab"),
+        SwitchTo(
+            Const("🔙Назад ко всем табам"),
+            id="to_tabs",
+            state=states.BandSongsPanelSG.song_tabs,
+        ),
+        state=states.BandSongsPanelSG.song_tab_detail,
+        getter=get_detail_tab,
     ),
 )
 
@@ -264,16 +358,17 @@ favorite_songs = Dialog(
     Window(
         templates.SONG_CHORDS_WITHOUT_TABS_TEMPLATE,
         SwitchTo(
+            Const("📜Показать табы"),
+            id="to_tabs",
+            state=states.FavoriteSongsPanelSG.song_tabs,
+            when=F["song"].tabs,
+        ),
+        menu.modulation_menu,
+        SwitchTo(
             Const("📜Показать аппликатуры аккордов"),
             id="to_chords_tabs",
             state=states.FavoriteSongsPanelSG.song_chords_with_tabs,
         ),
-        SwitchTo(
-            Const("📜Показать табы"),
-            id="to_tabs",
-            state=states.FavoriteSongsPanelSG.song_tabs,
-        ),
-        menu.modulation_menu,
         SwitchTo(
             Const("🔙Назад к меню песни"),
             id="to_song",
@@ -287,11 +382,17 @@ favorite_songs = Dialog(
     Window(
         templates.SONG_CHORDS_WITH_TABS_TEMPLATE,
         SwitchTo(
+            Const("📜Показать табы"),
+            id="to_tabs",
+            state=states.FavoriteSongsPanelSG.song_tabs,
+            when=F["song"].tabs,
+        ),
+        menu.modulation_menu,
+        SwitchTo(
             Const("📜Показать текст и аккорды"),
             id="to_chords",
             state=states.FavoriteSongsPanelSG.song_chords,
         ),
-        menu.modulation_menu,
         SwitchTo(
             Const("🔙Назад к меню песни"),
             id="to_song",
@@ -330,7 +431,7 @@ favorite_songs = Dialog(
         Format("{title}"),
         DynamicMedia("tab"),
         SwitchTo(
-            Const("🔙Назад к табам"),
+            Const("🔙Назад ко всем табам"),
             id="to_tabs",
             state=states.FavoriteSongsPanelSG.song_tabs,
         ),
@@ -403,11 +504,17 @@ songs_founded_by_title = Dialog(
     Window(
         templates.SONG_CHORDS_WITHOUT_TABS_TEMPLATE,
         SwitchTo(
+            Const("📜Показать табы"),
+            id="to_tabs",
+            state=states.FoundedSongsPanelSG.song_tabs,
+            when=F["song"].tabs,
+        ),
+        menu.modulation_menu,
+        SwitchTo(
             Const("📜Показать аппликатуры аккордов"),
             id="to_chords_tabs",
             state=states.FoundedSongsPanelSG.song_chords_with_tabs,
         ),
-        menu.modulation_menu,
         SwitchTo(
             Const("🔙Назад к меню песни"),
             id="to_song",
@@ -421,11 +528,17 @@ songs_founded_by_title = Dialog(
     Window(
         templates.SONG_CHORDS_WITH_TABS_TEMPLATE,
         SwitchTo(
+            Const("📜Показать табы"),
+            id="to_tabs",
+            state=states.FoundedSongsPanelSG.song_tabs,
+            when=F["song"].tabs,
+        ),
+        menu.modulation_menu,
+        SwitchTo(
             Const("📜Показать текст и аккорды"),
             id="to_chords",
             state=states.FoundedSongsPanelSG.song_chords,
         ),
-        menu.modulation_menu,
         SwitchTo(
             Const("🔙Назад к меню песни"),
             id="to_song",
@@ -435,6 +548,41 @@ songs_founded_by_title = Dialog(
         state=states.FoundedSongsPanelSG.song_chords_with_tabs,
         preview_data={"song": PREVIEW_SONG},
         getter=get_chords,
+    ),
+    Window(
+        Const("Список табов"),
+        ScrollingGroup(
+            Select(
+                Format("{item.title}"),
+                id="founded_song_tabs",
+                item_id_getter=lambda x: x.id,
+                items="tabs",
+                on_click=select_founded_song_tab,
+            ),
+            id="founded_songs_tabs_sg",
+            width=1,
+            height=7,
+            when=F["tabs"],
+        ),
+        SwitchTo(
+            Const("🔙Назад к аккордам"),
+            id="to_song",
+            state=states.FoundedSongsPanelSG.song_chords,
+            on_click=refresh_mod_value,
+        ),
+        state=states.FoundedSongsPanelSG.song_tabs,
+        getter=get_all_tabs,
+    ),
+    Window(
+        Format("{title}"),
+        DynamicMedia("tab"),
+        SwitchTo(
+            Const("🔙Назад ко всем табам"),
+            id="to_tabs",
+            state=states.FoundedSongsPanelSG.song_tabs,
+        ),
+        state=states.FoundedSongsPanelSG.song_tab_detail,
+        getter=get_detail_tab,
     ),
     Window(
         Const("Введите текстовое название"),

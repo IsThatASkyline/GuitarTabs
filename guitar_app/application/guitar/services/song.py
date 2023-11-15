@@ -23,6 +23,7 @@ from guitar_app.application.guitar.usecases import (
     RemoveSongFromFavorite,
     UpdateSong,
     GetTabsForSong,
+    DeleteTabs,
 )
 from guitar_app.application.guitar.usecases.song import CreateTabs, GetTabById
 from guitar_app.infrastructure.db.uow import UnitOfWork
@@ -74,6 +75,11 @@ class SongServices:
     async def delete_song(self, id_: int) -> None:
         async with self.uow:
             await DeleteSong(self.uow)(id_)
+            await self.uow.commit()
+
+    async def delete_tabs_in_song(self, id_: int) -> None:
+        async with self.uow:
+            await DeleteTabs(self.uow)(id_)
             await self.uow.commit()
 
     async def modulate_song(self, modulate_song_dto: ModulateSongDTO) -> FullSongDTO:

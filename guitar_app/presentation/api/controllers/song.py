@@ -118,6 +118,21 @@ async def delete_song(
         return NotFoundSongError()
 
 
+@router.delete("/delete-tabs/{song_id}")
+async def delete_tabs(
+    song_id: int,
+    response: Response,
+    song_services: SongServices = Depends(get_song_services),
+) -> NotFoundSongError | None:
+    try:
+        await song_services.delete_tabs_in_song(song_id)
+        response.status_code = status.HTTP_204_NO_CONTENT
+        return
+    except SongNotExists:
+        response.status_code = status.HTTP_404_NOT_FOUND
+        return NotFoundSongError()
+
+
 @router.post("/modulate-song/{song_id}")
 async def modulate_song(
     song_id: int,

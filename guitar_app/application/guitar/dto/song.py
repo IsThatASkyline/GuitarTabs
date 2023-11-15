@@ -2,6 +2,7 @@ from dataclasses import dataclass
 
 from .band import BandDTO
 from .verse import BaseVerseDTO
+from .tab import TabDTO
 
 
 @dataclass
@@ -42,6 +43,7 @@ class FullSongDTO:
     band: BandDTO
     verses: list[BaseVerseDTO]
     hits_count: int | None
+    tabs: list[TabDTO] | None = None
 
     def compress(self):
         return SongDTO(id=self.id, title=self.title, band=self.band)

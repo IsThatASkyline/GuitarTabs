@@ -34,6 +34,7 @@ class Song(BaseAlchemyModels):
             id=self.id,
             title=self.title,
             band=self.band.to_dto(),
+            tabs=[tab.to_dto() for tab in self.tabs],
             verses=[verse.to_dto() for verse in self.verses],
             hits_count=self.hits_count,
         )

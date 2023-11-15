@@ -76,6 +76,27 @@ async def select_favorite_song(c: CallbackQuery, widget: Any, manager: DialogMan
     await manager.switch_to(states.FavoriteSongsPanelSG.song_menu)
 
 
+async def select_song_tab(c: CallbackQuery, widget: Any, manager: DialogManager, item_id: str):
+    await c.answer()
+    data = manager.dialog_data
+    data["tab_id"] = int(item_id)
+    await manager.switch_to(states.AllSongsPanelSG.song_tab_detail)
+
+
+async def select_band_song_tab(c: CallbackQuery, widget: Any, manager: DialogManager, item_id: str):
+    await c.answer()
+    data = manager.dialog_data
+    data["tab_id"] = int(item_id)
+    await manager.switch_to(states.BandSongsPanelSG.song_tab_detail)
+
+
+async def select_founded_song_tab(c: CallbackQuery, widget: Any, manager: DialogManager, item_id: str):
+    await c.answer()
+    data = manager.dialog_data
+    data["tab_id"] = int(item_id)
+    await manager.switch_to(states.FoundedSongsPanelSG.song_tab_detail)
+
+
 async def select_favorite_song_tab(c: CallbackQuery, widget: Any, manager: DialogManager, item_id: str):
     await c.answer()
     data = manager.dialog_data

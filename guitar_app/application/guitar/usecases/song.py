@@ -124,9 +124,15 @@ class GetModulatedSong(SongUseCase):
 class DeleteSong(SongUseCase):
     async def __call__(self, id_: int) -> None:
         if await self.uow.app_holder.song_repo.get_song(id_):
-            await self.uow.app_holder.song_repo.delete_song(id_)
-            return
+            return await self.uow.app_holder.song_repo.delete_song(id_)
         raise SongNotExists
+
+
+class DeleteTabs(SongUseCase):
+    async def __call__(self, id_: int) -> None:
+        if (await self.uow.app_holder.song_repo.get_song(id_)).tabs:
+            return await self.uow.app_holder.tab_repo.delete_all_tabs_in_song(id_)
+        raise Exception
 
 
 class HitSong(SongUseCase):

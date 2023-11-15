@@ -41,7 +41,7 @@ class SongRepository(BaseRepository[Song]):
     async def get_song(self, id_: int) -> FullSongDTO:
         query = (
             select(Song)
-            .options(joinedload(Song.verses), joinedload(Song.band))
+            .options(joinedload(Song.verses), joinedload(Song.band), joinedload(Song.tabs))
             .where(Song.id == id_)
         )
         song = (await self.session.execute(query)).unique().scalar_one_or_none()
