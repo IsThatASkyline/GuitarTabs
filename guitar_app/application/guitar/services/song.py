@@ -1,4 +1,4 @@
-from guitar_app.application.guitar.dto import UserDTO
+from guitar_app.application.guitar.dto import UserDTO, TabDTO, CreateTabDTO
 from guitar_app.application.guitar.dto.song import (
     CreateSongDTO,
     FavoriteSongDTO,
@@ -22,7 +22,9 @@ from guitar_app.application.guitar.usecases import (
     HitSong,
     RemoveSongFromFavorite,
     UpdateSong,
+    GetTabsForSong,
 )
+from guitar_app.application.guitar.usecases.song import CreateTabs, GetTabById
 from guitar_app.infrastructure.db.uow import UnitOfWork
 
 
@@ -44,6 +46,18 @@ class SongServices:
             await HitSong(self.uow)(get_song_dto)
             await self.uow.commit()
             return await GetSongById(self.uow)(get_song_dto.song_id)
+
+    async def create_tabs(self, tabs_dto: CreateTabDTO) -> list[TabDTO]:
+        async with self.uow:
+            await CreateTabs(self.uow)(tabs_dto)
+            await self.uow.commit()
+            return await GetTabsForSong(self.uow)(tabs_dto.song_id)
+
+    async def get_tabs_for_song(self, id_: int) -> list[TabDTO]:
+        return await GetTabsForSong(self.uow)(id_)
+
+    async def get_tab(self, id_: int) -> TabDTO:
+        return await GetTabById(self.uow)(id_)
 
     async def get_favorite_songs_by_user(self, user_dto: UserDTO) -> list[SongDTO]:
         return await GetFavoriteSongsByUser(self.uow)(user_dto.telegram_id)

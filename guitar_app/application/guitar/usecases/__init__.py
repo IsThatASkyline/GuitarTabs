@@ -27,4 +27,6 @@ from .song import (
     GetModulatedSong,
     FindSong,
     HitSong,
+    GetTabsForSong,
+    GetTabById,
 )

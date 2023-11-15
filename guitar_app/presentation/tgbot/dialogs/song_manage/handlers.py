@@ -76,6 +76,13 @@ async def select_favorite_song(c: CallbackQuery, widget: Any, manager: DialogMan
     await manager.switch_to(states.FavoriteSongsPanelSG.song_menu)
 
 
+async def select_favorite_song_tab(c: CallbackQuery, widget: Any, manager: DialogManager, item_id: str):
+    await c.answer()
+    data = manager.dialog_data
+    data["tab_id"] = int(item_id)
+    await manager.switch_to(states.FavoriteSongsPanelSG.song_tab_detail)
+
+
 async def add_song_to_favorite(c: CallbackQuery, widget: Button, manager: DialogManager):
     await c.answer()
     song_id = manager.dialog_data["song_id"]

@@ -11,7 +11,7 @@ from guitar_app.application.guitar.dto import (
     ModulateSongDTO,
     SongDTO,
     UpdateSongDTO,
-    UserDTO,
+    UserDTO, TabDTO, CreateTabDTO, BaseTabDTO,
 )
 from guitar_app.application.guitar.exceptions import CreateSongException, SongNotExists
 from guitar_app.application.guitar.services import SongServices
@@ -22,6 +22,7 @@ from guitar_app.presentation.api.controllers.requests import (
     ModulateSongRequest,
     RemoveFavoriteSongRequest,
     UpdateSongRequest,
+    CreateTabRequest,
 )
 from guitar_app.presentation.api.controllers.responses import SongDeleteResponse
 from guitar_app.presentation.api.controllers.responses.exceptions import (
@@ -169,3 +170,21 @@ async def find_song(
     song_services: SongServices = Depends(get_song_services),
 ) -> list[SongDTO] | None:
     return await song_services.find_song(FindSongDTO(**song.dict()))
+
+
+@router.post("/create-tabs/{song_id}")
+async def create_tabs(
+    song_id: int,
+    tabs: list[CreateTabRequest],
+    song_services: SongServices = Depends(get_song_services),
+) -> list[TabDTO]:
+    return await song_services.create_tabs(CreateTabDTO(
+        song_id=song_id,
+        tabs=[
+            BaseTabDTO(
+                title=tab.title,
+                image_url=tab.image_url,
+            ) for tab in tabs if tabs
+        ]
+    ))
+

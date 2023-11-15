@@ -8,7 +8,7 @@ from guitar_app.application.guitar.dto import (
     GetSongDTO,
     ModulateSongDTO,
     SongDTO,
-    UpdateSongDTO,
+    UpdateSongDTO, TabDTO, CreateTabDTO,
 )
 from guitar_app.application.guitar.exceptions import CreateSongException, SongNotExists
 from guitar_app.infrastructure.db.uow import UnitOfWork
@@ -26,11 +26,25 @@ class GetSongById(SongUseCase):
         raise SongNotExists
 
 
+class GetTabById(SongUseCase):
+    async def __call__(self, id_: int) -> TabDTO:
+        if tab := await self.uow.app_holder.tab_repo.get_tab(id_):
+            return tab
+        raise Exception
+
+
 class CreateSong(SongUseCase):
     async def __call__(self, song_dto: CreateSongDTO) -> int:
         if await self.uow.app_holder.band_repo.get_band(song_dto.band_id):
             return await self.uow.app_holder.song_repo.add_song(song_dto)
         raise CreateSongException
+
+
+class CreateTabs(SongUseCase):
+    async def __call__(self, tabs_dto: CreateTabDTO) -> int:
+        if await self.uow.app_holder.song_repo.get_song(tabs_dto.song_id):
+            return await self.uow.app_holder.tab_repo.add_tab(tabs_dto)
+        raise Exception
 
 
 class GetSongs(SongUseCase):
@@ -84,6 +98,13 @@ class FindSong(SongUseCase):
         if songs := await self.uow.app_holder.song_repo.find_song_by_title(song_dto):
             return songs
         return None
+
+
+class GetTabsForSong(SongUseCase):
+    async def __call__(self, id_: int) -> list[TabDTO] | None:
+        if tabs := await self.uow.app_holder.song_repo.get_tabs_for_song(id_):
+            return tabs
+        raise SongNotExists
 
 
 class GetModulatedSong(SongUseCase):

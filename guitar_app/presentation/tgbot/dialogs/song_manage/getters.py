@@ -1,4 +1,6 @@
+from aiogram.enums import ContentType
 from aiogram_dialog import DialogManager
+from aiogram_dialog.api.entities import MediaAttachment
 
 from guitar_app.application.guitar.domain.services.modulation import get_modulated_verses
 from guitar_app.application.guitar import dto, services
@@ -68,6 +70,19 @@ async def get_chords(uow: UnitOfWork, user: dto.UserDTO, dialog_manager: DialogM
         "chords_tabs": chords_tabs,
         "mod_value": mod_value
     }
+
+
+async def get_all_tabs(uow: UnitOfWork, user: dto.UserDTO, dialog_manager: DialogManager, **_):
+    song_id = dialog_manager.dialog_data.get("song_id", None) or dialog_manager.start_data["song_id"]
+    tabs = await services.SongServices(uow).get_tabs_for_song(song_id)
+    return {'tabs': tabs}
+
+
+async def get_detail_tab(uow: UnitOfWork, user: dto.UserDTO, dialog_manager: DialogManager, **_):
+    tab_id = dialog_manager.dialog_data.get("tab_id", None) or dialog_manager.start_data["tab_id"]
+    tab = await services.SongServices(uow).get_tab(tab_id)
+    tab_image = MediaAttachment(ContentType.PHOTO, url=tab.image_url)
+    return {'tab': tab_image, 'title': tab.title}
 
 
 async def get_chords_tabs(chords):

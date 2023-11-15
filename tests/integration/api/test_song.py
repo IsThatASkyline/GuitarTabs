@@ -58,12 +58,14 @@ async def test_create_song(
     }
 
     response = await client.post("song/create-song", json=data_json)
+    response_422 = await client.post("song/create-song", json={"title": "qq"})
 
     r_data = response.json()
 
     assert response.status_code == status.HTTP_201_CREATED
     assert r_data["title"] == data_json["title"]
     assert r_data["id"] == data_json["band_id"]
+    assert response_422.status_code == status.HTTP_422_UNPROCESSABLE_ENTITY
 
 
 @pytest.mark.asyncio

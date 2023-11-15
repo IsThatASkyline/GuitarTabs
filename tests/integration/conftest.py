@@ -4,7 +4,7 @@ import pytest
 import pytest_asyncio
 from aiogram import Dispatcher
 from aiogram_dialog.test_tools import MockMessageManager
-from aiogram_tests.mocked_bot import MockedBot
+# from aiogram_tests.mocked_bot import MockedBot
 from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_async_engine
 from sqlalchemy.orm import close_all_sessions, sessionmaker
 
@@ -44,9 +44,9 @@ def dp(
     return dp
 
 
-@pytest.fixture
-def bot():
-    return MockedBot(token=get_settings().BOT_TOKEN)
+# @pytest.fixture
+# def bot():
+#     return MockedBot(token=get_settings().BOT_TOKEN)
 
 
 @pytest.fixture(scope="session")

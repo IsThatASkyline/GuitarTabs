@@ -9,6 +9,7 @@ from aiogram_dialog.widgets.kbd import (
     Start,
     SwitchTo,
 )
+from aiogram_dialog.widgets.media import DynamicMedia
 from aiogram_dialog.widgets.text import Const, Format, Jinja
 
 from ... import states
@@ -17,10 +18,12 @@ from ..preview_data import PREVIEW_SONG
 from .getters import (
     get_all_songs,
     get_chords,
+    get_all_tabs,
     get_favorite_songs,
     get_song,
     get_songs_by_band,
     get_songs_founded_by_title,
+    get_detail_tab,
 )
 from .handlers import (
     add_song_to_favorite,
@@ -31,6 +34,7 @@ from .handlers import (
     select_song_by_band,
     select_song_founded_by_title,
     refresh_mod_value,
+    select_favorite_song_tab,
 )
 
 all_songs = Dialog(
@@ -264,6 +268,11 @@ favorite_songs = Dialog(
             id="to_chords_tabs",
             state=states.FavoriteSongsPanelSG.song_chords_with_tabs,
         ),
+        SwitchTo(
+            Const("📜Показать табы"),
+            id="to_tabs",
+            state=states.FavoriteSongsPanelSG.song_tabs,
+        ),
         menu.modulation_menu,
         SwitchTo(
             Const("🔙Назад к меню песни"),
@@ -292,6 +301,41 @@ favorite_songs = Dialog(
         state=states.FavoriteSongsPanelSG.song_chords_with_tabs,
         preview_data={"song": PREVIEW_SONG},
         getter=get_chords,
+    ),
+    Window(
+        Const("Список табов"),
+        ScrollingGroup(
+            Select(
+                Format("{item.title}"),
+                id="favorite_song_tabs",
+                item_id_getter=lambda x: x.id,
+                items="tabs",
+                on_click=select_favorite_song_tab,
+            ),
+            id="favorite_songs_tabs_sg",
+            width=1,
+            height=7,
+            when=F["tabs"],
+        ),
+        SwitchTo(
+            Const("🔙Назад к аккордам"),
+            id="to_song",
+            state=states.FavoriteSongsPanelSG.song_chords,
+            on_click=refresh_mod_value,
+        ),
+        state=states.FavoriteSongsPanelSG.song_tabs,
+        getter=get_all_tabs,
+    ),
+    Window(
+        Format("{title}"),
+        DynamicMedia("tab"),
+        SwitchTo(
+            Const("🔙Назад к табам"),
+            id="to_tabs",
+            state=states.FavoriteSongsPanelSG.song_tabs,
+        ),
+        state=states.FavoriteSongsPanelSG.song_tab_detail,
+        getter=get_detail_tab,
     ),
 )
 

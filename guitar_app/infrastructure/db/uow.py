@@ -9,7 +9,7 @@ from guitar_app.infrastructure.db.repositories import (
     HitCounterRepository,
     MusicianRepository,
     SongRepository,
-    UserRepository,
+    UserRepository, TabRepository,
 )
 
 
@@ -51,6 +51,7 @@ class AppHolder(AbstractHolder):
         self.musician_repo = MusicianRepository(session)
         self.band_repo = BandRepository(session)
         self.song_repo = SongRepository(session)
+        self.tab_repo = TabRepository(session)
         self.favorites_repo = FavoriteRepository(session)
         self.band_members_repo = BandMembersRepository(session)
         self.hit_counter_repo = HitCounterRepository(session)

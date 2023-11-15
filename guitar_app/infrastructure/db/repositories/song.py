@@ -7,9 +7,9 @@ from guitar_app.application.guitar.dto import (
     FindSongDTO,
     FullSongDTO,
     SongDTO,
-    UpdateSongDTO,
+    UpdateSongDTO, TabDTO,
 )
-from guitar_app.infrastructure.db.models import Song, Verse
+from guitar_app.infrastructure.db.models import Song, Verse, Tab
 from guitar_app.infrastructure.db.repositories.base import BaseRepository
 
 
@@ -46,6 +46,11 @@ class SongRepository(BaseRepository[Song]):
         )
         song = (await self.session.execute(query)).unique().scalar_one_or_none()
         return song.to_full_dto() if song else None
+
+    async def get_tabs_for_song(self, id_: int) -> list[TabDTO]:
+        query = select(Tab).where(Tab.song_id == id_)
+        tabs = (await self.session.execute(query)).scalars().all()
+        return [tab.to_dto() for tab in tabs] if tabs else None
 
     async def list_songs(self) -> list[SongDTO]:
         query = select(Song).options(joinedload(Song.band)).order_by(Song.title)
