@@ -18,8 +18,4 @@ class Tab(BaseAlchemyModels):
     song: Mapped["Song"] = relationship(back_populates="tabs")
 
     def to_dto(self) -> TabDTO:
-        return TabDTO(
-            id=self.id,
-            title=self.title,
-            image_url=self.image_url
-        )
+        return TabDTO(id=self.id, title=self.title, image_url=self.image_url)

@@ -1,14 +1,18 @@
 from guitar_app.application.common.usecases.base import BaseUseCase
-from guitar_app.application.guitar.domain.services.modulation import get_modulated_verses
+from guitar_app.application.guitar.domain.services.modulation import (
+    get_modulated_verses,
+)
 from guitar_app.application.guitar.dto import (
     CreateSongDTO,
+    CreateTabDTO,
     FavoriteSongDTO,
     FindSongDTO,
     FullSongDTO,
     GetSongDTO,
     ModulateSongDTO,
     SongDTO,
-    UpdateSongDTO, TabDTO, CreateTabDTO,
+    TabDTO,
+    UpdateSongDTO,
 )
 from guitar_app.application.guitar.exceptions import CreateSongException, SongNotExists
 from guitar_app.infrastructure.db.uow import UnitOfWork

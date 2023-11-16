@@ -84,6 +84,7 @@ async def after_modulate_song_data1():
             {"title": "verse2", "lyrics": "lyrics", "chords": "A# C#m D# G#m"},
         ],
         "hits_count": 0,
+        "tabs": None,
     }
 
 
@@ -101,6 +102,7 @@ async def after_modulate_song_data2():
             {"title": "verse2", "lyrics": "lyrics", "chords": "G A#m C Fm"},
         ],
         "hits_count": 0,
+        "tabs": None,
     }
 
 

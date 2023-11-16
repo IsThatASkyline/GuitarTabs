@@ -7,9 +7,10 @@ from guitar_app.application.guitar.dto import (
     FindSongDTO,
     FullSongDTO,
     SongDTO,
-    UpdateSongDTO, TabDTO,
+    TabDTO,
+    UpdateSongDTO,
 )
-from guitar_app.infrastructure.db.models import Song, Verse, Tab
+from guitar_app.infrastructure.db.models import Song, Tab, Verse
 from guitar_app.infrastructure.db.repositories.base import BaseRepository
 
 
@@ -25,6 +26,7 @@ class SongRepository(BaseRepository[Song]):
         )
         self.session.add(song)
         await self.session.flush()
+
         if song_dto.verses:
             for v in song_dto.verses:
                 self.session.add(

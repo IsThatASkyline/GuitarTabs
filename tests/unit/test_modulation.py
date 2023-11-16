@@ -1,6 +1,8 @@
 import pytest
 
-from guitar_app.application.guitar.domain.services.modulation import get_modulated_verses
+from guitar_app.application.guitar.domain.services.modulation import (
+    get_modulated_verses,
+)
 
 
 @pytest.mark.asyncio

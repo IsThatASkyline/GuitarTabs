@@ -1,4 +1,4 @@
-from guitar_app.application.guitar.dto import UserDTO, TabDTO, CreateTabDTO
+from guitar_app.application.guitar.dto import CreateTabDTO, TabDTO, UserDTO
 from guitar_app.application.guitar.dto.song import (
     CreateSongDTO,
     FavoriteSongDTO,
@@ -13,17 +13,17 @@ from guitar_app.application.guitar.usecases import (
     AddSongToFavorite,
     CreateSong,
     DeleteSong,
+    DeleteTabs,
     FindSong,
     GetFavoriteSongsByUser,
     GetModulatedSong,
     GetSongById,
     GetSongs,
     GetSongsByGroup,
+    GetTabsForSong,
     HitSong,
     RemoveSongFromFavorite,
     UpdateSong,
-    GetTabsForSong,
-    DeleteTabs,
 )
 from guitar_app.application.guitar.usecases.song import CreateTabs, GetTabById
 from guitar_app.infrastructure.db.uow import UnitOfWork

@@ -47,8 +47,11 @@ async def clean_tables(db_session_test) -> None:
         "song_table",
         "musician_band_table",
         "band_table",
+        "verse_table",
         "user_table",
         "user_favorite_table",
+        "hit_counter_blacklist_table",
+        "tab_table",
     )
     async with db_session_test() as session:
         for table in tables:

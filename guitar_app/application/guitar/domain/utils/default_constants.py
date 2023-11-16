@@ -1,18 +1,18 @@
 STANDARD_CHORDS = {
-    'H': 'B',
-    'Hm': 'Bm',
-    'H7': 'B7',
-    'Hm7': 'Bm7',
-    'Ab': 'G#',
-    'Abm': 'G#m',
-    'Bb': 'A#',
-    'Bbm': 'A#m',
-    'Db': 'C#',
-    'Dbm': 'C#m',
-    'Eb': 'D#',
-    'Ebm': 'D#m',
-    'Gb': 'F#',
-    'Gbm': 'F#m'
+    "H": "B",
+    "Hm": "Bm",
+    "H7": "B7",
+    "Hm7": "Bm7",
+    "Ab": "G#",
+    "Abm": "G#m",
+    "Bb": "A#",
+    "Bbm": "A#m",
+    "Db": "C#",
+    "Dbm": "C#m",
+    "Eb": "D#",
+    "Ebm": "D#m",
+    "Gb": "F#",
+    "Gbm": "F#m",
 }
 
 MAJOR_CHORDS_SEQUENCE = (

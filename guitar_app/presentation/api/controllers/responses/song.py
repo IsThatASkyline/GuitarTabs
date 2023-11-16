@@ -7,3 +7,7 @@ class SongCreateResponse(BaseModel):
 
 class SongDeleteResponse(BaseModel):
     message: str = Field("The song has been deleted", const=True)
+
+
+class TabsDeleteResponse(BaseModel):
+    message: str = Field("Tabs has been deleted", const=True)

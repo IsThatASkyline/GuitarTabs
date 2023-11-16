@@ -9,7 +9,8 @@ from guitar_app.infrastructure.db.repositories import (
     HitCounterRepository,
     MusicianRepository,
     SongRepository,
-    UserRepository, TabRepository,
+    TabRepository,
+    UserRepository,
 )
 
 

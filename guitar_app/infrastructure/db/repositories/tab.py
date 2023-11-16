@@ -1,9 +1,7 @@
-from sqlalchemy import select, delete
+from sqlalchemy import delete, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from guitar_app.application.guitar.dto import (
-    CreateTabDTO, TabDTO
-)
+from guitar_app.application.guitar.dto import CreateTabDTO, TabDTO
 from guitar_app.infrastructure.db.models import Song, Tab
 from guitar_app.infrastructure.db.repositories.base import BaseRepository
 
@@ -15,11 +13,7 @@ class TabRepository(BaseRepository[Tab]):
 
     async def add_tab(self, tab_dto: CreateTabDTO):
         for tab in tab_dto.tabs:
-            item = Tab(
-                title=tab.title,
-                song_id=tab_dto.song_id,
-                image_url=tab.image_url
-            )
+            item = Tab(title=tab.title, song_id=tab_dto.song_id, image_url=tab.image_url)
             self.session.add(item)
             await self.session.flush()
 
@@ -28,7 +22,9 @@ class TabRepository(BaseRepository[Tab]):
         tab = (await self.session.execute(query)).unique().scalar_one_or_none()
         return tab.to_dto() if tab else None
 
+    async def delete_tab_in_song(self, id_: int):
+        await super().delete(id_)
+
     async def delete_all_tabs_in_song(self, id_: int):
         query = delete(Song.tabs).where(Song.id == id_)
         await self.session.execute(query)
-

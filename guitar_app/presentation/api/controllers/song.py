@@ -2,29 +2,35 @@ from fastapi import APIRouter, Response, status
 from fastapi.params import Depends
 
 from guitar_app.application.guitar.dto import (
+    BaseTabDTO,
     BaseVerseDTO,
     CreateSongDTO,
+    CreateTabDTO,
     FavoriteSongDTO,
     FindSongDTO,
     FullSongDTO,
     GetSongDTO,
     ModulateSongDTO,
     SongDTO,
+    TabDTO,
     UpdateSongDTO,
-    UserDTO, TabDTO, CreateTabDTO, BaseTabDTO,
+    UserDTO,
 )
 from guitar_app.application.guitar.exceptions import CreateSongException, SongNotExists
 from guitar_app.application.guitar.services import SongServices
 from guitar_app.presentation.api.controllers.requests import (
     AddFavoriteSongRequest,
     CreateSongRequest,
+    CreateTabRequest,
     FindSongRequest,
     ModulateSongRequest,
     RemoveFavoriteSongRequest,
     UpdateSongRequest,
-    CreateTabRequest,
 )
-from guitar_app.presentation.api.controllers.responses import SongDeleteResponse
+from guitar_app.presentation.api.controllers.responses import (
+    SongDeleteResponse,
+    TabsDeleteResponse,
+)
 from guitar_app.presentation.api.controllers.responses.exceptions import (
     NotFoundSongError,
     SongIntegrityError,
@@ -123,11 +129,11 @@ async def delete_tabs(
     song_id: int,
     response: Response,
     song_services: SongServices = Depends(get_song_services),
-) -> NotFoundSongError | None:
+) -> TabsDeleteResponse | NotFoundSongError:
     try:
         await song_services.delete_tabs_in_song(song_id)
         response.status_code = status.HTTP_204_NO_CONTENT
-        return
+        return TabsDeleteResponse()
     except SongNotExists:
         response.status_code = status.HTTP_404_NOT_FOUND
         return NotFoundSongError()
@@ -193,13 +199,16 @@ async def create_tabs(
     tabs: list[CreateTabRequest],
     song_services: SongServices = Depends(get_song_services),
 ) -> list[TabDTO]:
-    return await song_services.create_tabs(CreateTabDTO(
-        song_id=song_id,
-        tabs=[
-            BaseTabDTO(
-                title=tab.title,
-                image_url=tab.image_url,
-            ) for tab in tabs if tabs
-        ]
-    ))
-
+    return await song_services.create_tabs(
+        CreateTabDTO(
+            song_id=song_id,
+            tabs=[
+                BaseTabDTO(
+                    title=tab.title,
+                    image_url=tab.image_url,
+                )
+                for tab in tabs
+                if tabs
+            ],
+        )
+    )

@@ -1,8 +1,8 @@
 from dataclasses import dataclass
 
 from .band import BandDTO
-from .verse import BaseVerseDTO
 from .tab import TabDTO
+from .verse import BaseVerseDTO
 
 
 @dataclass
@@ -20,6 +20,7 @@ class GetSongDTO:
 @dataclass
 class CreateSongDTO(BaseSongDTO):
     verses: list[BaseVerseDTO] | None = None
+    tabs: list[TabDTO] | None = None
 
 
 @dataclass
