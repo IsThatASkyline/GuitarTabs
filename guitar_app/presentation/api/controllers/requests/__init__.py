@@ -13,3 +13,4 @@ from .song import (
 )
 from .band import UpdateBandRequest, CreateBandRequest, UpdateMusicianBandRequest
 from .verse import CreateVerseRequest
+from .tab import CreateTabRequest

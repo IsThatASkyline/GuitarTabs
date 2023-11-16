@@ -1,7 +1,11 @@
+from aiogram.enums import ContentType
 from aiogram_dialog import DialogManager
+from aiogram_dialog.api.entities import MediaAttachment
 
-from guitar_app.application.guitar.domain.services.modulation import get_modulated_verses
 from guitar_app.application.guitar import dto, services
+from guitar_app.application.guitar.domain.services.modulation import (
+    get_modulated_verses,
+)
 from guitar_app.application.guitar.dto import GetSongDTO
 from guitar_app.infrastructure.db.uow import UnitOfWork
 from guitar_app.presentation.tgbot.jinja.chords import CHORDS_TABLATURE
@@ -9,7 +13,9 @@ from guitar_app.presentation.tgbot.models.verse import Chord, Verse, VerseString
 from guitar_app.presentation.tgbot.utils import space_ranges
 
 
-async def get_modulated_chords(uow: UnitOfWork, user: dto.UserDTO, dialog_manager: DialogManager, **_):
+async def get_modulated_chords(
+    uow: UnitOfWork, user: dto.UserDTO, dialog_manager: DialogManager, **_
+):
     song_id = dialog_manager.dialog_data.get("song_id", None) or dialog_manager.start_data["song_id"]
     song = await services.SongServices(uow).get_song_by_id(
         GetSongDTO(
@@ -21,11 +27,7 @@ async def get_modulated_chords(uow: UnitOfWork, user: dto.UserDTO, dialog_manage
 
     new_verses = get_modulated_verses(song.verses, mod_value)
     new_song = dto.FullSongDTO(
-        id=song.id,
-        title=song.title,
-        band=song.band,
-        verses=new_verses,
-        hits_count=song.hits_count
+        id=song.id, title=song.title, band=song.band, verses=new_verses, hits_count=song.hits_count
     )
     verses, unique_chords = await _get_verses_and_unique_chords(new_song.verses)
     chords_tabs = await get_chords_tabs(unique_chords)
@@ -49,25 +51,29 @@ async def get_chords(uow: UnitOfWork, user: dto.UserDTO, dialog_manager: DialogM
     mod_value = dialog_manager.dialog_data.get("mod_value", None)
     if not mod_value == 0:
         new_verses = get_modulated_verses(song.verses, mod_value)
-        new_song = dto.FullSongDTO(
-            id=song.id,
-            title=song.title,
-            band=song.band,
-            verses=new_verses,
-            hits_count=song.hits_count
-        )
-        verses, unique_chords = await _get_verses_and_unique_chords(new_song.verses)
+        verses, unique_chords = await _get_verses_and_unique_chords(new_verses)
         chords_tabs = await get_chords_tabs(unique_chords)
     else:
         verses, unique_chords = await _get_verses_and_unique_chords(song.verses)
         chords_tabs = await get_chords_tabs(unique_chords)
+    return {"song": song, "verses": verses, "chords_tabs": chords_tabs, "mod_value": mod_value}
 
-    return {
-        "song": song,
-        "verses": verses,
-        "chords_tabs": chords_tabs,
-        "mod_value": mod_value
-    }
+
+async def get_all_tabs(uow: UnitOfWork, user: dto.UserDTO, dialog_manager: DialogManager, **_):
+    song_id = dialog_manager.dialog_data.get("song_id", None) or dialog_manager.start_data["song_id"]
+
+    song = await services.SongServices(uow).get_song_by_id(
+        GetSongDTO(song_id=song_id, user_id=user.id)
+    )
+    # tabs = await services.SongServices(uow).get_tabs_for_song(song_id)
+    return {"tabs": song.tabs, "song_title": song.title, "band_title": song.band.title}
+
+
+async def get_detail_tab(uow: UnitOfWork, user: dto.UserDTO, dialog_manager: DialogManager, **_):
+    tab_id = dialog_manager.dialog_data.get("tab_id", None) or dialog_manager.start_data["tab_id"]
+    tab = await services.SongServices(uow).get_tab(tab_id)
+    tab_image = MediaAttachment(ContentType.PHOTO, url=tab.image_url)
+    return {"tab": tab_image, "title": tab.title}
 
 
 async def get_chords_tabs(chords):
@@ -190,37 +196,6 @@ async def get_verse_strings_with_tabs_for_half_verse(chords_list):
         )
         verse_strings.append(pair)
     return verse_strings, unique_chords
-
-
-async def get_all_songs(uow: UnitOfWork, **_):
-    return {
-        "songs": await services.SongServices(uow).get_all_songs(),
-    }
-
-
-async def get_songs_by_band(uow: UnitOfWork, dialog_manager: DialogManager, **_):
-    band_id = dialog_manager.dialog_data.get("band_id", None) or dialog_manager.start_data["band_id"]
-    band = await services.BandServices(uow).get_band_by_id(id_=band_id)
-    return {
-        "songs": await services.SongServices(uow).get_songs_by_band(band_id=band_id),
-        "band_title": band.title,
-    }
-
-
-async def get_favorite_songs(uow: UnitOfWork, user: dto.UserDTO, **_):
-    return {
-        "songs": await services.SongServices(uow).get_favorite_songs_by_user(user_dto=user),
-    }
-
-
-async def get_songs_founded_by_title(uow: UnitOfWork, dialog_manager: DialogManager, **_):
-    song_title = (
-        dialog_manager.dialog_data.get("song_title", None) or dialog_manager.start_data["song_title"]
-    )
-    return {
-        "songs": await services.SongServices(uow).find_song(dto.FindSongDTO(value=song_title)),
-        "song_title": song_title,
-    }
 
 
 async def _get_verses_and_unique_chords(verses):

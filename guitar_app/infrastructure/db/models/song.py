@@ -16,6 +16,7 @@ class Song(BaseAlchemyModels):
     hits_count: Mapped[int] = mapped_column(default=0, nullable=True)
 
     verses: Mapped[list["Verse"]] = relationship()
+    tabs: Mapped[list["Tab"]] = relationship()
     band: Mapped["Band"] = relationship(back_populates="songs")
     in_favorites: Mapped["User"] = relationship(
         secondary="user_favorite_table", back_populates="favorites"
@@ -33,6 +34,7 @@ class Song(BaseAlchemyModels):
             id=self.id,
             title=self.title,
             band=self.band.to_dto(),
+            tabs=[tab.to_dto() for tab in self.tabs],
             verses=[verse.to_dto() for verse in self.verses],
             hits_count=self.hits_count,
         )

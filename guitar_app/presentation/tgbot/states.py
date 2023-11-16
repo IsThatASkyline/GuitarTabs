@@ -24,6 +24,8 @@ class FavoriteSongsPanelSG(StatesGroup):
     song_menu = State()
     song_chords = State()
     song_chords_with_tabs = State()
+    song_tabs = State()
+    song_tab_detail = State()
 
 
 class AllSongsPanelSG(StatesGroup):
@@ -32,6 +34,8 @@ class AllSongsPanelSG(StatesGroup):
     song_menu = State()
     song_chords = State()
     song_chords_with_tabs = State()
+    song_tabs = State()
+    song_tab_detail = State()
 
 
 class FoundedSongsPanelSG(StatesGroup):
@@ -42,6 +46,8 @@ class FoundedSongsPanelSG(StatesGroup):
     song_menu = State()
     song_chords = State()
     song_chords_with_tabs = State()
+    song_tabs = State()
+    song_tab_detail = State()
 
 
 class BandSongsPanelSG(StatesGroup):
@@ -50,11 +56,16 @@ class BandSongsPanelSG(StatesGroup):
     song_menu = State()
     song_chords = State()
     song_chords_with_tabs = State()
+    song_tabs = State()
+    song_tab_detail = State()
 
 
 class AllBandsPanelSG(StatesGroup):
     choose_band = State()
-    menu = State()
-    band_menu = State()
-    band_song = State()
-    band_song_chords = State()
+    choose_song = State()
+    song = State()
+    song_menu = State()
+    song_chords = State()
+    song_chords_with_tabs = State()
+    song_tabs = State()
+    song_tab_detail = State()

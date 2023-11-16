@@ -19,3 +19,4 @@ from .song import (
 )
 from .verse import BaseVerseDTO
 from .hit_counter import HitDTO, BaseHitDTO, CreateHitDTO
+from .tab import BaseTabDTO, TabDTO, CreateTabDTO

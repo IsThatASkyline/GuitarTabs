@@ -1,13 +1,17 @@
 from guitar_app.application.common.usecases.base import BaseUseCase
-from guitar_app.application.guitar.domain.services.modulation import get_modulated_verses
+from guitar_app.application.guitar.domain.services.modulation import (
+    get_modulated_verses,
+)
 from guitar_app.application.guitar.dto import (
     CreateSongDTO,
+    CreateTabDTO,
     FavoriteSongDTO,
     FindSongDTO,
     FullSongDTO,
     GetSongDTO,
     ModulateSongDTO,
     SongDTO,
+    TabDTO,
     UpdateSongDTO,
 )
 from guitar_app.application.guitar.exceptions import CreateSongException, SongNotExists
@@ -26,11 +30,25 @@ class GetSongById(SongUseCase):
         raise SongNotExists
 
 
+class GetTabById(SongUseCase):
+    async def __call__(self, id_: int) -> TabDTO:
+        if tab := await self.uow.app_holder.tab_repo.get_tab(id_):
+            return tab
+        raise Exception
+
+
 class CreateSong(SongUseCase):
     async def __call__(self, song_dto: CreateSongDTO) -> int:
         if await self.uow.app_holder.band_repo.get_band(song_dto.band_id):
             return await self.uow.app_holder.song_repo.add_song(song_dto)
         raise CreateSongException
+
+
+class CreateTabs(SongUseCase):
+    async def __call__(self, tabs_dto: CreateTabDTO) -> int:
+        if await self.uow.app_holder.song_repo.get_song(tabs_dto.song_id):
+            return await self.uow.app_holder.tab_repo.add_tab(tabs_dto)
+        raise Exception
 
 
 class GetSongs(SongUseCase):
@@ -86,6 +104,13 @@ class FindSong(SongUseCase):
         return None
 
 
+class GetTabsForSong(SongUseCase):
+    async def __call__(self, id_: int) -> list[TabDTO] | None:
+        if tabs := await self.uow.app_holder.song_repo.get_tabs_for_song(id_):
+            return tabs
+        raise SongNotExists
+
+
 class GetModulatedSong(SongUseCase):
     async def __call__(self, song_modulate_dto: ModulateSongDTO) -> FullSongDTO:
         if song := await self.uow.app_holder.song_repo.get_song(song_modulate_dto.id):
@@ -103,9 +128,15 @@ class GetModulatedSong(SongUseCase):
 class DeleteSong(SongUseCase):
     async def __call__(self, id_: int) -> None:
         if await self.uow.app_holder.song_repo.get_song(id_):
-            await self.uow.app_holder.song_repo.delete_song(id_)
-            return
+            return await self.uow.app_holder.song_repo.delete_song(id_)
         raise SongNotExists
+
+
+class DeleteTabs(SongUseCase):
+    async def __call__(self, id_: int) -> None:
+        if (await self.uow.app_holder.song_repo.get_song(id_)).tabs:
+            return await self.uow.app_holder.tab_repo.delete_all_tabs_in_song(id_)
+        raise Exception
 
 
 class HitSong(SongUseCase):

@@ -1,5 +1,5 @@
 from aiogram import F
-from aiogram_dialog.widgets.kbd import Row, Button
+from aiogram_dialog.widgets.kbd import Button, Row
 from aiogram_dialog.widgets.text import Const, Format
 
 from guitar_app.presentation.tgbot.dialogs.song_manage.handlers import down_key, up_key
@@ -29,5 +29,5 @@ modulation_menu = Row(
         Const("⬆"),
         id="key_plus",
         on_click=up_key,
-    )
+    ),
 )
