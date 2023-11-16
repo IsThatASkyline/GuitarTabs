@@ -20,7 +20,6 @@ class GetSongDTO:
 @dataclass
 class CreateSongDTO(BaseSongDTO):
     verses: list[BaseVerseDTO] | None = None
-    tabs: list[TabDTO] | None = None
 
 
 @dataclass

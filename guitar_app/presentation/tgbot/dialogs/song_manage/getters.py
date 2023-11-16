@@ -13,32 +13,6 @@ from guitar_app.presentation.tgbot.models.verse import Chord, Verse, VerseString
 from guitar_app.presentation.tgbot.utils import space_ranges
 
 
-async def get_modulated_chords(
-    uow: UnitOfWork, user: dto.UserDTO, dialog_manager: DialogManager, **_
-):
-    song_id = dialog_manager.dialog_data.get("song_id", None) or dialog_manager.start_data["song_id"]
-    song = await services.SongServices(uow).get_song_by_id(
-        GetSongDTO(
-            song_id=song_id,
-            user_id=user.telegram_id,
-        )
-    )
-    mod_value = dialog_manager.dialog_data.get("mod_value", None)
-
-    new_verses = get_modulated_verses(song.verses, mod_value)
-    new_song = dto.FullSongDTO(
-        id=song.id, title=song.title, band=song.band, verses=new_verses, hits_count=song.hits_count
-    )
-    verses, unique_chords = await _get_verses_and_unique_chords(new_song.verses)
-    chords_tabs = await get_chords_tabs(unique_chords)
-
-    return {
-        "song": song,
-        "verses": verses,
-        "chords_tabs": chords_tabs,
-    }
-
-
 async def get_chords(uow: UnitOfWork, user: dto.UserDTO, dialog_manager: DialogManager, **_):
     song_id = dialog_manager.dialog_data.get("song_id", None) or dialog_manager.start_data["song_id"]
     song = await services.SongServices(uow).get_song_by_id(
@@ -52,11 +26,11 @@ async def get_chords(uow: UnitOfWork, user: dto.UserDTO, dialog_manager: DialogM
     if not mod_value == 0:
         new_verses = get_modulated_verses(song.verses, mod_value)
         verses, unique_chords = await _get_verses_and_unique_chords(new_verses)
-        chords_tabs = await get_chords_tabs(unique_chords)
+        chords_fingerings = await get_chords_fingerings(unique_chords)
     else:
         verses, unique_chords = await _get_verses_and_unique_chords(song.verses)
-        chords_tabs = await get_chords_tabs(unique_chords)
-    return {"song": song, "verses": verses, "chords_tabs": chords_tabs, "mod_value": mod_value}
+        chords_fingerings = await get_chords_fingerings(unique_chords)
+    return {"song": song, "verses": verses, "chords_fingerings": chords_fingerings, "mod_value": mod_value}
 
 
 async def get_all_tabs(uow: UnitOfWork, user: dto.UserDTO, dialog_manager: DialogManager, **_):
@@ -65,7 +39,6 @@ async def get_all_tabs(uow: UnitOfWork, user: dto.UserDTO, dialog_manager: Dialo
     song = await services.SongServices(uow).get_song_by_id(
         GetSongDTO(song_id=song_id, user_id=user.id)
     )
-    # tabs = await services.SongServices(uow).get_tabs_for_song(song_id)
     return {"tabs": song.tabs, "song_title": song.title, "band_title": song.band.title}
 
 
@@ -76,14 +49,14 @@ async def get_detail_tab(uow: UnitOfWork, user: dto.UserDTO, dialog_manager: Dia
     return {"tab": tab_image, "title": tab.title}
 
 
-async def get_chords_tabs(chords):
-    chords_tabs = []
+async def get_chords_fingerings(chords):
+    chords_fingerings = []
     for chord in chords:
         try:
-            chords_tabs.append(Chord(title=chord, tab=CHORDS_TABLATURE[f"{chord}"]))
+            chords_fingerings.append(Chord(title=chord, tab=CHORDS_TABLATURE[f"{chord}"]))
         except KeyError:
             pass
-    return chords_tabs
+    return chords_fingerings
 
 
 async def get_song(uow: UnitOfWork, user: dto.UserDTO, dialog_manager: DialogManager, **_):
@@ -157,7 +130,7 @@ async def get_verse_strings_for_half_verse(chords_list):
     return verse_strings
 
 
-async def get_verse_strings_with_tabs_for_full_verse(chords_list, lyrics_list):
+async def get_verse_strings_with_fingerings_for_full_verse(chords_list, lyrics_list):
     verse_strings = []
     unique_chords = set()
     for chords, lyrics in zip(*(chords_list, lyrics_list)):
@@ -182,7 +155,7 @@ async def get_verse_strings_with_tabs_for_full_verse(chords_list, lyrics_list):
     return verse_strings, unique_chords
 
 
-async def get_verse_strings_with_tabs_for_half_verse(chords_list):
+async def get_verse_strings_with_fingerings_for_half_verse(chords_list):
     verse_strings = []
     unique_chords = set()
     for chords in chords_list:
@@ -212,13 +185,13 @@ async def _get_verses_and_unique_chords(verses):
             lyrics_list = None
 
         if lyrics_list and chords_list:
-            verse_strings, chords = await get_verse_strings_with_tabs_for_full_verse(
+            verse_strings, chords = await get_verse_strings_with_fingerings_for_full_verse(
                 chords_list, lyrics_list
             )
             unique_chords.update(chords)
             result.append(Verse(title=verse.title, strings=verse_strings))
         elif not lyrics_list and chords_list:
-            verse_strings, chords = await get_verse_strings_with_tabs_for_half_verse(chords_list)
+            verse_strings, chords = await get_verse_strings_with_fingerings_for_half_verse(chords_list)
             unique_chords.update(chords)
             result.append(Verse(title=verse.title, strings=verse_strings))
         elif not lyrics_list and not chords_list:
