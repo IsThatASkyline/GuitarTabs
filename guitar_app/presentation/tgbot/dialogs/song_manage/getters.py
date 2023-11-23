@@ -13,32 +13,6 @@ from guitar_app.presentation.tgbot.models.verse import Chord, Verse, VerseString
 from guitar_app.presentation.tgbot.utils import space_ranges
 
 
-async def get_modulated_chords(
-    uow: UnitOfWork, user: dto.UserDTO, dialog_manager: DialogManager, **_
-):
-    song_id = dialog_manager.dialog_data.get("song_id", None) or dialog_manager.start_data["song_id"]
-    song = await services.SongServices(uow).get_song_by_id(
-        GetSongDTO(
-            song_id=song_id,
-            user_id=user.telegram_id,
-        )
-    )
-    mod_value = dialog_manager.dialog_data.get("mod_value", None)
-
-    new_verses = get_modulated_verses(song.verses, mod_value)
-    new_song = dto.FullSongDTO(
-        id=song.id, title=song.title, band=song.band, verses=new_verses, hits_count=song.hits_count
-    )
-    verses, unique_chords = await _get_verses_and_unique_chords(new_song.verses)
-    chords_tabs = await get_chords_tabs(unique_chords)
-
-    return {
-        "song": song,
-        "verses": verses,
-        "chords_tabs": chords_tabs,
-    }
-
-
 async def get_chords(uow: UnitOfWork, user: dto.UserDTO, dialog_manager: DialogManager, **_):
     song_id = dialog_manager.dialog_data.get("song_id", None) or dialog_manager.start_data["song_id"]
     song = await services.SongServices(uow).get_song_by_id(
@@ -65,7 +39,6 @@ async def get_all_tabs(uow: UnitOfWork, user: dto.UserDTO, dialog_manager: Dialo
     song = await services.SongServices(uow).get_song_by_id(
         GetSongDTO(song_id=song_id, user_id=user.id)
     )
-    # tabs = await services.SongServices(uow).get_tabs_for_song(song_id)
     return {"tabs": song.tabs, "song_title": song.title, "band_title": song.band.title}
 
 

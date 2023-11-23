@@ -6,6 +6,7 @@ from .verse import CreateVerseRequest
 class BaseSong(BaseModel):
     title: str
     band_id: int
+    description: str | None = None
 
 
 class CreateSongRequest(BaseSong):

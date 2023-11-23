@@ -22,6 +22,7 @@ class SongRepository(BaseRepository[Song]):
     async def add_song(self, song_dto: CreateSongDTO) -> int:
         song = Song(
             title=song_dto.title,
+            description=song_dto.description,
             band_id=song_dto.band_id,
         )
         self.session.add(song)
