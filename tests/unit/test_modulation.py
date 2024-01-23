@@ -12,8 +12,8 @@ async def test_get_modulated_verses(
     modulation_in_data2,
     modulation_expected_data2,
 ) -> None:
-    result = get_modulated_verses(*modulation_in_data)
-    result2 = get_modulated_verses(*modulation_in_data2)
+    result = await get_modulated_verses(*modulation_in_data)
+    result2 = await get_modulated_verses(*modulation_in_data2)
 
     assert result == modulation_expected_data
     assert result2 == modulation_expected_data2

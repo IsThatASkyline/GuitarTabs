@@ -114,7 +114,7 @@ class GetTabsForSong(SongUseCase):
 class GetModulatedSong(SongUseCase):
     async def __call__(self, song_modulate_dto: ModulateSongDTO) -> FullSongDTO:
         if song := await self.uow.app_holder.song_repo.get_song(song_modulate_dto.id):
-            modulate_verses = get_modulated_verses(song.verses, song_modulate_dto.value)
+            modulate_verses = await get_modulated_verses(song.verses, song_modulate_dto.value)
             return FullSongDTO(
                 id=song.id,
                 title=song.title,

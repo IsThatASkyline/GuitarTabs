@@ -8,7 +8,7 @@ from guitar_app.application.guitar.domain.utils.default_constants import (
 from guitar_app.application.guitar.dto import BaseVerseDTO
 
 
-def modulate(song_chords: list[str], value: int) -> str:
+async def modulate(song_chords: list[str], value: int) -> str:
     new_chord_sequence = []
     for verse_line in song_chords:
         verse_line_chords = verse_line.split()
@@ -30,7 +30,7 @@ def modulate(song_chords: list[str], value: int) -> str:
             try:
                 chord_index = base_seq.index(chord)
             except ValueError:
-                chord_index = base_seq.index(refactor_chord_to_standard(chord))
+                chord_index = base_seq.index(await refactor_chord_to_standard(chord))
 
             new_sequence = base_seq[chord_index:] + base_seq[:chord_index]
             new_verse_line_chords.append(new_sequence[value])
@@ -38,12 +38,12 @@ def modulate(song_chords: list[str], value: int) -> str:
     return "//".join(new_chord_sequence)
 
 
-def get_modulated_verses(verses: list[BaseVerseDTO], value: int) -> list[BaseVerseDTO]:
+async def get_modulated_verses(verses: list[BaseVerseDTO], value: int) -> list[BaseVerseDTO]:
     new_verses = []
     for verse in verses:
         if verse.lyrics:
             old_chords = verse.chords.split("//")
-            new_chords = modulate(old_chords, value)
+            new_chords = await modulate(old_chords, value)
             new_verses.append(
                 BaseVerseDTO(title=verse.title, lyrics=verse.lyrics, chords=new_chords)
             )
@@ -52,5 +52,5 @@ def get_modulated_verses(verses: list[BaseVerseDTO], value: int) -> list[BaseVer
     return new_verses
 
 
-def refactor_chord_to_standard(chord: str):
+async def refactor_chord_to_standard(chord: str):
     return STANDARD_CHORDS[chord]
