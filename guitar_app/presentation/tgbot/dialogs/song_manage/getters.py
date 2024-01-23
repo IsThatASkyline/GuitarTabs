@@ -30,7 +30,12 @@ async def get_chords(uow: UnitOfWork, user: dto.UserDTO, dialog_manager: DialogM
     else:
         verses, unique_chords = await _get_verses_and_unique_chords(song.verses)
         chords_fingerings = await get_chords_fingerings(unique_chords)
-    return {"song": song, "verses": verses, "chords_fingerings": chords_fingerings, "mod_value": mod_value}
+    return {
+        "song": song,
+        "verses": verses,
+        "chords_fingerings": chords_fingerings,
+        "mod_value": mod_value,
+    }
 
 
 async def get_all_tabs(uow: UnitOfWork, user: dto.UserDTO, dialog_manager: DialogManager, **_):
@@ -191,7 +196,9 @@ async def _get_verses_and_unique_chords(verses):
             unique_chords.update(chords)
             result.append(Verse(title=verse.title, strings=verse_strings))
         elif not lyrics_list and chords_list:
-            verse_strings, chords = await get_verse_strings_with_fingerings_for_half_verse(chords_list)
+            verse_strings, chords = await get_verse_strings_with_fingerings_for_half_verse(
+                chords_list
+            )
             unique_chords.update(chords)
             result.append(Verse(title=verse.title, strings=verse_strings))
         elif not lyrics_list and not chords_list:

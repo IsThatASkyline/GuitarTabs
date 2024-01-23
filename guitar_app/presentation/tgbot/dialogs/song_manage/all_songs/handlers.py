@@ -12,7 +12,7 @@ async def select_song(c: CallbackQuery, widget: Any, manager: DialogManager, ite
     if not isinstance(data, dict):
         data = {}
     data["song_id"] = int(item_id)
-    data['mod_value'] = 0
+    data["mod_value"] = 0
     await manager.switch_to(states.AllSongsPanelSG.song_menu)
 
 

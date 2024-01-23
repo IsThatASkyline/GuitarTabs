@@ -6,19 +6,33 @@ from aiogram_dialog.widgets.kbd import (
     Cancel,
     ScrollingGroup,
     Select,
-    SwitchTo, Start,
+    Start,
+    SwitchTo,
 )
 from aiogram_dialog.widgets.media import DynamicMedia
 from aiogram_dialog.widgets.text import Const, Format, Jinja
 
 from guitar_app.presentation.tgbot import states
-from guitar_app.presentation.tgbot.dialogs.song_manage.founded_songs.getters import get_songs_founded_by_title
-from guitar_app.presentation.tgbot.dialogs.song_manage.founded_songs.handlers import find_song_by_title, \
-    select_song_founded_by_title, select_founded_song_tab
-from guitar_app.presentation.tgbot.dialogs.song_manage.getters import get_song, get_chords, get_all_tabs, get_detail_tab
-from guitar_app.presentation.tgbot.dialogs.song_manage.handlers import add_song_to_favorite, remove_song_from_favorite, \
-    refresh_mod_value
-from guitar_app.presentation.tgbot.jinja.templates import templates, menu
+from guitar_app.presentation.tgbot.dialogs.song_manage.founded_songs.getters import (
+    get_songs_founded_by_title,
+)
+from guitar_app.presentation.tgbot.dialogs.song_manage.founded_songs.handlers import (
+    find_song_by_title,
+    select_founded_song_tab,
+    select_song_founded_by_title,
+)
+from guitar_app.presentation.tgbot.dialogs.song_manage.getters import (
+    get_all_tabs,
+    get_chords,
+    get_detail_tab,
+    get_song,
+)
+from guitar_app.presentation.tgbot.dialogs.song_manage.handlers import (
+    add_song_to_favorite,
+    refresh_mod_value,
+    remove_song_from_favorite,
+)
+from guitar_app.presentation.tgbot.jinja.templates import menu, templates
 
 songs_founded_by_title = Dialog(
     Window(
