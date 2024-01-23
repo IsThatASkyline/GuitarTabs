@@ -12,11 +12,13 @@ async def select_favorite_song(c: CallbackQuery, widget: Any, manager: DialogMan
     if not isinstance(data, dict):
         data = {}
     data["song_id"] = int(item_id)
-    data['mod_value'] = 0
+    data["mod_value"] = 0
     await manager.switch_to(states.FavoriteSongsPanelSG.song_menu)
 
 
-async def select_favorite_song_tab(c: CallbackQuery, widget: Any, manager: DialogManager, item_id: str):
+async def select_favorite_song_tab(
+    c: CallbackQuery, widget: Any, manager: DialogManager, item_id: str
+):
     await c.answer()
     data = manager.dialog_data
     data["tab_id"] = int(item_id)

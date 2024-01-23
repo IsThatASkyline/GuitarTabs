@@ -1,22 +1,29 @@
 from aiogram import F
 from aiogram_dialog import Dialog, Window
-from aiogram_dialog.widgets.kbd import (
-    Button,
-    Cancel,
-    ScrollingGroup,
-    Select,
-    SwitchTo,
-)
+from aiogram_dialog.widgets.kbd import Button, Cancel, ScrollingGroup, Select, SwitchTo
 from aiogram_dialog.widgets.media import DynamicMedia
 from aiogram_dialog.widgets.text import Const, Format, Jinja
 
 from guitar_app.presentation.tgbot import states
-from guitar_app.presentation.tgbot.dialogs.song_manage.all_songs.getters import get_all_songs
-from guitar_app.presentation.tgbot.dialogs.song_manage.all_songs.handlers import select_song, select_song_tab
-from guitar_app.presentation.tgbot.dialogs.song_manage.getters import get_song, get_chords, get_all_tabs, get_detail_tab
-from guitar_app.presentation.tgbot.dialogs.song_manage.handlers import add_song_to_favorite, remove_song_from_favorite, \
-    refresh_mod_value
-from guitar_app.presentation.tgbot.jinja.templates import templates, menu
+from guitar_app.presentation.tgbot.dialogs.song_manage.all_songs.getters import (
+    get_all_songs,
+)
+from guitar_app.presentation.tgbot.dialogs.song_manage.all_songs.handlers import (
+    select_song,
+    select_song_tab,
+)
+from guitar_app.presentation.tgbot.dialogs.song_manage.getters import (
+    get_all_tabs,
+    get_chords,
+    get_detail_tab,
+    get_song,
+)
+from guitar_app.presentation.tgbot.dialogs.song_manage.handlers import (
+    add_song_to_favorite,
+    refresh_mod_value,
+    remove_song_from_favorite,
+)
+from guitar_app.presentation.tgbot.jinja.templates import menu, templates
 
 all_songs = Dialog(
     Window(
@@ -98,7 +105,7 @@ all_songs = Dialog(
         ),
         menu.modulation_menu,
         SwitchTo(
-            Const('📜Показать текст и аккорды'),
+            Const("📜Показать текст и аккорды"),
             id="to_chords",
             state=states.AllSongsPanelSG.song_chords,
         ),

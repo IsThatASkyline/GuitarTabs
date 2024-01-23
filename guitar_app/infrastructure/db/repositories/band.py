@@ -27,10 +27,7 @@ class BandRepository(BaseRepository[Band]):
 
     async def get_band(self, id_: int) -> FullBandDTO:
         query = (
-            select(Band)
-            .options(joinedload(Band.songs))
-            .where(Band.id == id_)
-            .order_by(Band.title)
+            select(Band).options(joinedload(Band.songs)).where(Band.id == id_).order_by(Band.title)
         )
         band = (await self._session.execute(query)).unique().scalar_one_or_none()
         return band.to_full_dto() if band else None

@@ -1,6 +1,6 @@
 from aiogram_dialog import DialogManager
 
-from guitar_app.application.guitar import services, dto
+from guitar_app.application.guitar import dto, services
 from guitar_app.infrastructure.db.uow import UnitOfWork
 
 
