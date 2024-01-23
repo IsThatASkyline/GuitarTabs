@@ -28,7 +28,7 @@ class BandRepository(BaseRepository[Band]):
     async def get_band(self, id_: int) -> FullBandDTO:
         query = (
             select(Band)
-            .options(joinedload(Band.songs), joinedload(Band.members))
+            .options(joinedload(Band.songs))
             .where(Band.id == id_)
             .order_by(Band.title)
         )

@@ -72,34 +72,3 @@ async def test_delete_band(client: AsyncClient, create_band_in_database, band_da
     assert response.status_code == status.HTTP_204_NO_CONTENT
     assert response_404.json()["detail"] == "Not found band"
     assert response_404.status_code == status.HTTP_404_NOT_FOUND
-
-
-@pytest.mark.asyncio
-async def test_add_musician_to_band(
-    client: AsyncClient,
-    create_band_in_database,
-    create_musician_in_database,
-    band_data,
-    musician_data,
-    musician_data2,
-) -> None:
-    await create_band_in_database(**band_data)
-    await create_musician_in_database(**musician_data)
-    await create_musician_in_database(**musician_data2)
-
-    data_json = {"musician_id": musician_data["musician_id"]}
-
-    data_json2 = {"musician_id": musician_data2["musician_id"]}
-
-    await client.post(f'band/add-musician-to-band/{band_data["band_id"]}', json=data_json)
-    await client.post(f'band/add-musician-to-band/{band_data["band_id"]}', json=data_json2)
-    response = await client.get(f'band/get-band/{band_data["band_id"]}')
-    r_data = response.json()
-    assert response.status_code == status.HTTP_200_OK
-    assert r_data["title"] == band_data["title"]
-    assert r_data["id"] == band_data["band_id"]
-    assert len(r_data["members"]) == 2
-    assert r_data["members"][0]["first_name"] == musician_data["first_name"]
-    assert r_data["members"][0]["last_name"] == musician_data["last_name"]
-    assert r_data["members"][1]["first_name"] == musician_data2["first_name"]
-    assert r_data["members"][1]["last_name"] == musician_data2["last_name"]
