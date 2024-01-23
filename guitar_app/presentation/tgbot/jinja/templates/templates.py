@@ -2,6 +2,9 @@ from aiogram_dialog.widgets.text import Jinja
 
 SONG_CHORDS_WITHOUT_TABS_TEMPLATE = Jinja(
     "<b>{{ song.band.title }} - {{ song.title }}</b>\n"
+    "{% if song.description  %}"
+    "\n\n{{ song.description }}\n"
+    "{% endif %}"
     "{% for verse in verses %}"
     "{% if not verse.strings  %}"
     "\n\n{{ verse.title }}\n"
