@@ -14,11 +14,6 @@ class Band(BaseAlchemyModels):
         nullable=False,
     )
     songs: Mapped[list["Song"]] = relationship(back_populates="band")
-    members: Mapped[list["Musician"]] = relationship(
-        back_populates="bands", secondary="musician_band_table"
-    )
-
-    # Альбомы
 
     def to_dto(self) -> BandDTO:
         return BandDTO(
@@ -30,6 +25,5 @@ class Band(BaseAlchemyModels):
         return FullBandDTO(
             id=self.id,
             title=self.title,
-            members=[member.to_dto() for member in self.members],
             songs=[song.to_dto() for song in self.songs],
         )

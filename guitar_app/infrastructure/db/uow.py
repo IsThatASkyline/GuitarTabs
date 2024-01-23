@@ -3,11 +3,9 @@ import abc
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from guitar_app.infrastructure.db.repositories import (
-    BandMembersRepository,
     BandRepository,
     FavoriteRepository,
     HitCounterRepository,
-    MusicianRepository,
     SongRepository,
     TabRepository,
     UserRepository,
@@ -49,12 +47,10 @@ class AbstractHolder:
 class AppHolder(AbstractHolder):
     def __init__(self, session: AsyncSession) -> None:
         self.user_repo = UserRepository(session)
-        self.musician_repo = MusicianRepository(session)
         self.band_repo = BandRepository(session)
         self.song_repo = SongRepository(session)
         self.tab_repo = TabRepository(session)
         self.favorites_repo = FavoriteRepository(session)
-        self.band_members_repo = BandMembersRepository(session)
         self.hit_counter_repo = HitCounterRepository(session)
 
 

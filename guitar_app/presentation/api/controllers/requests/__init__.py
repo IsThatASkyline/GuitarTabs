@@ -1,4 +1,3 @@
-from .musician import CreateMusicianRequest, UpdateMusicianRequest
 from .user import (
     CreateUserRequest,
     UpdateUserRequest,
@@ -11,6 +10,6 @@ from .song import (
     RemoveFavoriteSongRequest,
     FindSongRequest,
 )
-from .band import UpdateBandRequest, CreateBandRequest, UpdateMusicianBandRequest
+from .band import UpdateBandRequest, CreateBandRequest
 from .verse import CreateVerseRequest
 from .tab import CreateTabRequest

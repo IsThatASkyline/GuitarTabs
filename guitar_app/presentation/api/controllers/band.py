@@ -6,19 +6,16 @@ from guitar_app.application.guitar.dto import (
     CreateBandDTO,
     FullBandDTO,
     UpdateBandDTO,
-    UpdateMusicianBandDTO,
 )
-from guitar_app.application.guitar.exceptions import BandNotExists, MusicianNotExists
+from guitar_app.application.guitar.exceptions import BandNotExists
 from guitar_app.application.guitar.services import BandServices
 from guitar_app.presentation.api.controllers.requests import (
     CreateBandRequest,
     UpdateBandRequest,
-    UpdateMusicianBandRequest,
 )
 from guitar_app.presentation.api.controllers.responses import BandDeleteResponse
 from guitar_app.presentation.api.controllers.responses.exceptions import (
     NotFoundBandError,
-    NotFoundMusicianError,
 )
 from guitar_app.presentation.api.di.providers.services import get_band_services
 
@@ -67,25 +64,6 @@ async def update_band(
     except BandNotExists:
         response.status_code = response.status_code = status.HTTP_404_NOT_FOUND
         return NotFoundBandError()
-
-
-@router.post("/add-musician-to-band/{band_id}")
-async def add_musician_to_band(
-    band_id: int,
-    response: Response,
-    band: UpdateMusicianBandRequest,
-    band_services: BandServices = Depends(get_band_services),
-) -> FullBandDTO | NotFoundBandError | NotFoundMusicianError:
-    try:
-        return await band_services.add_musician_to_band(
-            UpdateMusicianBandDTO(band_id=band_id, **band.dict())
-        )
-    except BandNotExists:
-        response.status_code = status.HTTP_404_NOT_FOUND
-        return NotFoundBandError()
-    except MusicianNotExists:
-        response.status_code = status.HTTP_404_NOT_FOUND
-        return NotFoundMusicianError()
 
 
 @router.delete("/delete-band/{band_id}")

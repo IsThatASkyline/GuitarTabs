@@ -4,9 +4,8 @@ from guitar_app.application.guitar.dto import (
     CreateBandDTO,
     FullBandDTO,
     UpdateBandDTO,
-    UpdateMusicianBandDTO,
 )
-from guitar_app.application.guitar.exceptions import BandNotExists, MusicianNotExists
+from guitar_app.application.guitar.exceptions import BandNotExists
 from guitar_app.infrastructure.db.uow import UnitOfWork
 
 
@@ -37,17 +36,6 @@ class UpdateBand(BandUseCase):
         if await self.uow.app_holder.band_repo.get_band(band_update_dto.id):
             await self.uow.app_holder.band_repo.update_band(band_update_dto)
             return
-        raise BandNotExists
-
-
-class UpdateMusicianBand(BandUseCase):
-    async def __call__(self, membership_update_dto: UpdateMusicianBandDTO) -> None:
-        if await self.uow.app_holder.band_repo.get_band(membership_update_dto.band_id):
-            if await self.uow.app_holder.musician_repo.get_musician(
-                membership_update_dto.musician_id
-            ):
-                return await self.uow.app_holder.band_members_repo.add_member(membership_update_dto)
-            raise MusicianNotExists
         raise BandNotExists
 
 

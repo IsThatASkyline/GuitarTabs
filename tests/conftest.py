@@ -43,9 +43,7 @@ def event_loop(request):
 @pytest.fixture(scope="function", autouse=True)
 async def clean_tables(db_session_test) -> None:
     tables = (
-        "musician_table",
         "song_table",
-        "musician_band_table",
         "band_table",
         "verse_table",
         "user_table",
@@ -77,7 +75,6 @@ async def client() -> AsyncGenerator[AsyncClient, None]:
 
 pytest_plugins = [
     "tests.fixtures.band_fixtures",
-    "tests.fixtures.musician_fixtures",
     "tests.fixtures.song_fixtures",
     "tests.fixtures.user_fixtures",
 ]

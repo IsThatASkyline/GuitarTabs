@@ -11,7 +11,3 @@ class CreateBandRequest(BaseBand):
 
 class UpdateBandRequest(BaseBand):
     pass
-
-
-class UpdateMusicianBandRequest(BaseModel):
-    musician_id: int

@@ -1,7 +1,5 @@
 from dataclasses import dataclass
 
-from .musician import MusicianDTO
-
 
 @dataclass
 class BaseBandDTO:
@@ -31,11 +29,4 @@ class FullBandDTO:
 
     id: int
     title: str
-    members: list[MusicianDTO] | None
     songs: list[SongDTO] | None
-
-
-@dataclass
-class UpdateMusicianBandDTO:
-    musician_id: int
-    band_id: int
