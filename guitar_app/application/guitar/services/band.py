@@ -18,11 +18,11 @@ class BandServices:
     def __init__(self, uow: UnitOfWork) -> None:
         self.uow = uow
 
-    async def create_band(self, band_dto: CreateBandDTO) -> FullBandDTO:
+    async def create_band(self, band_dto: CreateBandDTO) -> BandDTO:
         async with self.uow:
             band = await CreateBand(self.uow)(band_dto)
             await self.uow.commit()
-            return await GetBandById(self.uow)(band.id)
+            return band
 
     async def get_all_bands(self) -> list[BandDTO]:
         return await GetBands(self.uow)()

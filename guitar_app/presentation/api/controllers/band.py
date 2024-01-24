@@ -27,7 +27,7 @@ async def create_band(
     band: CreateBandRequest,
     response: Response,
     band_services: BandServices = Depends(get_band_services),
-) -> FullBandDTO:
+) -> BandDTO:
     response.status_code = status.HTTP_201_CREATED
     return await band_services.create_band(CreateBandDTO(**band.dict()))
 
