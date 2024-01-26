@@ -6,6 +6,7 @@ from aiogram.types import TelegramObject, Update
 from sqlalchemy.exc import IntegrityError
 
 from guitar_app.application.guitar import dto, services
+from guitar_app.application.guitar.dto import UserDTO
 from guitar_app.infrastructure.db.uow import UnitOfWork
 from guitar_app.presentation.tgbot.utils.data import MiddlewareData
 

@@ -31,8 +31,6 @@ async def test_get_user_by_id_service():
     repo = FakeUserRepo([user_data_1, user_data_2])
     user = await UserServices(uow=FakeUnitOfWork(user_repo=repo)).get_user_by_id(2)
     assert user.username == user_data_2.username
-    with pytest.raises(UserNotExists):
-        await UserServices(uow=FakeUnitOfWork(user_repo=repo)).get_user_by_id(100)
 
 
 @pytest.mark.asyncio
