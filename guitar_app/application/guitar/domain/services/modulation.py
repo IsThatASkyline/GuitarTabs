@@ -41,7 +41,7 @@ async def modulate(song_chords: list[str], value: int) -> str:
 async def get_modulated_verses(verses: list[BaseVerseDTO], value: int) -> list[BaseVerseDTO]:
     new_verses = []
     for verse in verses:
-        if verse.lyrics:
+        if verse.chords:
             old_chords = verse.chords.split("//")
             new_chords = await modulate(old_chords, value)
             new_verses.append(
