@@ -99,4 +99,3 @@ class FakeUnitOfWork:
 
     async def rollback(self):
         pass
-
