@@ -75,6 +75,7 @@ async def after_modulate_song_data1():
     return {
         "id": 1,
         "title": "string",
+        "description": None,
         "band": {
             "id": 1,
             "title": "test_band",
@@ -93,6 +94,7 @@ async def after_modulate_song_data2():
     return {
         "id": 1,
         "title": "string",
+        "description": None,
         "band": {
             "id": 1,
             "title": "test_band",

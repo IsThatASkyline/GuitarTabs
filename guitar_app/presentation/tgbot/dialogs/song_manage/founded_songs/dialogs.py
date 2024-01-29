@@ -24,6 +24,7 @@ from guitar_app.presentation.tgbot.dialogs.song_manage.founded_songs.handlers im
 from guitar_app.presentation.tgbot.dialogs.song_manage.getters import (
     get_all_tabs,
     get_chords,
+    get_fingerings,
     get_detail_tab,
     get_song,
 )
@@ -137,7 +138,7 @@ songs_founded_by_title = Dialog(
             on_click=refresh_mod_value,
         ),
         state=states.FoundedSongsPanelSG.song_chords_with_tabs,
-        getter=get_chords,
+        getter=get_fingerings,
     ),
     Window(
         Jinja("Табы к <b>{{ band_title }} - {{ song_title }}</b>"),

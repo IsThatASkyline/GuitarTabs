@@ -10,6 +10,7 @@ class Song(BaseAlchemyModels):
 
     id: Mapped[int] = mapped_column(primary_key=True)
     title: Mapped[str] = mapped_column(String(125), nullable=False)
+    description: Mapped[str] = mapped_column(String(200), nullable=True)
     band_id: Mapped[int] = mapped_column(
         ForeignKey("band_table.id", ondelete="CASCADE"), nullable=False
     )
@@ -33,6 +34,7 @@ class Song(BaseAlchemyModels):
         return FullSongDTO(
             id=self.id,
             title=self.title,
+            description=self.description,
             band=self.band.to_dto(),
             tabs=[tab.to_dto() for tab in self.tabs],
             verses=[verse.to_dto() for verse in self.verses],
