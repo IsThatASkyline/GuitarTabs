@@ -9,6 +9,7 @@ from .verse import BaseVerseDTO
 class BaseSongDTO:
     title: str
     band_id: int
+    description: str | None = None
 
 
 @dataclass
@@ -44,6 +45,7 @@ class FullSongDTO:
     verses: list[BaseVerseDTO]
     hits_count: int | None
     tabs: list[TabDTO] | None = None
+    description: str | None = None
 
     def compress(self):
         return SongDTO(id=self.id, title=self.title, band=self.band)

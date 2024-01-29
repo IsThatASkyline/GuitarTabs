@@ -75,7 +75,7 @@ all_songs = Dialog(
     Window(
         templates.SONG_CHORDS_WITHOUT_TABS_TEMPLATE,
         SwitchTo(
-            Const("📜Показать табы"),
+            Const("🎼Показать табы"),
             id="to_tabs",
             state=states.AllSongsPanelSG.song_tabs,
             when=F["song"].tabs,
@@ -98,7 +98,7 @@ all_songs = Dialog(
     Window(
         templates.SONG_CHORDS_WITH_TABS_TEMPLATE,
         SwitchTo(
-            Const("📜Показать табы"),
+            Const("🎼Показать табы"),
             id="to_tabs",
             state=states.AllSongsPanelSG.song_tabs,
             when=F["song"].tabs,

@@ -60,6 +60,7 @@ async def get_chords_fingerings(chords):
         try:
             chords_fingerings.append(Chord(title=chord, tab=CHORDS_TABLATURE[f"{chord}"]))
         except KeyError:
+            # В случае, когда не добавлена аппликатура к аккорду
             pass
     return chords_fingerings
 
@@ -201,6 +202,21 @@ async def _get_verses_and_unique_chords(verses):
             )
             unique_chords.update(chords)
             result.append(Verse(title=verse.title, strings=verse_strings))
+        elif lyrics_list and not chords_list:
+            verse_strings = await get_only_lyrics_verse(
+                lyrics_list
+            )
+            result.append(Verse(title=verse.title, strings=verse_strings))
         elif not lyrics_list and not chords_list:
             result.append(Verse(title=verse.title, strings=None))
     return result, unique_chords
+
+
+async def get_only_lyrics_verse(lyrics_list):
+    verse_strings = []
+    for lyrics in lyrics_list:
+        verse_string = VerseString(
+            lyrics=lyrics
+        )
+        verse_strings.append(verse_string)
+    return verse_strings

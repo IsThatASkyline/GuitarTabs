@@ -51,6 +51,7 @@ async def create_song(
         return await song_services.create_song(
             CreateSongDTO(
                 title=song.title,
+                description=song.description,
                 band_id=song.band_id,
                 verses=[
                     BaseVerseDTO(title=v.title, lyrics=v.lyrics, chords=v.chords)
