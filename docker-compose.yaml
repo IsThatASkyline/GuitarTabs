@@ -1,0 +1,29 @@
+services:
+  db:
+    image: postgres:latest
+    restart: always
+    volumes:
+      - ./postgresql/data:/var/lib/postgresql/data
+    env_file:
+      - .docker-compose.env
+
+  redis:
+      image: redis:latest
+      volumes:
+        - .redis_data:/data
+
+  guitar-tgbot:
+    build:
+      context: .
+    restart: always
+    volumes:
+      - .:/usr/src/app
+    ports:
+      - 8080:8080
+    environment:
+      DB_URL: "postgresql+asyncpg://postgres:postgres@db:5432/guitar"
+      BOT_TOKEN: "6667099334:AAEKLHTOfB2yqF6gGNL8V15Jf0XNIRQiME4"
+      TEST_DB_URL: "postgresql+asyncpg://postgres:postgres@localhost:5432/testdb"
+    depends_on:
+      - db
+      - redis

@@ -8,10 +8,11 @@ from guitar_app.presentation.tgbot.main_factory import create_bot, create_dispat
 
 
 async def main():
-    engine = create_engine(get_settings().DB_URL)
+    config = get_settings()
+    engine = create_engine(config.DB_URL)
     pool = build_sessions(engine)
-    bot = create_bot(get_settings().BOT_TOKEN)
-    dp = create_dispatcher(pool=pool, message_manager=MessageManager())
+    bot = create_bot(config.BOT_TOKEN)
+    dp = create_dispatcher(pool=pool, config=config, message_manager=MessageManager())
     try:
         print("Started")
         await dp.start_polling(

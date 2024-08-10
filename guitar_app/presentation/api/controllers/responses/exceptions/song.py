@@ -1,11 +1,13 @@
+from typing import Any
+
 from pydantic import Field
 
 from guitar_app.presentation.api.controllers.responses.exceptions.base import ApiError
 
 
 class NotFoundSongError(ApiError):
-    detail = Field("Not found song", const=True)
+    detail: Any = Field("Not found song")
 
 
 class SongIntegrityError(ApiError):
-    detail = Field("Ошибка при добавлении песни", const=True)
+    detail: Any = Field("Ошибка при добавлении песни")

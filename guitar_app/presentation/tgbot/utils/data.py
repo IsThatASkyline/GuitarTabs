@@ -4,7 +4,7 @@ from aiogram import Bot, Router, types
 from aiogram.dispatcher.event.handler import HandlerObject
 from aiogram.fsm.context import FSMContext
 from aiogram.fsm.storage.base import BaseStorage
-from aiogram_dialog import DialogManager
+from aiogram_dialog import DialogManager, BgManagerFactory
 from aiogram_dialog.api.entities import Context, Stack
 from aiogram_dialog.context.storage import StorageProxy
 
@@ -34,3 +34,5 @@ class DialogMiddlewareData(AiogramMiddlewareData, total=False):
 class MiddlewareData(DialogMiddlewareData, total=False):
     uow: UnitOfWork
     user: dto.UserDTO | None
+    bg_manager_factory: BgManagerFactory
+
