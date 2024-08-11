@@ -3,7 +3,7 @@ services:
     image: postgres:latest
     restart: always
     volumes:
-      - ./postgresql/data:/var/lib/postgresql/data
+      - .postgresql/data:/var/lib/postgresql/data
     env_file:
       - .docker-compose.env
 

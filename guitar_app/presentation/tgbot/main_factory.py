@@ -1,3 +1,5 @@
+import logging
+
 from aiogram import Bot, Dispatcher
 from aiogram.enums import ParseMode
 from aiogram.fsm.storage.base import BaseStorage
@@ -10,6 +12,8 @@ from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker
 from guitar_app.config import Settings
 from guitar_app.presentation.tgbot.handlers import setup_handlers
 from guitar_app.presentation.tgbot.middlewares import setup_middlewares
+
+logger = logging.getLogger(__name__)
 
 
 def create_bot(token) -> Bot:
@@ -42,8 +46,8 @@ def create_only_dispatcher(config: Settings):
     return dp
 
 
-def create_storage(config) -> BaseStorage:
-    # logger.info("creating storage for type %s", config.type_)
+def create_storage(config: Settings) -> BaseStorage:
+    logger.info("creating storage for type %s", config.storage_type)
     match config.storage_type:
         # case StorageType.memory:
         case "memory":
@@ -60,5 +64,5 @@ def create_storage(config) -> BaseStorage:
 
 
 def create_redis(config: Settings) -> Redis:
-    # logger.info("created redis for %s", config)
+    logger.info("created redis")
     return Redis(host=config.REDIS_URL, port=config.REDIS_PORT, db=config.REDIS_DB)
