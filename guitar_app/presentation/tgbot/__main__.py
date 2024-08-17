@@ -1,24 +1,29 @@
 import asyncio
+import logging
 
 from aiogram_dialog.manager.message_manager import MessageManager
-
-from guitar_app.config import get_settings
+from guitar_app.config import get_settings, setup_logging
 from guitar_app.infrastructure.db.main import build_sessions, create_engine
 from guitar_app.presentation.tgbot.main_factory import create_bot, create_dispatcher
 
+logger = logging.getLogger(__name__)
+
 
 async def main():
-    engine = create_engine(get_settings().DB_URL)
+    setup_logging()
+    config = get_settings()
+    engine = create_engine(config.DB_URL)
     pool = build_sessions(engine)
-    bot = create_bot(get_settings().BOT_TOKEN)
-    dp = create_dispatcher(pool=pool, message_manager=MessageManager())
+    bot = create_bot(config.BOT_TOKEN)
+    dp = create_dispatcher(pool=pool, config=config, message_manager=MessageManager())
     try:
-        print("Started")
+        logger.info("Started")
         await dp.start_polling(
             bot, allowed_updates=dp.resolve_used_update_types(skip_events={"aiogd_update"})
         )
     finally:
-        print("Stopped")
+        await engine.dispose()
+        logger.info("stopped")
 
 
 def run():

@@ -1,0 +1,25 @@
+services:
+  db:
+    image: postgres:latest
+    restart: always
+    volumes:
+      - .postgresql/data:/var/lib/postgresql/data
+    env_file:
+      - .docker-compose.env
+
+  redis:
+      image: redis:latest
+      volumes:
+        - .redis_data:/data
+
+  guitar-tgbot:
+    build:
+      context: .
+    restart: always
+    volumes:
+      - .:/usr/src/app
+    ports:
+      - 8080:8080
+    depends_on:
+      - db
+      - redis

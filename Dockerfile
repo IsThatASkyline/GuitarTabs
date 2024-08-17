@@ -1,4 +1,4 @@
-FROM python:3.10 as build_app
+FROM python:3.10 AS build_app
 
 WORKDIR /usr/src/app
 
