@@ -4,6 +4,7 @@ from guitar_app.application.guitar.domain.utils.default_constants import (
     MINOR_7_CHORDS_SEQUENCE,
     MINOR_CHORDS_SEQUENCE,
     STANDARD_CHORDS,
+    SUS2_CHORDS_SEQUENCE
 )
 from guitar_app.application.guitar.dto import BaseVerseDTO
 
@@ -18,6 +19,8 @@ async def modulate(song_chords: list[str], value: int) -> str:
             if chord == "||":
                 new_verse_line_chords.append("||")
                 continue
+            elif "sus2" in chord:
+                base_seq = SUS2_CHORDS_SEQUENCE
             elif "m7" in chord:
                 base_seq = MINOR_7_CHORDS_SEQUENCE
             elif "7" in chord:

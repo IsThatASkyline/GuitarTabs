@@ -74,3 +74,18 @@ MINOR_7_CHORDS_SEQUENCE = (
     "Gm7",
     "G#m7",
 )
+
+SUS2_CHORDS_SEQUENCE = (
+    "Asus2",
+    "A#sus2",
+    "Bsus2",
+    "Csus2",
+    "C#sus2",
+    "Dsus2",
+    "D#sus2",
+    "Esus2",
+    "Fsus2",
+    "F#sus2",
+    "Gsus2",
+    "G#sus2",
+)
